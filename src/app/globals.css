@@ -3,21 +3,49 @@
 @tailwind utilities;
 
 :root {
-  --bg-editorial: #FAF8F5; /* Tông kem ấm cao cấp */
-  --text-charcoal: #121212; /* Màu chữ than sang trọng */
-  --accent-violet: #8B5CF6; /* Tím nhạt */
+  --bg-cream: #FAF8F5;
+  --text-charcoal: #121212;
+  --accent-violet: #8B5CF6;
 }
 
-body {
-  background-color: var(--bg-editorial);
+/* KHÓA CỨNG HOÀN TOÀN CUỘN DỌC CỦA TRÌNH DUYỆT */
+html, body {
+  background-color: var(--bg-cream);
   color: var(--text-charcoal);
-  overflow-x: hidden;
+  overflow: hidden !important;
+  height: 100vh !important;
+  width: 100vw !important;
   font-family: var(--font-inter), sans-serif;
   user-select: none;
-  cursor: none; /* Ẩn chuột mặc định để dùng Cursor Lens */
+  cursor: none; /* Ẩn chuột để dùng thấu kính */
 }
 
-/* HIỆU ỨNG TIA QUÉT GRADIENT SÁNG (SCANNER EFFECT) */
+/* LỚP BỤI PHIM DI ĐỘNG (CINEMATIC GRAIN) */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* CHỮ RỖNG STROKE */
+.text-stroke {
+  -webkit-text-stroke: 1px rgba(18, 18, 18, 0.2);
+  color: transparent;
+}
+
+.text-stroke-white {
+  -webkit-text-stroke: 1px rgba(250, 248, 245, 0.2);
+  color: transparent;
+}
+
+/* HIỆU ỨNG ÁNH SÁNG CHẠY QUA THẺ (GLOW INDEX) */
 .scan-glow {
   position: relative;
   overflow: hidden;
@@ -32,7 +60,7 @@ body {
   background: linear-gradient(
     45deg,
     transparent 45%,
-    rgba(139, 92, 246, 0.1) 50%,
+    rgba(139, 92, 246, 0.08) 50%,
     transparent 55%
   );
   transform: translate(-30%, -30%);
@@ -41,30 +69,4 @@ body {
 }
 .scan-glow:hover::before {
   transform: translate(30%, 30%);
-}
-
-/* LỚP BỤI ĐIỆN ẢNH (CINEMATIC FILM GRAIN) */
-body::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-image: url('https://grainy-gradients.vercel.app/noise.svg');
-  opacity: 0.05;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-/* HIỆU ỨNG SMOOTH CUỘN */
-html.lenis {
-  height: auto;
-}
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-::-webkit-scrollbar {
-  width: 0px;
 }
