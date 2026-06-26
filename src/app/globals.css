@@ -3,20 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --bg-cream: #FAF8F5; /* Tông nền kem chuẩn 28K */
-  --text-charcoal: #141414; /* Chữ đen xám */
-  --accent-lilac: #8B5CF6; /* Tím nhạt */
+  --bg-editorial: #FAF8F5; /* Tông kem ấm cao cấp */
+  --text-charcoal: #121212; /* Màu chữ than sang trọng */
+  --accent-violet: #8B5CF6; /* Tím nhạt */
 }
 
 body {
-  background-color: var(--bg-cream);
+  background-color: var(--bg-editorial);
   color: var(--text-charcoal);
   overflow-x: hidden;
   font-family: var(--font-inter), sans-serif;
   user-select: none;
 }
 
-/* LỚP BỤI NHIỄU PHIM (GRAIN EFFECT) */
+/* LỚP BỤI ĐIỆN ẢNH (CINEMATIC FILM GRAIN) */
 body::after {
   content: "";
   position: fixed;
@@ -30,14 +30,6 @@ body::after {
   z-index: 9999;
 }
 
-/* HỆ LƯỚI NỀN KỸ THUẬT (DESIGN MATRIX GRID) */
-.design-grid-bg {
-  background-size: 40px 40px;
-  background-image: 
-    linear-gradient(to right, rgba(20, 20, 20, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(20, 20, 20, 0.02) 1px, transparent 1px);
-}
-
 /* HIỆU ỨNG SMOOTH CUỘN */
 html.lenis {
   height: auto;
@@ -46,7 +38,12 @@ html.lenis {
   scroll-behavior: auto !important;
 }
 
-/* KHÔNG HIỂN THỊ SCROLLBAR ĐỂ GIỮ THẨM MỸ */
+/* CHỮ RỖNG SANG TRỌNG */
+.text-stroke-charcoal {
+  -webkit-text-stroke: 1px rgba(18, 18, 18, 0.2);
+  color: transparent;
+}
+
 ::-webkit-scrollbar {
   width: 0px;
 }
