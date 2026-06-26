@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --bg-obsidian: #080808; /* Màu đen xám bóng tối sang trọng */
-  --text-ivory: #FAF8F5; /* Màu chữ trắng ngà cao cấp */
-  --accent-gold: #C5A880; /* Màu vàng Champagne / Đồng cổ */
+  --bg-slate: #1C2333; /* Slate Midnight Blue chuẩn 375 Studio */
+  --text-linen: #FAF8F5; /* Trắng ngà hoàng gia */
+  --accent-gold: #C5A880; /* Vàng Champagne Đồng */
 }
 
 html, body {
-  background-color: var(--bg-obsidian);
-  color: var(--text-ivory);
+  background-color: var(--bg-slate);
+  color: var(--text-linen);
   overflow: hidden !important;
   height: 100vh !important;
   width: 100vw !important;
@@ -18,20 +18,20 @@ html, body {
   user-select: none;
 }
 
-/* FONT CHỮ SERIF HOÀNG GIA */
+/* FONT CHỮ THỜI TRANG CAO CẤP */
 .font-serif-luxury {
   font-family: var(--font-cormorant), serif;
 }
 
-/* ĐƯỜNG CHỈ BIÊN SANG TRỌNG CỰC MẢNH */
+/* ĐƯỜNG KẺ BIÊN TOÁN HỌC MỎNG NHƯ SỢI TÓC */
 .luxury-border-b {
-  border-bottom: 1px solid rgba(250, 248, 245, 0.05);
+  border-bottom: 1px solid rgba(250, 248, 245, 0.08);
 }
 .luxury-border-r {
-  border-right: 1px solid rgba(250, 248, 245, 0.05);
+  border-right: 1px solid rgba(250, 248, 245, 0.08);
 }
 
-/* CHỮ RỖNG THỜI TRANG CAO CẤP */
+/* CHỮ RỖNG THỜI TRANG */
 .text-stroke-gold {
   -webkit-text-stroke: 1px rgba(197, 168, 128, 0.25);
   color: transparent;
@@ -42,7 +42,7 @@ html, body {
   -webkit-text-stroke: 1px rgba(197, 168, 128, 1);
 }
 
-/* HIỆU ỨNG GRAIN SƯƠNG MỜ */
+/* LỚP PHỦ HẠT BỤI ĐIỆN ẢNH (CINEMATIC NOISE) */
 body::after {
   content: "";
   position: fixed;
@@ -51,7 +51,7 @@ body::after {
   width: 100vw;
   height: 100vh;
   background-image: url('https://grainy-gradients.vercel.app/noise.svg');
-  opacity: 0.03;
+  opacity: 0.04;
   pointer-events: none;
   z-index: 9999;
 }
