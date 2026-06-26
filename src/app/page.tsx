@@ -5,7 +5,7 @@ import { Music, Youtube, Instagram, ArrowDown, ArrowUp } from 'lucide-react';
 import Lenis from 'lenis';
 
 // ----------------------------------------------------
-// BỘ TỔNG HỢP NHẠC NỀN & SFX CHUẨN ĐIỆN ẢNH (WEB AUDIO ENGINE)
+// BỘ THIẾT KẾ ÂM THANH SPA & LOUNGE CAO CẤP (BOUTIQUE ACOUSTIC ENGINE)
 // ----------------------------------------------------
 class LuxuryAudioEngine {
   private ctx: AudioContext | null = null;
@@ -24,7 +24,7 @@ class LuxuryAudioEngine {
         this.ctx.resume();
       }
     } catch (e) {
-      console.warn("AudioContext failed:", e);
+      console.warn("AudioContext failed to initialize:", e);
     }
   }
 
@@ -35,33 +35,47 @@ class LuxuryAudioEngine {
     }
   }
 
-  // KHỞI CHẠY NHẠC NỀN KHÔNG GIAN (CHAMPAGNE AMBIENT PAD LO-FI)
+  // TẠO NHẠC NỀN THIỀN ĐỊNH GENTLE AMBIENT DRONE (KHÔNG GIAN SPA XA XỈ)
   startAmbientMusic() {
     this.init();
     if (!this.ctx || this.isMusicPlaying) return;
     this.isMusicPlaying = true;
 
     try {
+      // Thiết lập volume Master cực nhỏ để nhạc nền chỉ ngân nga siêu nhẹ ở phía sau
       this.ambientGain = this.ctx.createGain();
       this.ambientGain.gain.setValueAtTime(0, this.ctx.currentTime);
-      this.ambientGain.gain.linearRampToValueAtTime(0.04, this.ctx.currentTime + 3);
+      this.ambientGain.gain.linearRampToValueAtTime(0.008, this.ctx.currentTime + 5); // Tăng âm lượng chậm rãi trong 5 giây
       this.ambientGain.connect(this.ctx.destination);
 
-      const luxuryChords = [138.59, 207.65, 277.18, 349.23, 523.25];
+      // Quãng 5 hoàn hảo (Perfect Fifth) êm ái và ổn định nhất: A2 (110Hz) và E3 (164.81Hz)
+      const baseNotes = [110.00, 164.81];
 
-      luxuryChords.forEach((freq) => {
+      baseNotes.forEach((freq, idx) => {
         if (!this.ctx || !this.ambientGain) return;
         const osc = this.ctx.createOscillator();
         const filter = this.ctx.createBiquadFilter();
         const oscGain = this.ctx.createGain();
 
-        osc.type = "sine";
-        osc.frequency.value = freq;
+        osc.type = "sine"; // Sóng Sine tinh khiết và êm dịu nhất
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
 
+        // Lọc hoàn toàn tần số cao chói tai, giữ lại tiếng trầm siêu ấm
         filter.type = "lowpass";
-        filter.frequency.value = 250; 
+        filter.frequency.setValueAtTime(150, this.ctx.currentTime);
 
-        oscGain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+        // Thuật toán Swell Breathing (Nhịp thở âm thanh): nốt này to thì nốt kia nhỏ
+        const now = this.ctx.currentTime;
+        oscGain.gain.setValueAtTime(0.05, now);
+        
+        const swellDuration = 8; // Chu kỳ thở 8 giây ngân nga lặp lại
+        for (let i = 0; i < 100; i++) {
+          const timeOffset = i * swellDuration;
+          const val1 = idx === 0 ? 0.08 : 0.02;
+          const val2 = idx === 0 ? 0.02 : 0.08;
+          oscGain.gain.linearRampToValueAtTime(val1, now + timeOffset);
+          oscGain.gain.linearRampToValueAtTime(val2, now + timeOffset + (swellDuration / 2));
+        }
 
         osc.connect(filter);
         filter.connect(oscGain);
@@ -71,7 +85,7 @@ class LuxuryAudioEngine {
         this.ambientOscillators.push(osc);
       });
     } catch (e) {
-      console.warn("Music playing error:", e);
+      console.warn("Ambient music block bypass:", e);
     }
   }
 
@@ -82,13 +96,21 @@ class LuxuryAudioEngine {
       if (!this.ctx) return;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
+      
       osc.type = "sine";
-      osc.frequency.setValueAtTime(1400, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(300, this.ctx.currentTime + 0.04);
-      gain.gain.setValueAtTime(0.012, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.04);
-      osc.connect(gain); gain.connect(this.ctx.destination);
-      osc.start(); osc.stop(this.ctx.currentTime + 0.04);
+      // Tiếng Click mộc tần số thấp ấm áp (Wood Click)
+      osc.frequency.setValueAtTime(450, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(80, this.ctx.currentTime + 0.015);
+      
+      // Volume siêu nhỏ, biến mất cực nhanh sau 15 mili-giây
+      gain.gain.setValueAtTime(0.006, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.015);
+      
+      osc.connect(gain); 
+      gain.connect(this.ctx.destination);
+      
+      osc.start(); 
+      osc.stop(this.ctx.currentTime + 0.015);
     } catch (e) {}
   }
 
@@ -99,13 +121,20 @@ class LuxuryAudioEngine {
       if (!this.ctx) return;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
+      
       osc.type = "sine";
-      osc.frequency.setValueAtTime(100, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(350, this.ctx.currentTime + 0.18);
-      gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.18);
-      osc.connect(gain); gain.connect(this.ctx.destination);
-      osc.start(); osc.stop(this.ctx.currentTime + 0.18);
+      // Tiếng lướt đệm không khí trầm ấm
+      osc.frequency.setValueAtTime(140, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(60, this.ctx.currentTime + 0.35);
+      
+      gain.gain.setValueAtTime(0.008, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.35);
+      
+      osc.connect(gain); 
+      gain.connect(this.ctx.destination);
+      
+      osc.start(); 
+      osc.stop(this.ctx.currentTime + 0.35);
     } catch (e) {}
   }
 
@@ -113,15 +142,27 @@ class LuxuryAudioEngine {
     try {
       this.init(); 
       if (!this.ctx) return;
-      const osc = this.ctx.createOscillator();
+      const osc1 = this.ctx.createOscillator();
+      const osc2 = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-      osc.frequency.setValueAtTime(660, this.ctx.currentTime + 0.1);
-      gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.3);
-      osc.connect(gain); gain.connect(this.ctx.destination);
-      osc.start(); osc.stop(this.ctx.currentTime + 0.3);
+      
+      osc1.type = "sine";
+      osc1.frequency.setValueAtTime(329.63, this.ctx.currentTime); // Nốt E4 (Thanh thản)
+      
+      osc2.type = "sine";
+      osc2.frequency.setValueAtTime(523.25, this.ctx.currentTime); // Nốt C5 (Mượt mà)
+      
+      gain.gain.setValueAtTime(0.005, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.6);
+      
+      osc1.connect(gain);
+      osc2.connect(gain);
+      gain.connect(this.ctx.destination);
+      
+      osc1.start(); 
+      osc2.start();
+      osc1.stop(this.ctx.currentTime + 0.6);
+      osc2.stop(this.ctx.currentTime + 0.6);
     } catch (e) {}
   }
 }
@@ -166,7 +207,7 @@ export default function Home() {
   const [isScrolling, setIsScrolling] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // 1. CHU TRÌNH GIẢI MÃ SỐ KHÔNG GIAN GIA TỐC (MƯỢT 100%)
+  // 1. MA TRẬN GIẢI MÃ SỐ (MATRIX SCRAMBLER DECODER CHẠY SIÊU MƯỢT)
   useEffect(() => {
     let timer: NodeJS.Timeout;
     const startTime = Date.now();
@@ -217,7 +258,7 @@ export default function Home() {
     requestAnimationFrame(raf);
   }, [loading]);
 
-  // 3. SCROLL INTERCEPT ENGINE
+  // 3. SCROLL INTERCEPT ENGINE (KHÓA DỌC TRƯỢT NGANG SLIDE)
   useEffect(() => {
     if (loading) return;
 
@@ -347,28 +388,39 @@ export default function Home() {
             <div className="absolute w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,rgba(197,168,128,0.12)_0%,transparent_60%)] pointer-events-none" />
 
             {/* Bố cục khóa cứng chiều cao không gian năm - Không bao giờ xảy ra lỗi giật nảy màn hình */}
-            <div className="flex flex-col items-center justify-center gap-10 z-10 select-none">
+            <div className="relative w-full h-80 flex flex-col items-center justify-center">
               
               {/* TRỤC QUÉT SỐ NGẪU NHIÊN DECODER */}
-              <div className="font-sans font-black text-center text-[#FAF8F5] text-[20vw] md:text-[14vw] tracking-tighter leading-none select-none flex items-center justify-center">
+              <div className="flex items-center justify-center font-black tracking-tighter text-[#FAF8F5] select-none font-sans uppercase text-7xl md:text-[10rem] leading-none absolute top-12">
                 <span>20</span>
                 <span>{lastTwoDigits}</span>
               </div>
 
               {/* HAI NÚT BẤM KÍNH MỜ XUẤT HIỆN TUYỆT ĐỐI KHÔNG LỆCH GRID */}
-              <div className={`flex flex-col md:flex-row gap-4 justify-center items-center transition-all duration-[1000ms] ${showGateway ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6 pointer-events-none"}`}>
-                <button 
-                  onClick={() => enterPortfolio(true)}
-                  className="px-8 py-3.5 border border-[#C5A880] rounded-full text-xs font-mono tracking-widest uppercase hover:bg-[#C5A880] hover:text-[#1D2436] transition-all duration-300 bg-transparent text-[#C5A880]"
-                >
-                  ENTER WITH MUSIC
-                </button>
-                <button 
-                  onClick={() => enterPortfolio(false)}
-                  className="px-8 py-3.5 border border-white/20 rounded-full text-xs font-mono tracking-widest uppercase hover:bg-white hover:text-[#1D2436] transition-all duration-300 bg-transparent text-white/70"
-                >
-                  ENTER WITHOUT MUSIC
-                </button>
+              <div className="absolute bottom-4 w-full flex justify-center">
+                <AnimatePresence>
+                  {showGateway && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="flex flex-col md:flex-row gap-4 justify-center items-center"
+                    >
+                      <button 
+                        onClick={() => enterPortfolio(true)}
+                        className="px-8 py-3.5 border border-[#C5A880] rounded-full text-xs font-mono tracking-widest uppercase hover:bg-[#C5A880] hover:text-[#1D2436] transition-all duration-300 bg-transparent text-[#C5A880]"
+                      >
+                        ENTER WITH MUSIC
+                      </button>
+                      <button 
+                        onClick={() => enterPortfolio(false)}
+                        className="px-8 py-3.5 border border-white/20 rounded-full text-xs font-mono tracking-widest uppercase hover:bg-white hover:text-[#1D2436] transition-all duration-300 bg-transparent text-white/70"
+                      >
+                        ENTER WITHOUT MUSIC
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
             </div>
