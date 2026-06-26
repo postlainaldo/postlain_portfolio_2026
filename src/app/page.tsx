@@ -134,30 +134,30 @@ const synth = new LuxuryAudioEngine();
 const careerImpacts = [
   {
     num: "01",
-    role: "QUẢN LÝ CỬA HÀNG (STORE MANAGER)",
+    role: "STORE MANAGER",
     company: "ALDO GO! DALAT",
-    period: "2025 — 2026",
-    metrics: "Giảm tỉ lệ thất thoát kho bãi xuống dưới 1%",
-    highlight: "Thúc đẩy doanh thu tăng trưởng vượt mốc 15%",
-    detail: "Định vị và tái cơ cấu quy trình phân phối sản phẩm dựa trên phân tích tệp khách hàng cao cấp tại địa phương. Thiết lập hệ thống vận hành và điều phối nhân sự tối ưu."
+    period: "2025—2026",
+    metrics: "Giảm Thất Thoát Kho Bãi <1%",
+    highlight: "Tăng Trưởng Doanh Số 15%",
+    detail: "Tối ưu hóa sơ đồ trưng bày sản phẩm dựa trên dữ liệu khách du lịch địa phương. Thiết lập KPI thực chiến giúp thúc đẩy tối đa doanh số bán lẻ."
   },
   {
     num: "02",
-    role: "QUẢN LÝ PHÒNG THU (STUDIO MANAGER)",
+    role: "STUDIO MANAGER",
     company: "SB STUDIO",
-    period: "2023 — 2024",
-    metrics: "Tiết kiệm 40% tổng chi phí sản xuất",
+    period: "2023—2024",
+    metrics: "Tiết kiệm 40% chi phí sản xuất",
     highlight: "Tăng trưởng hiệu suất vận hành lên đến 200%",
-    detail: "Hệ thống hóa toàn bộ quy trình làm việc giữa các nghệ sĩ, đối tác truyền thông quốc tế và MCN qua các giải pháp lưu trữ thông minh giúp loại bỏ các khâu trung gian thừa thãi."
+    detail: "Hệ thống hóa toàn bộ lịch trình thu âm, quản lý nghệ sĩ và đối tác truyền thông qua Google Sheets API, rút ngắn 50% thời gian điều phối."
   },
   {
     num: "03",
     role: "TRƯỞNG CA / ĐIỀU HÀNH LOGISTICS BẾP",
-    company: "PHỦI STEAK",
-    period: "2024 — 2025",
-    metrics: "Rút ngắn 20% thời gian chờ đợi của khách",
-    highlight: "Sắp xếp chuỗi cung ứng đạt mốc hoàn hảo 100%",
-    detail: "Áp dụng tư duy hình học không gian vào quản trị logistics nguyên vật liệu Âu cao cấp, đảm bảo hiệu suất phục vụ liên tục trong các khung giờ áp lực lớn nhất."
+    company: "PHUI STEAK",
+    period: "2024—2025",
+    metrics: "Giảm 20% Thời Gian Chờ Của Khách",
+    highlight: "Sắp Xếp Quy Trình Bếp Đạt Mốc 100%",
+    detail: "Áp dụng phương pháp di chuyển tam giác vàng trong bếp công nghiệp, phân phối mượt mà các món Âu chất lượng cao trong khung giờ cao điểm."
   }
 ];
 
