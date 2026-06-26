@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Bot, Zap, Music, Youtube, Instagram, Cpu, Terminal, Sparkles, TrendingUp, ShieldAlert, Award } from 'lucide-react';
+import { ArrowRight, Bot, Zap, Music, Youtube, Instagram, Terminal } from 'lucide-react';
 import Lenis from 'lenis';
 
 // ----------------------------------------------------
@@ -37,6 +37,18 @@ class TechSynth {
     gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.15);
     osc.connect(gain); gain.connect(this.ctx.destination);
     osc.start(); osc.stop(this.ctx.currentTime + 0.15);
+  }
+  playSuccess() {
+    this.init(); if (!this.ctx) return;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(520, this.ctx.currentTime);
+    osc.frequency.setValueAtTime(1040, this.ctx.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.015, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.2);
+    osc.connect(gain); gain.connect(this.ctx.destination);
+    osc.start(); osc.stop(this.ctx.currentTime + 0.2);
   }
 }
 
@@ -147,7 +159,7 @@ export default function Page() {
             </div>
           </nav>
 
-          {/* 1. HERO SECTION: TEXT MASK SPLIT EFFECT */}
+          {/* 1. HERO SECTION */}
           <section id="about" className="min-h-screen flex flex-col justify-between pt-40 px-6 md:px-12 relative border-b border-[#121212]/5">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
               <div className="md:col-span-8">
@@ -189,7 +201,7 @@ export default function Page() {
             </div>
           </section>
 
-          {/* 2. CORE VALUE: ĐIỂM NHẤN ĐỐI VỚI DOANH NGHIỆP TUYỂN DỤNG */}
+          {/* 2. CORE VALUE */}
           <section className="py-32 px-6 md:px-12 bg-white border-b border-[#121212]/5">
             <p className="font-mono text-[10px] tracking-[0.4em] text-zinc-400 uppercase mb-4">// VALUE STATEMENT FOR EMPLOYERS</p>
             <h2 className="text-4xl md:text-6xl font-space font-black tracking-tighter uppercase mb-20">Tại sao tôi mang lại sự đột phá?</h2>
@@ -219,7 +231,7 @@ export default function Page() {
             </div>
           </section>
 
-          {/* 3. ĐỈNH CAO CHUYỂN ĐỘNG: CUỘN DỌC TRỰT NGANG (HORIZONTAL SCROLL DECK) */}
+          {/* 3. HORIZONTAL SCROLL DECK */}
           <div ref={horizontalSectionRef} id="journey" className="relative h-[300vh] border-b border-[#121212]/5">
             <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center bg-[#FAF8F5]">
               <motion.div style={{ x: xTranslation }} className="flex w-[300vw] h-full">
@@ -269,7 +281,7 @@ export default function Page() {
                        <p className="text-[#121212] font-bold">Vận Hành Cửa Hàng Bán Lẻ</p>
                      </div>
                      <div>
-                       <p className="text-[#121212] font-bold">Kiểm Soát Tự Động Kho Bãi</p>
+                       <p className="text-[#121212] font-bold">Kiểm Sát Tự Động Kho Bãi</p>
                      </div>
                   </div>
                 </div>
@@ -303,7 +315,7 @@ export default function Page() {
             </div>
           </div>
 
-          {/* 4. MẠNG XÃ HỘI & CONTACT CHUẨN CHUYÊN NGHIỆP */}
+          {/* 4. CONTACT */}
           <section className="py-40 px-6 md:px-12 border-t border-[#121212]/5">
             <div className="max-w-4xl mx-auto text-center">
               <span className="font-mono text-[9px] tracking-[0.5em] text-purple-600 uppercase block mb-12">// RECRUITMENT INQUIRY</span>
