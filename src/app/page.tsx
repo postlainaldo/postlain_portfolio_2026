@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, Zap, Music, Youtube, Instagram, Terminal, Award, Globe, ArrowDown, ArrowUp, Compass, Cpu, Activity, LayoutGrid } from 'lucide-react';
+import { Music, Youtube, Instagram, ArrowDown, ArrowUp, Compass } from 'lucide-react';
 import Lenis from 'lenis';
 
 // ----------------------------------------------------
-// BỘ TỔNG HỢP ÂM TẦN KỸ THUẬT SỐ (REAL-TIME SYNTH ENGINE)
+// BỘ TỔNG HỢP ÂM TẦN PHẢN HỒI CƠ HỌC (LUXURY AUDIO SYNTH)
 // ----------------------------------------------------
 class TechSynth {
   private ctx: AudioContext | null = null;
@@ -19,9 +19,9 @@ class TechSynth {
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(1400, this.ctx.currentTime);
+    osc.frequency.setValueAtTime(1200, this.ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(300, this.ctx.currentTime + 0.04);
-    gain.gain.setValueAtTime(0.012, this.ctx.currentTime);
+    gain.gain.setValueAtTime(0.008, this.ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.04);
     osc.connect(gain); gain.connect(this.ctx.destination);
     osc.start(); osc.stop(this.ctx.currentTime + 0.04);
@@ -30,74 +30,69 @@ class TechSynth {
     this.init(); if (!this.ctx) return;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
-    osc.type = "triangle";
-    osc.frequency.setValueAtTime(120, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(450, this.ctx.currentTime + 0.15);
-    gain.gain.setValueAtTime(0.015, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.15);
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(100, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(350, this.ctx.currentTime + 0.18);
+    gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.18);
     osc.connect(gain); gain.connect(this.ctx.destination);
-    osc.start(); osc.stop(this.ctx.currentTime + 0.15);
+    osc.start(); osc.stop(this.ctx.currentTime + 0.18);
   }
   playSuccess() {
     this.init(); if (!this.ctx) return;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(520, this.ctx.currentTime);
-    osc.frequency.setValueAtTime(1040, this.ctx.currentTime + 0.08);
-    gain.gain.setValueAtTime(0.015, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.25);
+    osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+    osc.frequency.setValueAtTime(660, this.ctx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.3);
     osc.connect(gain); gain.connect(this.ctx.destination);
-    osc.start(); osc.stop(this.ctx.currentTime + 0.25);
+    osc.start(); osc.stop(this.ctx.currentTime + 0.3);
   }
 }
 
 const synth = new TechSynth();
 
-// ĐỮ LIỆU CHỈ SỐ THỰC CHIẾN (RECRUITER TARGET)
+// HỒ SƠ DOANH NGHIỆP THỰC CHIẾN - ĐÃ VIỆT HÓA CHUẨN SANG TRỌNG
 const careerImpacts = [
   {
     num: "01",
-    role: "STORE MANAGER",
+    role: "QUẢN LÝ CỬA HÀNG (STORE MANAGER)",
     company: "ALDO GO! DALAT",
-    period: "2025—2026",
-    metrics: "Giảm Thất Thoát Kho Bãi <1%",
-    highlight: "Tăng Trưởng Doanh Số 15%",
-    detail: "Tối ưu hóa sơ đồ trưng bày sản phẩm dựa trên dữ liệu khách du lịch địa phương. Thiết lập KPI thực chiến giúp thúc đẩy tối đa doanh số bán lẻ.",
-    icon: <Globe size={20} className="text-purple-600" />
+    period: "2025 — 2026",
+    metrics: "Giảm tỉ lệ thất thoát kho bãi xuống dưới 1%",
+    highlight: "Thúc đẩy doanh thu tăng trưởng vượt mốc 15%",
+    detail: "Định vị và tái cơ cấu quy trình phân phối sản phẩm dựa trên phân tích tệp khách hàng cao cấp tại địa phương. Thiết lập hệ thống vận hành và điều phối nhân sự tối ưu."
   },
   {
     num: "02",
-    role: "STUDIO MANAGER",
+    role: "QUẢN LÝ PHÒNG THU (STUDIO MANAGER)",
     company: "SB STUDIO",
-    period: "2023—2024",
-    metrics: "Tiết Kiệm 40% Chi Phí Sản Xuất",
-    highlight: "Tăng Hiệu Suất Vận Hành 200%",
-    detail: "Thiết lập hệ thống tự động quản trị lịch trình phòng thu và đối tác truyền thông qua Google Sheets API, rút ngắn 50% thời gian điều phối.",
-    icon: <Music size={20} className="text-purple-600" />
+    period: "2023 — 2024",
+    metrics: "Tiết kiệm 40% tổng chi phí sản xuất",
+    highlight: "Tăng trưởng hiệu suất vận hành lên đến 200%",
+    detail: "Hệ thống hóa toàn bộ quy trình làm việc giữa các nghệ sĩ, đối tác truyền thông quốc tế và MCN qua các giải pháp lưu trữ thông minh giúp loại bỏ các khâu trung gian thừa thãi."
   },
   {
     num: "03",
-    role: "KITCHEN CAPTAIN / CHEF",
-    company: "PHUI STEAK",
-    period: "2024—2025",
-    metrics: "Giảm 20% Thời Gian Chờ Của Khách",
-    highlight: "Sắp Xếp Quy Trình Bếp Đạt Mốc 100%",
-    detail: "Áp dụng phương pháp di chuyển tam giác vàng trong bếp công nghiệp, phân phối mượt mà các món Âu chất lượng cao trong khung giờ cao điểm.",
-    icon: <Zap size={20} className="text-purple-600" />
+    role: "TRƯỞNG CA / ĐIỀU HÀNH LOGISTICS BẾP",
+    company: "PHỦI STEAK",
+    period: "2024 — 2025",
+    metrics: "Rút ngắn 20% thời gian chờ đợi của khách",
+    highlight: "Sắp xếp chuỗi cung ứng đạt mốc hoàn hảo 100%",
+    detail: "Áp dụng tư duy hình học không gian vào quản trị logistics nguyên vật liệu Âu cao cấp, đảm bảo hiệu suất phục vụ liên tục trong các khung giờ áp lực lớn nhất."
   }
 ];
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
-  const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
-  const [isHovered, setIsHovered] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // 1. CHẠY PRELOADER CONSOLE
+  // 1. LOADING SCREEN TINH TẾ
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
@@ -125,17 +120,7 @@ export default function Home() {
     requestAnimationFrame(raf);
   }, [loading]);
 
-  // 3. MOUSE LENS CONTROLLER
-  useEffect(() => {
-    if (loading) return;
-    const handleMouseMove = (e: MouseEvent) => {
-      setCursorPos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [loading]);
-
-  // 4. SCROLL INTERCEPT ENGINE (KHÓA CUỘN DỌC TRỰT SLIDE TỰ ĐỘNG)
+  // 3. SCROLL INTERCEPT ENGINE
   useEffect(() => {
     if (loading) return;
 
@@ -147,7 +132,7 @@ export default function Home() {
         setIsScrolling(true);
         synth.playWhoosh();
         setActiveSlide(prev => prev + 1);
-        setTimeout(() => setIsScrolling(false), 1200); // 1.2s lock để animation chuyển mượt
+        setTimeout(() => setIsScrolling(false), 1200);
       } else if (e.deltaY < -30 && activeSlide > 0) {
         setIsScrolling(true);
         synth.playWhoosh();
@@ -180,13 +165,13 @@ export default function Home() {
     };
   }, [loading, activeSlide, isScrolling]);
 
-  // 5. XOAY 3D THẺ HOÀNH TRÁNG (3D ROTATION ENGINE)
+  // 4. XOAY THẺ 3D PERSPECTIVE SANG TRỌNG
   const handle3DTilt = (e: React.MouseEvent<HTMLDivElement>) => {
     const el = e.currentTarget;
     const rect = el.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    el.style.transform = `perspective(1200px) rotateY(${x * 0.08}deg) rotateX(${-y * 0.08}deg) scale3d(1.03, 1.03, 1.03)`;
+    el.style.transform = `perspective(1200px) rotateY(${x * 0.05}deg) rotateX(${-y * 0.05}deg) scale3d(1.01, 1.01, 1.01)`;
   };
 
   const reset3DTilt = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -194,7 +179,7 @@ export default function Home() {
     el.style.transform = `perspective(1200px) rotateY(0deg) rotateX(0deg) scale3d(1, 1, 1)`;
   };
 
-  // 6. NỀN NƯỚC SINH HỌC CHUYỂN ĐỘNG CHẬM & QUAY THIẾT BỊ HUYỀN ẢO
+  // 5. NỀN NƯỚC HỔ PHÁCH VÀ VÀNG ĐỒNG CHẢY CHẬM (LUXURY AMBIENT ORB)
   useEffect(() => {
     if (loading || !canvasRef.current) return;
     const canvas = canvasRef.current;
@@ -214,29 +199,17 @@ export default function Home() {
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
-      tick += 0.002;
+      tick += 0.0015;
 
-      // HÀO QUANG TRÔI NỔI (LUXURY FLOATING ORBS)
-      const orbX = width * 0.7 + Math.sin(tick) * 100;
-      const orbY = height * 0.3 + Math.cos(tick * 1.5) * 100;
-      const grad = ctx.createRadialGradient(orbX, orbY, 10, orbX, orbY, 350);
-      grad.addColorStop(0, "rgba(124, 58, 237, 0.06)"); // Tím nhạt
-      grad.addColorStop(1, "rgba(250, 248, 245, 0)");
+      // HÀO QUANG VÀNG SANG TRỌNG (CHAMPAGNE GOLD AMBIENT ORB)
+      const orbX = width * 0.75 + Math.sin(tick) * 80;
+      const orbY = height * 0.25 + Math.cos(tick * 1.2) * 80;
+      const grad = ctx.createRadialGradient(orbX, orbY, 5, orbX, orbY, 400);
+      grad.addColorStop(0, "rgba(197, 168, 128, 0.04)"); /* Màu vàng Champagne cực mỏng */
+      grad.addColorStop(1, "rgba(8, 8, 8, 0)");
       ctx.fillStyle = grad;
       ctx.beginPath();
-      ctx.arc(orbX, orbY, 350, 0, Math.PI * 2);
-      ctx.fill();
-
-      // SÓNG LỎNG CHẢY CHẬM
-      ctx.beginPath();
-      ctx.moveTo(0, height);
-      for (let x = 0; x < width; x++) {
-        const y = Math.sin(x * 0.0015 + tick) * Math.cos(x * 0.001 + tick * 0.5) * 50 + height * 0.75;
-        ctx.lineTo(x, y);
-      }
-      ctx.lineTo(width, height);
-      ctx.closePath();
-      ctx.fillStyle = "rgba(18, 18, 18, 0.015)";
+      ctx.arc(orbX, orbY, 400, 0, Math.PI * 2);
       ctx.fill();
 
       animationId = requestAnimationFrame(draw);
@@ -250,25 +223,10 @@ export default function Home() {
   }, [loading]);
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-[#FAF8F5] blueprint-grid">
+    <div className="relative h-screen w-screen overflow-hidden bg-[#080808] text-[#FAF8F5]">
       
-      {/* NỀN SÓNG NƯỚC & HÀO QUANG CHẢY CHẬM */}
+      {/* CANVAS HÀO QUANG VÀNG ĐỒNG */}
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-10" />
-
-      {/* CUSTOM CURSOR LENS (KÍNH LÚP HOÀNH TRÁNG) */}
-      {!loading && (
-        <motion.div 
-          className="fixed w-12 h-12 border border-[#121212] rounded-full pointer-events-none z-[9999] mix-blend-difference"
-          animate={{
-            x: cursorPos.x - 24,
-            y: cursorPos.y - 24,
-            scale: isHovered ? 1.8 : 1,
-            borderWidth: isHovered ? "2px" : "1px",
-            backgroundColor: isHovered ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0)"
-          }}
-          transition={{ type: "spring", stiffness: 240, damping: 22 }}
-        />
-      )}
 
       {/* CONSOLE LOADING SCREEN */}
       <AnimatePresence>
@@ -276,20 +234,18 @@ export default function Home() {
           <motion.div 
             exit={{ y: "-100%" }}
             transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 bg-[#121212] text-white z-[9999] flex flex-col justify-between p-8 font-mono"
+            className="fixed inset-0 bg-[#080808] text-[#FAF8F5] z-[9999] flex flex-col justify-between p-8 font-serif-luxury"
           >
-            <div className="flex justify-between items-center text-xs opacity-50 border-b border-white/5 pb-4">
-              <span className="flex items-center gap-2">
-                <Terminal size={14} className="animate-spin text-purple-500" /> POSTLAIN SYS_CORE V4.0
-              </span>
-              <span>DALAT // GENERATIVE INTERFACE</span>
+            <div className="flex justify-between items-center text-xs opacity-40 border-b border-white/5 pb-4 font-sans">
+              <span>POSTLAIN PORTFOLIO</span>
+              <span>DA LAT, VN</span>
             </div>
             <div className="text-center">
-              <span className="text-[14vw] font-black leading-none font-space text-purple-500">{progress}%</span>
+              <span className="text-[12vw] font-light leading-none text-[#C5A880] italic">{progress}%</span>
             </div>
-            <div className="flex justify-between items-end text-xs opacity-50">
-              <span>SYNTHESIZING MECHANICAL INTERACTION CORE...</span>
-              <span>©2026 CORES</span>
+            <div className="flex justify-between items-end text-[10px] opacity-40 font-sans tracking-widest">
+              <span>ĐANG KHỞI TẠO KHÔNG GIAN TRIỂN LÃM SỐ...</span>
+              <span>MMXVI</span>
             </div>
           </motion.div>
         )}
@@ -298,115 +254,101 @@ export default function Home() {
       {!loading && (
         <div className="h-full w-full relative z-20">
           
-          {/* HEADER NAV CHUẨN BẮC ÂU */}
-          <nav className="fixed top-0 w-full z-50 flex justify-between items-center p-6 md:p-8 border-b border-[#121212]/5 bg-[#FAF8F5]/80 backdrop-blur-md">
-            <span 
-              onMouseEnter={() => { setIsHovered(true); synth.playTick(); }}
-              onMouseLeave={() => setIsHovered(false)}
-              className="font-space font-black tracking-tighter text-2xl"
-            >
+          {/* HEADER NAV CHUẨN THỜI TRANG CAO CẤP */}
+          <nav className="fixed top-0 w-full z-50 flex justify-between items-center p-6 md:p-8 border-b border-white/5 bg-[#080808]/80 backdrop-blur-md">
+            <span className="font-serif-luxury italic font-medium tracking-tight text-xl text-[#C5A880]">
               POSTLAIN*
             </span>
-            <div className="flex gap-4 items-center font-mono text-[9px] tracking-widest text-zinc-400">
-              <span className="w-2 h-2 bg-purple-600 rounded-full animate-ping" />
-              <span>ACTIVE SYSTEM: COORD_0{activeSlide + 1}</span>
+            <div className="flex gap-4 items-center font-sans text-[9px] tracking-[0.25em] text-[#C5A880] uppercase">
+              <span className="w-1.5 h-1.5 bg-[#C5A880] rounded-full animate-pulse" />
+              <span>STAGE // 0{activeSlide + 1}</span>
             </div>
           </nav>
 
-          {/* BỘ CHỈ BÁO TRANG LỘNG LẪY PHÍA BÊN PHẢI (BLUEPRINT NAVIGATION) */}
-          <div className="fixed right-10 top-1/2 -translate-y-1/2 z-[80] flex flex-col gap-8 hidden md:flex border-l border-zinc-200 pl-4 py-8">
+          {/* CHỈ BÁO TRANG CỐ ĐỊNH PHÍA BÊN PHẢI (BLUEPRINT NAVIGATION) */}
+          <div className="fixed right-10 top-1/2 -translate-y-1/2 z-[80] flex flex-col gap-8 hidden md:flex border-l border-white/5 pl-4 py-8">
             {[0, 1, 2, 3].map((idx) => (
               <button 
                 key={idx}
                 onClick={() => { synth.playWhoosh(); setActiveSlide(idx); }}
                 className="group flex items-center justify-end gap-4 relative"
               >
-                <span className={`font-mono text-[10px] tracking-widest transition-opacity duration-300 ${activeSlide === idx ? "opacity-100 font-black text-purple-600" : "opacity-30 group-hover:opacity-100"}`}>
-                  STAGE_0{idx + 1}
+                <span className={`font-sans text-[9px] tracking-[0.3em] transition-opacity duration-300 ${activeSlide === idx ? "opacity-100 font-bold text-[#C5A880]" : "opacity-30 group-hover:opacity-100 text-white"}`}>
+                  0{idx + 1}
                 </span>
-                <span className={`w-2 h-2 rounded-full transition-all duration-300 ${activeSlide === idx ? "bg-purple-600 scale-[2] ring-4 ring-purple-100" : "bg-zinc-300 group-hover:bg-zinc-800"}`} />
+                <span className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${activeSlide === idx ? "bg-[#C5A880] scale-[2] ring-4 ring-[#C5A880]/10" : "bg-white/20 group-hover:bg-white"}`} />
               </button>
             ))}
           </div>
 
           {/* DÒNG TIẾN TRÌNH CUỘN Ở CHÂN TRANG */}
-          <div className="fixed bottom-8 left-8 z-50 font-mono text-[9px] tracking-widest uppercase opacity-40 flex items-center gap-6">
+          <div className="fixed bottom-8 left-8 z-50 font-sans text-[8px] tracking-[0.3em] uppercase opacity-30 flex items-center gap-6">
              <div className="flex gap-1 items-center">
-               <ArrowUp size={12} className="text-purple-600" />
-               <div className="w-12 h-[1px] bg-zinc-300" />
-               <ArrowDown size={12} className="text-purple-600" />
+               <ArrowUp size={10} className="text-[#C5A880]" />
+               <div className="w-8 h-[1px] bg-white/20" />
+               <ArrowDown size={10} className="text-[#C5A880]" />
              </div>
-             <span>Swivel Mouse Wheel / Swipe to explore</span>
+             <span>Lăn chuột hoặc dùng phím mũi tên để tham quan</span>
           </div>
 
-          {/* KHÔNG GIAN KHỞI TẠO CÁC SLIDE HOÀNH TRÁNG */}
+          {/* KHÔNG GIAN TRÌNH DIỄN CHUYỂN SLIDE ĐỘC BẢN */}
           <AnimatePresence mode="wait">
             
             {/* ---------------------------------------------------- */}
-            {/* SLIDE 01: HERO - HOÀNH TRÁNG & KIẾN TRÚC GRAPHIC */}
+            {/* SLIDE 01: HERO - SANG TRỌNG & ĐẲNG CẤP */}
             {/* ---------------------------------------------------- */}
             {activeSlide === 0 && (
               <motion.section 
                 key="slide-1"
-                initial={{ opacity: 0, scale: 0.96 }}
+                initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.04 }}
+                exit={{ opacity: 0, scale: 1.02 }}
                 transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
                 className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24"
               >
-                {/* Đồ họa vector sinh học xoay chậm tạo sự lộng lẫy */}
-                <div className="absolute right-[5%] top-[15%] w-[350px] h-[350px] opacity-[0.06] pointer-events-none hidden md:block">
-                  <svg viewBox="0 0 100 100" className="w-full h-full animate-[spin_60s_linear_infinite]">
-                    <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="5,5" />
-                    <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="0.2" />
-                    <path d="M 50 5 L 50 95 M 5 50 L 95 50" stroke="currentColor" strokeWidth="0.2" />
-                  </svg>
-                </div>
-
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start relative z-10">
                   <div className="md:col-span-8">
                     <div className="flex items-center gap-2 mb-6">
-                      <Terminal size={14} className="text-purple-600" />
-                      <span className="font-mono text-[9px] tracking-[0.5em] uppercase text-purple-600">Postlain Operations Hub</span>
+                      <span className="w-8 h-[1px] bg-[#C5A880] opacity-50" />
+                      <span className="font-sans text-[9px] tracking-[0.35em] uppercase text-[#C5A880]">Creative Operations Architect</span>
                     </div>
-                    {/* Sự kết hợp giữa Serif hoành tráng và Sans-serif mạnh mẽ */}
-                    <h1 className="text-[12vw] md:text-[9vw] font-black font-space leading-[0.8] tracking-[-0.06em] uppercase text-[#121212]">
-                      OPERATIONS<br />
-                      <span className="italic font-serif font-light text-zinc-400 lowercase" style={{ textTransform: "none" }}>designed to</span><br />
-                      OPTIMIZE.
+                    <h1 className="text-[10vw] md:text-[7.5vw] font-bold font-serif-luxury leading-[0.85] tracking-tight text-[#FAF8F5]">
+                      TƯ DUY VẬN HÀNH<br />
+                      <span className="italic font-light text-[#C5A880] lowercase" style={{ textTransform: "none" }}>thiết kế để</span><br />
+                      TỐI ƯU HÓA.
                     </h1>
                   </div>
                   <div className="md:col-span-4 md:text-right md:pt-16">
-                    <span className="font-mono text-[9px] text-zinc-400 tracking-widest uppercase block mb-4">// EXEC PROFILE //</span>
-                    <p className="text-xl text-zinc-600 font-light leading-relaxed font-serif italic">
-                      Tôi là Ngô Phúc (POSTLAIN) — Chuyên gia định vị hệ thống, quản lý vận hành đa kênh tích hợp tự động hóa lập trình AI thực chiến.
+                    <span className="font-sans text-[8px] tracking-[0.3em] uppercase block mb-4 text-[#C5A880]">// GIỚI THIỆU TỔNG QUAN //</span>
+                    <p className="text-xl text-[#FAF8F5]/80 font-serif-luxury italic leading-relaxed font-light">
+                      Tôi là Ngô Phúc (POSTLAIN) — Nhà điều phối hệ thống. Tôi kết nối và giải quyết các bài toán vận hành phức tạp của doanh nghiệp thông qua sức mạnh của logic kỹ thuật và tự động hóa AI.
                     </p>
                   </div>
                 </div>
 
                 {/* Grid Chân Trang lấp đầy khoảng trống cực sang trọng */}
-                <div className="border-t border-[#121212]/5 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-[10px] font-mono uppercase tracking-widest text-zinc-500 relative z-10">
+                <div className="border-t border-white/5 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-[9px] font-sans uppercase tracking-[0.25em] text-zinc-500 relative z-10">
                   <div className="flex flex-col gap-2">
-                    <p className="text-zinc-400 flex items-center gap-1"><Cpu size={12}/> 01 / RETAIL MANAGER</p>
-                    <p className="font-bold text-[#121212]">ALDO GO! DALAT</p>
+                    <p className="text-[#C5A880] flex items-center gap-1">01 / STORE MANAGER</p>
+                    <p className="font-medium text-[#FAF8F5]">ALDO GO! DALAT</p>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <p className="text-zinc-400 flex items-center gap-1"><Activity size={12}/> 02 / MEDIA DIRECTOR</p>
-                    <p className="font-bold text-[#121212]">SB STUDIO</p>
+                    <p className="text-[#C5A880] flex items-center gap-1">02 / STUDIO MANAGER</p>
+                    <p className="font-medium text-[#FAF8F5]">SB STUDIO</p>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <p className="text-zinc-400 flex items-center gap-1"><Compass size={12}/> 03 / COORDINATE</p>
-                    <p className="font-bold text-purple-600">DALAT NODE // VN</p>
+                    <p className="text-[#C5A880] flex items-center gap-1">03 / SPECIAL SKILL</p>
+                    <p className="font-medium text-purple-400">AI AUTOMATION LOGIC</p>
                   </div>
-                  <div className="text-right flex justify-end items-end gap-2 text-purple-600 font-bold">
-                    <span>SYSTEMS ONLINE</span>
+                  <div className="text-right flex justify-end items-end gap-2 text-[#C5A880] font-bold">
+                    <span>HỆ THỐNG SẴN SÀNG</span>
                   </div>
                 </div>
               </motion.section>
             )}
 
             {/* ---------------------------------------------------- */}
-            {/* SLIDE 02: OPERATIONS DASHBOARD (BẢN ĐIỀU KHIỂN HOÀNH TRÁNG) */}
+            {/* SLIDE 02: TRIẾT LÝ QUẢN TRỊ (EDITORIAL MINIMALISM) */}
             {/* ---------------------------------------------------- */}
             {activeSlide === 1 && (
               <motion.section 
@@ -415,60 +357,59 @@ export default function Home() {
                 animate={{ y: "0%", opacity: 1 }}
                 exit={{ y: "-100%", opacity: 0 }}
                 transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-                className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24 bg-white"
+                className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24 bg-[#0a0a0a]"
               >
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center relative z-10 my-auto">
                   <div className="md:col-span-5 space-y-8">
-                    <span className="font-mono text-[9px] tracking-[0.4em] text-purple-600 uppercase block">// VALUE METRICS MATRIX</span>
-                    <h2 className="text-5xl md:text-7xl font-space font-black tracking-tighter uppercase leading-none text-[#121212]">
-                      BẢN LĨNH<br />VẬN HÀNH.
+                    <span className="font-sans text-[8px] tracking-[0.35em] text-[#C5A880] uppercase block">// TRIẾT LÝ THIẾT KẾ QUY TRÌNH</span>
+                    <h2 className="text-5xl md:text-6xl font-serif-luxury font-bold tracking-tight text-[#FAF8F5]">
+                      BẢN LĨNH<br /><span className="italic text-[#C5A880] font-light">QUẢN TRỊ.</span>
                     </h2>
-                    <p className="text-zinc-500 font-light leading-relaxed text-lg font-serif italic">
-                      "Không chỉ dừng lại ở vai trò quản lý tĩnh; tôi thiết lập các hệ số tăng trưởng thực tế dựa trên dữ liệu hệ thống."
+                    <p className="text-zinc-400 font-serif-luxury italic leading-relaxed text-lg font-light">
+                      "Quản trị giỏi là khi hệ thống có thể tự vận hành chính xác đến từng mili-giây mà không cần sự can thiệp thủ công liên tục."
                     </p>
                   </div>
 
-                  {/* Bản hiển thị đồ họa Dashboard dữ liệu kỹ thuật số phức tạp */}
-                  <div className="md:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-4">
-                     <div className="p-8 border border-zinc-100 rounded-[32px] bg-[#FAF8F5] hover:border-purple-600/30 transition-all flex flex-col justify-between h-[250px]">
-                        <Bot size={32} className="text-purple-600" />
+                  <div className="md:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div className="p-8 border border-white/5 rounded-[24px] bg-[#111111] flex flex-col justify-between h-[230px]">
+                        <span className="text-[#C5A880] font-serif-luxury text-3xl italic">A.</span>
                         <div>
-                          <h4 className="text-lg font-bold uppercase font-space text-[#121212]">Lập trình Tác Vụ AI</h4>
-                          <p className="text-xs text-zinc-400 mt-2 font-mono uppercase tracking-wider">KPI AUTOMATION // GOOGLE API</p>
+                          <h4 className="text-lg font-medium font-serif-luxury text-[#FAF8F5]">Giải Pháp Công Nghệ</h4>
+                          <p className="text-xs text-zinc-500 mt-2 font-light leading-relaxed">Phát triển phần mềm quản lý tự động, tinh giảm 80% sức lao động của các khâu trung gian.</p>
                         </div>
                      </div>
-                     <div className="p-8 border border-zinc-100 rounded-[32px] bg-[#FAF8F5] hover:border-purple-600/30 transition-all flex flex-col justify-between h-[250px]">
-                        <Zap size={32} className="text-purple-600" />
+                     <div className="p-8 border border-white/5 rounded-[24px] bg-[#111111] flex flex-col justify-between h-[230px]">
+                        <span className="text-[#C5A880] font-serif-luxury text-3xl italic">B.</span>
                         <div>
-                          <h4 className="text-lg font-bold uppercase font-space text-[#121212]">Vận Hành Đa Kênh</h4>
-                          <p className="text-xs text-zinc-400 mt-2 font-mono uppercase tracking-wider">RETAIL • MEDIA • RESTAURANT</p>
+                          <h4 className="text-lg font-medium font-serif-luxury text-[#FAF8F5]">Quản Trị Đội Ngũ</h4>
+                          <p className="text-xs text-zinc-500 mt-2 font-light leading-relaxed">Năng lực duy trì lửa nhiệt huyết, phân bổ sơ đồ dịch vụ hiệu quả trong môi trường áp lực.</p>
                         </div>
                      </div>
                   </div>
                 </div>
 
-                <div className="border-t border-[#121212]/5 py-8 text-[10px] font-mono uppercase tracking-widest text-zinc-400 flex justify-between items-center">
-                   <span>// STRUCTURAL INTEGRITY // HIGH CONVERT CORES</span>
-                   <span>STABILITY: 100%</span>
+                <div className="border-t border-white/5 py-8 text-[8px] font-sans uppercase tracking-[0.25em] text-zinc-500 flex justify-between items-center">
+                   <span>// ĐỒNG BỘ DỮ LIỆU ĐA CHIỀU</span>
+                   <span>ỔN ĐỊNH HỆ THỐNG: 100%</span>
                 </div>
               </motion.section>
             )}
 
             {/* ---------------------------------------------------- */}
-            {/* SLIDE 03: 3D GLASS PERSPECTIVE (CASE STUDIES) */}
+            {/* SLIDE 03: CASE STUDIES (3D GLASS PERSPECTIVE) */}
             {/* ---------------------------------------------------- */}
             {activeSlide === 2 && (
               <motion.section 
                 key="slide-3"
-                initial={{ scale: 0.9, opacity: 0, rotateY: 45 }}
+                initial={{ scale: 0.9, opacity: 0, rotateY: 30 }}
                 animate={{ scale: 1, opacity: 1, rotateY: 0 }}
-                exit={{ scale: 1.1, opacity: 0, rotateY: -45 }}
+                exit={{ scale: 1.1, opacity: 0, rotateY: -30 }}
                 transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
                 className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24"
               >
-                <div className="flex justify-between items-end border-b border-[#121212]/5 pb-6">
-                  <span className="font-mono text-[9px] tracking-widest text-zinc-400 uppercase">// CAREER DATA CASE STUDIES (CLICK AND HEAR)</span>
-                  <span className="font-mono text-[9px] text-purple-600 font-bold tracking-widest flex items-center gap-2"><LayoutGrid size={12}/> HOVER_TO_ACTIVATE_TILT</span>
+                <div className="flex justify-between items-end border-b border-white/5 pb-6">
+                  <span className="font-sans text-[8px] tracking-[0.25em] text-zinc-500 uppercase">// DỮ LIỆU CASE STUDIES THỰC TIỄN //</span>
+                  <span className="font-sans text-[9px] text-[#C5A880] font-bold tracking-widest flex items-center gap-2">RECRUITER OVERVIEW</span>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 my-auto items-center">
@@ -478,33 +419,33 @@ export default function Home() {
                       onMouseMove={handle3DTilt}
                       onMouseLeave={reset3DTilt}
                       onMouseEnter={() => synth.playWhoosh()}
-                      className="glass-panel p-10 rounded-[48px] shadow-sm flex flex-col justify-between h-[450px] cursor-pointer group scan-glow transition-all"
+                      className="bg-[#111111] border border-white/5 p-10 rounded-[36px] shadow-sm flex flex-col justify-between h-[440px] cursor-pointer group scan-glow transition-all duration-300"
                     >
                        <div className="flex justify-between items-start">
-                          <span className="font-space text-6xl font-black text-stroke group-hover:text-purple-600 transition-all">{item.num}</span>
-                          <span className="font-mono text-[9px] bg-purple-50 px-3 py-1.5 rounded-full text-purple-600 uppercase tracking-wider font-bold">{item.period}</span>
+                          <span className="font-serif-luxury text-5xl font-light text-stroke-gold group-hover:text-[#C5A880] transition-all italic">{item.num}</span>
+                          <span className="font-sans text-[8px] bg-[#C5A880]/10 px-3 py-1.5 rounded-full text-[#C5A880] uppercase tracking-wider font-bold">{item.period}</span>
                        </div>
                        <div>
-                          <p className="font-mono text-[9px] text-zinc-400 uppercase tracking-widest mb-1">{item.company}</p>
-                          <h4 className="text-2xl font-space font-black tracking-tight text-[#121212] uppercase leading-tight mb-4">{item.role}</h4>
-                          <p className="text-sm text-zinc-500 font-light leading-relaxed font-serif italic">{item.detail}</p>
+                          <p className="font-sans text-[8px] text-zinc-500 uppercase tracking-widest mb-1">{item.company}</p>
+                          <h4 className="text-xl font-serif-luxury font-bold tracking-tight text-[#FAF8F5] uppercase leading-tight mb-4">{item.role}</h4>
+                          <p className="text-xs text-zinc-400 font-light leading-relaxed font-serif-luxury italic">{item.detail}</p>
                        </div>
-                       <div className="pt-6 border-t border-zinc-200 flex flex-col gap-1">
-                          <span className="font-mono text-xs font-black text-purple-600 uppercase tracking-widest">{item.metrics}</span>
-                          <span className="font-mono text-[9px] uppercase tracking-widest text-zinc-400">{item.highlight}</span>
+                       <div className="pt-6 border-t border-white/5 flex flex-col gap-1">
+                          <span className="font-sans text-[10px] font-black text-[#C5A880] uppercase tracking-widest">{item.metrics}</span>
+                          <span className="font-sans text-[8px] uppercase tracking-widest text-zinc-500">{item.highlight}</span>
                        </div>
                     </div>
                   ))}
                 </div>
 
-                <div className="border-t border-[#121212]/5 py-8 text-[10px] font-mono uppercase tracking-widest text-zinc-400">
-                   // REAL-WORLD EXEC DATA DECK // DESIGNED BY POSTLAIN
+                <div className="border-t border-white/5 py-8 text-[8px] font-sans uppercase tracking-[0.25em] text-zinc-500">
+                   // CHỈ SỐ LƯỢNG HÓA CHỨNG MINH NĂNG LỰC ĐIỀU HÀNH
                 </div>
               </motion.section>
             )}
 
             {/* ---------------------------------------------------- */}
-            {/* SLIDE 04: THE MONOLITH CONTACT REACTOR (PORTAL HOÀNH TRÁNG) */}
+            {/* SLIDE 04: CONTACT PORTAL (BOUTIQUE SANG TRỌNG) */}
             {/* ---------------------------------------------------- */}
             {activeSlide === 3 && (
               <motion.section 
@@ -513,24 +454,21 @@ export default function Home() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.05 }}
                 transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-                className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24 bg-[#121212] text-white"
+                className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24 bg-[#0a0a0a]"
               >
-                {/* Một khối cầu năng lượng lớn rực sáng xoay ngầm phía sau tạo tính hoành tráng */}
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-600/5 blur-[120px] rounded-full pointer-events-none" />
-
                 <div className="text-center my-auto relative z-10">
-                  <span className="font-mono text-[10px] tracking-[0.8em] text-purple-400 uppercase block mb-12 animate-pulse">// RECRUITMENT GATEWAY CORE //</span>
+                  <span className="font-sans text-[8px] tracking-[0.4em] text-[#C5A880] uppercase block mb-12 animate-pulse">// THÔNG TIN LIÊN HỆ TRỰC TIẾP //</span>
                   
                   <motion.div 
-                    whileHover={{ scale: 0.97 }}
+                    whileHover={{ scale: 0.98 }}
                     className="inline-block cursor-pointer"
                   >
                     <a 
                       href="mailto:studionopu@gmail.com" 
                       onClick={() => synth.playSuccess()}
-                      className="text-[10vw] md:text-[6vw] font-black font-space leading-none tracking-tighter hover:text-purple-400 border-b-[8px] md:border-b-[15px] border-white hover:border-purple-400 transition-all duration-300 pb-4 inline-block text-white uppercase italic"
+                      className="text-[8vw] md:text-[5vw] font-bold font-serif-luxury leading-none tracking-tight text-[#FAF8F5] hover:text-[#C5A880] border-b-2 border-white hover:border-[#C5A880] transition-all duration-500 pb-4 inline-block italic"
                     >
-                      LET'S CONNECT.
+                      studionopu@gmail.com
                     </a>
                   </motion.div>
 
@@ -545,7 +483,7 @@ export default function Home() {
                         href={soc.url} 
                         target="_blank" 
                         onMouseEnter={() => synth.playTick()}
-                        className="p-5 rounded-full border border-white/10 hover:bg-white hover:text-black hover:border-white transition-all duration-300 transform hover:scale-110"
+                        className="p-5 rounded-full border border-white/5 hover:bg-[#FAF8F5] hover:text-black transition-all duration-500 transform hover:scale-105 text-[#C5A880]"
                       >
                          {soc.icon}
                       </a>
@@ -553,8 +491,8 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-[9px] font-mono uppercase tracking-widest text-zinc-500 gap-6 relative z-10">
-                  <span>SYSTEM SPEC: NEXTJS + GRAPHIC CORE V4</span>
+                <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-[8px] font-sans uppercase tracking-[0.25em] text-zinc-500 gap-6 relative z-10">
+                  <span>SYSTEM SPEC: NEXTJS + STAGED SLIDERS</span>
                   <span>Ngô Phúc // POSTLAIN © 2026</span>
                   <span>+84 938-649-420</span>
                 </div>
