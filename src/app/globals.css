@@ -3,20 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --bg-editorial: #FAF8F5; /* Tông kem ấm cao cấp */
-  --text-charcoal: #121212; /* Màu chữ than sang trọng */
-  --accent-violet: #8B5CF6; /* Tím nhạt */
+  --bg-cream: #FAF8F5; /* Tông màu kem ấm giống 28k.studio */
+  --text-charcoal: #121212; /* Chữ màu than sang trọng */
+  --accent-violet: #8B5CF6; /* Màu tím nhạt tạo điểm nhấn công nghệ */
 }
 
 body {
-  background-color: var(--bg-editorial);
+  background-color: var(--bg-cream);
   color: var(--text-charcoal);
-  overflow-x: hidden;
   font-family: var(--font-inter), sans-serif;
   user-select: none;
+  overflow-x: hidden;
 }
 
-/* LỚP BỤI ĐIỆN ẢNH (CINEMATIC FILM GRAIN) */
+/* LỚP PHỦ HẠT BỤI ĐIỆN ẢNH (FILM GRAIN EFFECT) */
 body::after {
   content: "";
   position: fixed;
@@ -30,18 +30,31 @@ body::after {
   z-index: 9999;
 }
 
-/* HIỆU ỨNG SMOOTH CUỘN */
+/* KẺ LINE CHUẨN DESIGN SYSTEM ĐAN MẠCH */
+.hairline-r {
+  border-right: 1px solid rgba(18, 18, 18, 0.08);
+}
+.hairline-b {
+  border-bottom: 1px solid rgba(18, 18, 18, 0.08);
+}
+
+/* CHỮ RỖNG (STROKE TYPOGRAPHY) */
+.text-stroke {
+  -webkit-text-stroke: 1px rgba(18, 18, 18, 0.2);
+  color: transparent;
+  transition: all 0.5s ease;
+}
+
+.group:hover .text-stroke {
+  -webkit-text-stroke: 1px rgba(18, 18, 18, 1);
+}
+
+/* LENIS SCROLLING */
 html.lenis {
   height: auto;
 }
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
-}
-
-/* CHỮ RỖNG SANG TRỌNG */
-.text-stroke-charcoal {
-  -webkit-text-stroke: 1px rgba(18, 18, 18, 0.2);
-  color: transparent;
 }
 
 ::-webkit-scrollbar {
