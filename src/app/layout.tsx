@@ -6,8 +6,8 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const space = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
 
 export const metadata: Metadata = {
-  title: "POSTLAIN | Ngô Phúc Portfolio",
-  description: "Manager & Tech Enthusiast",
+  title: "POSTLAIN // Ngô Phúc — Creative Operations",
+  description: "Advanced Operations, AI Integration & Creative Orchestration.",
 };
 
 export default function RootLayout({
