@@ -1,11 +1,11 @@
 "use client";
-import React, { useEffect, useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, Zap, Music, Youtube, Instagram, Grid, List, CheckCircle2, Cpu, Terminal, ArrowUpRight } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { ArrowRight, Bot, Zap, Music, Youtube, Instagram, Cpu, Terminal, Sparkles, TrendingUp, ShieldAlert, Award } from 'lucide-react';
 import Lenis from 'lenis';
 
 // ----------------------------------------------------
-// BỘ TỔNG HỢP ÂM TẦN KỸ THUẬT SỐ (REAL-TIME FM SYNTHESIZER)
+// BỘ TỔNG HỢP ÂM TẦN KỸ THUẬT SỐ (REAL-TIME SYNTHESIZER)
 // ----------------------------------------------------
 class TechSynth {
   private ctx: AudioContext | null = null;
@@ -14,107 +14,52 @@ class TechSynth {
       this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
     }
   }
-  playTick() {
+  playClick() {
     this.init(); if (!this.ctx) return;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(1600, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + 0.04);
-    gain.gain.setValueAtTime(0.015, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.04);
+    osc.frequency.setValueAtTime(1400, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(300, this.ctx.currentTime + 0.05);
+    gain.gain.setValueAtTime(0.012, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.05);
     osc.connect(gain); gain.connect(this.ctx.destination);
-    osc.start(); osc.stop(this.ctx.currentTime + 0.04);
+    osc.start(); osc.stop(this.ctx.currentTime + 0.05);
   }
-  playSuccess() {
+  playWhoosh() {
     this.init(); if (!this.ctx) return;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-    osc.frequency.setValueAtTime(880, this.ctx.currentTime + 0.08);
-    gain.gain.setValueAtTime(0.02, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.2);
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(120, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + 0.15);
+    gain.gain.setValueAtTime(0.015, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.15);
     osc.connect(gain); gain.connect(this.ctx.destination);
-    osc.start(); osc.stop(this.ctx.currentTime + 0.2);
+    osc.start(); osc.stop(this.ctx.currentTime + 0.15);
   }
 }
 
 const synth = new TechSynth();
 
-// ----------------------------------------------------
-// COMPONENT MAGNETIC CHUYỂN ĐỘNG NAM CHÂM SIÊU MƯỢT
-// ----------------------------------------------------
-const MagneticWrapper = ({ children }: { children: React.ReactNode }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!ref.current) return;
-    const { clientX, clientY } = e;
-    const { height, width, left, top } = ref.current.getBoundingClientRect();
-    const x = clientX - (left + width / 2);
-    const y = clientY - (top + height / 2);
-    ref.current.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-  };
-  const handleMouseLeave = () => {
-    if (!ref.current) return;
-    ref.current.style.transform = `translate(0px, 0px)`;
-  };
-  return (
-    <div 
-      ref={ref} 
-      onMouseMove={handleMouseMove} 
-      onMouseLeave={handleMouseLeave}
-      onMouseEnter={() => synth.playTick()}
-      className="transition-transform duration-300 ease-out inline-block"
-    >
-      {children}
-    </div>
-  );
-};
-
-// DATA DANH MỤC JSON LƯU TRỮ PROFILE CỦA PHÚC
-const projectDatabase = [
-  { id: "p1", category: "AI & TECH", company: "POSTLAIN CORE", role: "AI Software Creator", detail: "Phát triển các dòng mã tự động điều phối nhân sự, tích hợp API ngôn ngữ lớn.", metrics: "Logic // 98%" },
-  { id: "p2", category: "MANAGEMENT", company: "ALDO GO! DALAT", role: "Store Manager", detail: "Quản lý dòng sản phẩm retail, kiểm soát kho bãi tự động và tối ưu hóa nhân lực.", metrics: "Efficiency // +24%" },
-  { id: "p3", category: "MEDIA & ART", company: "SB STUDIO", role: "Studio Director", detail: "Điều hành dự án sản xuất truyền thông, quản lý nghệ sĩ và đối tác truyền thông quốc tế.", metrics: "Reach // 4M+" },
-  { id: "p4", category: "LOGISTICS", company: "PHUI STEAK", role: "Kitchen Captain / Chef", detail: "Quản trị quy trình chế biến, giám sát phân bổ chuỗi cung ứng thực phẩm tươi.", metrics: "Performance // 100%" }
-];
-
-export default function Home() {
+export default function Page() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
-  const [consoleLogs, setConsoleLogs] = useState<string[]>([]);
-  const [activeFilter, setActiveFilter] = useState("ALL");
-  const [viewMode, setViewMode] = useState<"grid" | "blueprint">("blueprint");
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const horizontalSectionRef = useRef<HTMLDivElement>(null);
 
-  // 1. CHẠY CONSOLE LOADING GIẢ LẬP ĐẲNG CẤP CAO
+  // 1. CHẠY PRELOADER CONSOLE
   useEffect(() => {
-    const logs = [
-      "Initializing Postlain OS Kernel v2.8...",
-      "Connecting to Da Lat, VN Node 1002...",
-      "Mapping AI System Frameworks...",
-      "Synthesizing mechanical audio layers...",
-      "Verifying structural grids...",
-      "System initialized successfully. Welcome Ngô Phúc."
-    ];
-    let logIndex = 0;
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          synth.playSuccess();
           setTimeout(() => setLoading(false), 500);
           return 100;
         }
-        if (prev % 15 === 0 && logIndex < logs.length) {
-          setConsoleLogs((p) => [...p, `[SYS_LOG]: ${logs[logIndex]}`]);
-          logIndex++;
-          synth.playTick();
-        }
+        if (prev % 12 === 0) synth.playClick();
         return prev + 1;
       });
-    }, 30);
+    }, 20);
     return () => clearInterval(interval);
   }, []);
 
@@ -129,323 +74,266 @@ export default function Home() {
     requestAnimationFrame(raf);
   }, [loading]);
 
-  // 3. ĐỒ HỌA MẠNG LƯỚI NƠ-RON TƯƠNG TÁC (CANVAS WEBGL/2D PHYSICS ENGINE)
-  useEffect(() => {
-    if (loading || !canvasRef.current) return;
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+  // 3. HIỆU ỨNG CUỘN NGANG (VERTICAL TO HORIZONTAL SCROLL)
+  const { scrollYProgress } = useScroll({ target: horizontalSectionRef });
+  const xTranslation = useTransform(scrollYProgress, [0, 1], ["0%", "-66.66%"]);
 
-    let animationFrameId: number;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
-
-    const handleResize = () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    };
-    window.addEventListener("resize", handleResize);
-
-    const particles: { x: number; y: number; vx: number; vy: number; radius: number }[] = [];
-    const particleCount = 60;
-
-    for (let i = 0; i < particleCount; i++) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 1.2,
-        vy: (Math.random() - 0.5) * 1.2,
-        radius: Math.random() * 2 + 1
-      });
+  const careerImpacts = [
+    {
+      num: "01",
+      role: "STORE MANAGER",
+      company: "ALDO GO! DALAT",
+      period: "2025—2026",
+      metrics: "Giảm Thất Thoát Kho Bãi <1%",
+      highlight: "Tăng Trưởng Doanh Số 15%",
+      detail: "Phân tích hành vi tệp khách hàng du lịch để cơ cấu lại danh mục sản phẩm chủ lực. Ứng dụng quy trình quản lý tinh giản giúp tối ưu hiệu năng làm việc của đội ngũ bán lẻ."
+    },
+    {
+      num: "02",
+      role: "STUDIO MANAGER",
+      company: "SB STUDIO",
+      period: "2023—2024",
+      metrics: "Tiết Kiệm 40% Chi Phí Sản Xuất",
+      highlight: "Tăng Hiệu Suất Vận Hành 200%",
+      detail: "Hệ thống hóa toàn bộ lịch trình thu âm, quản lý nghệ sĩ và đối tác truyền thông qua nền tảng số. Loại bỏ các khâu thừa thãi giúp đẩy mạnh tốc độ sản xuất nội dung."
+    },
+    {
+      num: "03",
+      role: "KITCHEN CAPTAIN / CHEF",
+      company: "PHUI STEAK",
+      period: "2024—2025",
+      metrics: "Giảm 20% Thời Gian Chờ Của Khách",
+      highlight: "Sắp Xếp Quy Trình Bếp Đạt Mốc 100%",
+      detail: "Ứng dụng sơ đồ di chuyển tuyến tính trong bếp. Điều phối ca cao điểm mượt mà bằng logic sắp xếp nguyên liệu thông minh."
     }
-
-    let mouse = { x: -1000, y: -1000 };
-    const handleMouseMove = (e: MouseEvent) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-
-    const draw = () => {
-      ctx.clearRect(0, 0, width, height);
-      
-      // Vẽ các nút mạng nơ-ron
-      particles.forEach((p, idx) => {
-        p.x += p.vx;
-        p.y += p.vy;
-
-        if (p.x < 0 || p.x > width) p.vx *= -1;
-        if (p.y < 0 || p.y > height) p.vy *= -1;
-
-        // Bắt dính chuột nhẹ
-        const dx = mouse.x - p.x;
-        const dy = mouse.y - p.y;
-        const dist = Math.hypot(dx, dy);
-        if (dist < 150) {
-          p.x += dx * 0.01;
-          p.y += dy * 0.01;
-        }
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(139, 92, 246, 0.4)";
-        ctx.fill();
-
-        // Vẽ các mối liên kết mạng logic
-        for (let j = idx + 1; j < particles.length; j++) {
-          const p2 = particles[j];
-          const distance = Math.hypot(p.x - p2.x, p.y - p2.y);
-          if (distance < 110) {
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(139, 92, 246, ${0.1 * (1 - distance / 110)})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        }
-      });
-
-      animationFrameId = requestAnimationFrame(draw);
-    };
-
-    draw();
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, [loading]);
-
-  const filteredProjects = activeFilter === "ALL" 
-    ? projectDatabase 
-    : projectDatabase.filter(p => p.category === activeFilter);
+  ];
 
   return (
-    <div className="relative min-h-screen selection:bg-purple-600 selection:text-white overflow-hidden">
+    <div className="relative min-h-screen bg-[#FAF8F5] text-[#121212]">
       
-      {/* 1. LAYER CANVAS ĐỒ HỌA MẠNG LƯỚI LOGIC BIỂU DIỄN AI */}
-      <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-10 opacity-70" />
-
-      {/* 2. CHƯƠNG TRÌNH PRELOADER HỆ THỐNG PHỨC TẠP CỦA CHUYÊN GIA */}
+      {/* PRELOADER HỆ THỐNG */}
       <AnimatePresence>
         {loading && (
           <motion.div 
             exit={{ y: "-100%" }}
             transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 bg-[#141414] text-white z-[9999] flex flex-col justify-between p-8 font-mono"
+            className="fixed inset-0 bg-[#121212] text-white z-[9999] flex flex-col justify-between p-8 font-mono"
           >
-            <div className="flex justify-between items-center border-b border-white/5 pb-4">
-              <span className="flex items-center gap-2 text-xs text-purple-400">
-                <Cpu size={14} className="animate-spin" /> POSTLAIN OS INITIALIZING_
-              </span>
-              <span className="text-xs opacity-50">LOCATION: DA LAT, VN</span>
+            <div className="flex justify-between text-xs opacity-50 border-b border-white/5 pb-4">
+              <span>POSTLAIN KERNEL V3.0</span>
+              <span>CALIBRATING SENSORS...</span>
             </div>
-
-            <div className="max-w-xl self-start flex flex-col gap-2 text-[10px] opacity-70">
-              {consoleLogs.map((log, i) => (
-                <div key={i} className="flex gap-2">
-                  <span className="text-purple-400">&gt;</span> {log}
-                </div>
-              ))}
+            <div className="text-center">
+              <span className="text-[15vw] font-black leading-none font-space text-purple-500">{progress}%</span>
             </div>
-
-            <div className="flex flex-col gap-4">
-              <div className="flex justify-between items-end">
-                <h2 className="text-4xl font-bold tracking-tighter">NGÔ PHÚC®</h2>
-                <span className="text-7xl font-light text-purple-400">{progress}%</span>
-              </div>
-              <div className="w-full bg-white/5 h-1 overflow-hidden relative rounded-full">
-                <motion.div 
-                  className="bg-purple-500 h-full rounded-full" 
-                  style={{ width: `${progress}%` }} 
-                />
-              </div>
+            <div className="flex justify-between items-end">
+              <span className="text-xs opacity-50">READY TO TRANSMIT</span>
+              <span className="text-xs">DALAT, VN</span>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* 3. TOÀN BỘ WEBSITE CHÍNH */}
       {!loading && (
-        <div className="design-grid-bg min-h-screen relative z-20">
+        <div className="relative">
           
-          {/* HEADER NAV */}
-          <nav className="fixed top-0 w-full z-50 flex justify-between items-center p-6 md:p-8 border-b border-[#141414]/5 bg-[#FAF8F5]/70 backdrop-blur-md">
-            <MagneticWrapper>
-              <span className="font-space font-black tracking-tighter text-2xl cursor-pointer">POSTLAIN*</span>
-            </MagneticWrapper>
-            <div className="flex items-center gap-4">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-ping" />
-              <span className="font-mono text-[9px] uppercase tracking-widest opacity-60">Status: Automated</span>
+          {/* HEADER NAV CHUẨN ĐAN MẠCH */}
+          <nav className="fixed top-0 w-full z-50 flex justify-between items-center p-6 md:p-8 border-b border-[#121212]/5 bg-[#FAF8F5]/80 backdrop-blur-md">
+            <span className="font-space font-black tracking-tighter text-2xl">POSTLAIN*</span>
+            <div className="flex gap-8 items-center text-[10px] font-mono tracking-widest uppercase">
+              <a href="#about" onClick={() => synth.playWhoosh()} className="hover:text-purple-600 transition">About</a>
+              <a href="#journey" onClick={() => synth.playWhoosh()} className="hover:text-purple-600 transition">Journey</a>
+              <a href="mailto:studionopu@gmail.com" className="bg-[#121212] text-white px-4 py-2 rounded-full hover:bg-purple-600 transition">HIRE POSTLAIN</a>
             </div>
           </nav>
 
-          {/* HERO SECTION */}
-          <section className="min-h-screen flex flex-col justify-between pt-40 px-6 md:px-12 relative border-b border-[#141414]/5">
+          {/* 1. HERO SECTION: TEXT MASK SPLIT EFFECT */}
+          <section id="about" className="min-h-screen flex flex-col justify-between pt-40 px-6 md:px-12 relative border-b border-[#121212]/5">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
               <div className="md:col-span-8">
                 <div className="flex items-center gap-2 mb-6">
                   <Terminal size={14} className="text-purple-600" />
-                  <span className="font-mono text-[9px] tracking-[0.4em] uppercase text-purple-600">Postlain Operational Core v2.0</span>
+                  <span className="font-mono text-[9px] tracking-[0.4em] uppercase text-purple-600">The Operations & AI Architecture</span>
                 </div>
-                <h1 className="text-[11vw] md:text-[8vw] font-black font-space leading-[0.85] tracking-[-0.06em] uppercase">
-                  MANAGEMENT<br />
-                  <span className="italic font-light text-zinc-400">ENGINEERED</span><br />
-                  WITH AI.
+                <h1 className="text-[12vw] md:text-[8vw] font-black font-space leading-[0.82] tracking-[-0.06em] uppercase">
+                  OPERATIONS<br />
+                  <span className="italic font-light text-zinc-400">DESIGNED TO</span><br />
+                  OPTIMIZE.
                 </h1>
               </div>
               <div className="md:col-span-4 md:text-right md:pt-14">
-                <p className="font-mono text-[9px] text-zinc-400 uppercase tracking-[0.3em] mb-4">SPECIFICATIONS // INPUTS</p>
-                <p className="text-sm text-zinc-600 leading-relaxed max-w-sm md:ml-auto">
-                  Vận hành và chuyển dịch các mắt xích quản lý bằng lập trình tư duy, tích hợp tác vụ AI vào từng khâu quản trị thực tế.
+                <span className="font-mono text-[9px] text-zinc-400 tracking-widest uppercase block mb-4">// EXECUTIVE SUMMARY</span>
+                <p className="text-lg text-zinc-600 leading-relaxed font-light">
+                  Tôi không chỉ quản lý con người; tôi thiết kế quy trình. Sự kết hợp giữa tư duy logic tự động hóa của AI và bản lĩnh điều phối đa ngành giúp doanh nghiệp vận hành mượt mà và tối ưu chi phí.
                 </p>
               </div>
             </div>
 
-            {/* Panel Hệ Thống */}
-            <div className="border-t border-[#141414]/5 py-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-[10px] font-mono uppercase tracking-widest text-zinc-500">
+            <div className="border-t border-[#121212]/5 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-[10px] font-mono uppercase tracking-widest text-zinc-500">
               <div>
-                <p className="text-zinc-400 mb-1">AUTOMATION</p>
-                <p className="font-bold text-[#141414]">100% PROGRAMMED</p>
+                <p className="text-zinc-400 mb-1">01 / RETAIL MANAGER</p>
+                <p className="font-bold text-[#121212]">ALDO GO! DALAT</p>
               </div>
               <div>
-                <p className="text-zinc-400 mb-1">INTERACTIVE AUDIO</p>
-                <p className="font-bold text-purple-600">FM SYNTH ACTIVE</p>
+                <p className="text-zinc-400 mb-1">02 / STUDIO MANAGER</p>
+                <p className="font-bold text-[#121212]">SB STUDIO</p>
               </div>
               <div>
-                <p className="text-zinc-400 mb-1">MATRIX BG</p>
-                <p className="font-bold text-[#141414]">EUCLIDEAN ALGORITHM</p>
+                <p className="text-zinc-400 mb-1">03 / SPECIAL STRENGTH</p>
+                <p className="font-bold text-purple-600">AI AUTOMATION LOGIC</p>
               </div>
-              <div className="text-right flex justify-end items-end gap-2">
-                <span>SCROLL TO SYSTEM MATRIX</span>
-                <ArrowUpRight size={14} className="text-purple-600" />
+              <div className="text-right flex justify-end items-end gap-2 text-purple-600">
+                <span>SCROLL DOWN TO INITIATE SLIDER</span>
+                <ArrowRight size={14} />
               </div>
             </div>
           </section>
 
-          {/* DYNAMIC CATALOG (Sự phức tạp về tính năng và dữ liệu) */}
-          <section className="py-32 px-6 md:px-12">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16 border-b border-[#141414]/5 pb-8">
-              <div>
-                <p className="font-mono text-[9px] uppercase text-zinc-400 tracking-widest">// SYSTEM INDEX</p>
-                <h2 className="text-5xl font-space font-black tracking-tighter uppercase mt-2">Dữ Liệu Vận Hành</h2>
-              </div>
+          {/* 2. CORE VALUE: ĐIỂM NHẤN ĐỐI VỚI DOANH NGHIỆP TUYỂN DỤNG */}
+          <section className="py-32 px-6 md:px-12 bg-white border-b border-[#121212]/5">
+            <p className="font-mono text-[10px] tracking-[0.4em] text-zinc-400 uppercase mb-4">// VALUE STATEMENT FOR EMPLOYERS</p>
+            <h2 className="text-4xl md:text-6xl font-space font-black tracking-tighter uppercase mb-20">Tại sao tôi mang lại sự đột phá?</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-zinc-200">
               
-              {/* BỘ LỌC DỮ LIỆU ĐỘNG (INTERACTIVE FILTERS) */}
-              <div className="flex flex-wrap gap-2">
-                {["ALL", "AI & TECH", "MANAGEMENT", "MEDIA & ART", "LOGISTICS"].map((filter) => (
-                  <button
-                    key={filter}
-                    onClick={() => { synth.playTick(); setActiveFilter(filter); }}
-                    className={`px-4 py-2 rounded-full font-mono text-[9px] uppercase tracking-widest transition-all ${
-                      activeFilter === filter 
-                        ? "bg-[#141414] text-white" 
-                        : "bg-white border border-[#141414]/5 text-zinc-500 hover:bg-zinc-100"
-                    }`}
-                  >
-                    {filter}
-                  </button>
-                ))}
+              <div onMouseEnter={() => synth.playClick()} className="bg-white p-12 flex flex-col justify-between h-[450px]">
+                <Bot size={40} className="text-purple-600" />
+                <div>
+                  <h3 className="text-3xl font-space font-bold uppercase tracking-tight mb-4">Tự Động Hóa Thực Tế</h3>
+                  <p className="text-zinc-500 leading-relaxed font-light">
+                     Không nói lý thuyết suông. Tôi có khả năng lập trình và ứng dụng AI trực tiếp để tạo ra các giải pháp tự quản lý nhân sự, tự phân công kịch bản truyền thông và xử lý các tệp dữ liệu kho bãi lớn.
+                  </p>
+                </div>
               </div>
 
-              {/* BỘ CHUYỂN ĐỔI CHẾ ĐỘ VIEW (VIEW MODE SYSTEM) */}
-              <div className="flex gap-1 bg-white border border-[#141414]/5 p-1 rounded-full hidden md:flex">
-                <button 
-                  onClick={() => { synth.playTick(); setViewMode("blueprint"); }}
-                  className={`p-2 rounded-full transition-colors ${viewMode === "blueprint" ? "bg-purple-600 text-white" : "text-zinc-400"}`}
-                >
-                  <List size={14} />
-                </button>
-                <button 
-                  onClick={() => { synth.playTick(); setViewMode("grid"); }}
-                  className={`p-2 rounded-full transition-colors ${viewMode === "grid" ? "bg-purple-600 text-white" : "text-zinc-400"}`}
-                >
-                  <Grid size={14} />
-                </button>
+              <div onMouseEnter={() => synth.playClick()} className="bg-white p-12 flex flex-col justify-between h-[450px]">
+                <Zap size={40} className="text-purple-600" />
+                <div>
+                  <h3 className="text-3xl font-space font-bold uppercase tracking-tight mb-4">Kinh Nghiệm Thực Chiến Đa Ngành</h3>
+                  <p className="text-zinc-500 leading-relaxed font-light">
+                     Tôi đã lãnh đạo trong 3 môi trường khắc nghiệt nhất: Bán lẻ thời trang quốc tế cao cấp (ALDO), Phòng sản xuất nghệ thuật cường độ cao (SB Studio) và Gian bếp nóng giờ cao điểm (Phủi Steak).
+                  </p>
+                </div>
               </div>
-            </div>
 
-            {/* KHÔNG GIAN HIỂN THỊ MORPHING CARDS */}
-            <motion.div layout className="grid grid-cols-1 md:grid-cols-12 gap-6">
-              <AnimatePresence mode="popLayout">
-                {filteredProjects.map((p, index) => (
-                  <motion.div
-                    layout
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-                    key={p.id}
-                    className={`bg-white border border-[#141414]/5 p-8 rounded-[32px] flex flex-col justify-between hover:shadow-2xl hover:border-purple-600/25 transition-all duration-500 ${
-                      viewMode === "blueprint" ? "md:col-span-12 flex-row items-center" : "md:col-span-6 h-[400px]"
-                    }`}
-                  >
-                    <div className="flex gap-6 items-start">
-                      <div className="p-3 bg-purple-50 rounded-2xl">
-                        {p.category === "AI & TECH" ? <Cpu className="text-purple-600" /> : <CheckCircle2 className="text-zinc-400" />}
-                      </div>
-                      <div>
-                        <span className="font-mono text-[9px] text-purple-600 uppercase tracking-widest">{p.category}</span>
-                        <h3 className="text-2xl font-space font-bold text-[#141414] mt-2">{p.company}</h3>
-                        <p className="text-sm font-mono text-zinc-400 uppercase tracking-wider mt-1">{p.role}</p>
-                        <p className="text-sm text-zinc-500 leading-relaxed max-w-xl mt-4">{p.detail}</p>
-                      </div>
-                    </div>
-                    <div className="text-right flex flex-col justify-between h-full pt-4 md:pt-0">
-                      <span className="font-mono text-xs font-bold text-[#141414] bg-zinc-100 px-3 py-1 rounded-full">{p.metrics}</span>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </motion.div>
-          </section>
-
-          {/* SOCIAL NETWORK LINKS */}
-          <section className="py-40 border-t border-[#141414]/5">
-            <div className="px-6 md:px-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                { icon: <Music />, title: "Spotify Artist", info: "POSTLAIN", url: "https://open.spotify.com/artist/1GXZL8RGTHaxQVbo6yFB9n" },
-                { icon: <Youtube />, title: "YouTube Node", info: "@postlain", url: "https://youtube.com/@postlain" },
-                { icon: <Instagram />, title: "Insta Feed", info: "@postlainagain", url: "https://www.instagram.com/postlainagain" }
-              ].map((social, idx) => (
-                <MagneticWrapper key={idx}>
-                  <a href={social.url} target="_blank" className="p-8 border border-[#141414]/5 bg-white rounded-[32px] flex justify-between items-center hover:bg-zinc-50 hover:border-purple-600/10 transition-all w-full">
-                    <div className="flex gap-4 items-center">
-                      <div className="text-purple-600">{social.icon}</div>
-                      <div>
-                        <h4 className="font-space font-bold text-lg text-[#141414]">{social.title}</h4>
-                        <p className="font-mono text-[10px] text-zinc-400 uppercase tracking-widest">{social.info}</p>
-                      </div>
-                    </div>
-                    <ArrowUpRight size={18} className="text-zinc-300" />
-                  </a>
-                </MagneticWrapper>
-              ))}
             </div>
           </section>
 
-          {/* SYSTEM FOOTER */}
-          <footer className="py-32 px-6 md:px-12 border-t border-[#141414]/5 bg-white text-black">
+          {/* 3. ĐỈNH CAO CHUYỂN ĐỘNG: CUỘN DỌC TRỰT NGANG (HORIZONTAL SCROLL DECK) */}
+          <div ref={horizontalSectionRef} id="journey" className="relative h-[300vh] border-b border-[#121212]/5">
+            <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center bg-[#FAF8F5]">
+              <motion.div style={{ x: xTranslation }} className="flex w-[300vw] h-full">
+                
+                {/* PANEL 1: SB STUDIO */}
+                <div onMouseEnter={() => synth.playWhoosh()} className="w-screen h-full flex flex-col justify-between p-12 md:p-24 border-r border-[#121212]/5 flex-shrink-0">
+                  <div className="flex justify-between items-start">
+                     <span className="font-space text-7xl font-black text-stroke-charcoal">01 / 03</span>
+                     <span className="font-mono text-xs bg-purple-50 px-4 py-2 rounded-full text-purple-600 font-bold uppercase tracking-wider">MEDIA OPERATIONS</span>
+                  </div>
+                  <div className="max-w-4xl">
+                     <p className="font-mono text-sm text-zinc-400 uppercase tracking-widest mb-4">SB STUDIO • STUDIO MANAGER</p>
+                     <h3 className="text-6xl md:text-8xl font-space font-black tracking-tighter uppercase leading-none mb-8">
+                       TĂNG HIỆU SUẤT VẬN HÀNH 200%
+                     </h3>
+                     <p className="text-xl text-zinc-500 leading-relaxed font-light max-w-2xl">
+                       Thiết kế lại quy trình điều phối giữa nghệ sĩ và đội ngũ quay dựng, triệt tiêu 40% chi phí sản xuất thừa thãi. Xây dựng kế hoạch quản trị và định hướng marketing thực chiến thúc đẩy tiếp cận của thương hiệu.
+                     </p>
+                  </div>
+                  <div className="flex gap-16 font-mono text-xs uppercase tracking-wider text-zinc-400">
+                     <div>
+                       <p className="text-[#121212] font-bold">Quản Lý Doanh Thu & CSKH</p>
+                     </div>
+                     <div>
+                       <p className="text-[#121212] font-bold">Quản Lý Đối Tác MCN & Nghệ Sĩ</p>
+                     </div>
+                  </div>
+                </div>
+
+                {/* PANEL 2: ALDO GO! */}
+                <div onMouseEnter={() => synth.playWhoosh()} className="w-screen h-full flex flex-col justify-between p-12 md:p-24 border-r border-[#121212]/5 flex-shrink-0">
+                  <div className="flex justify-between items-start">
+                     <span className="font-space text-7xl font-black text-stroke-charcoal">02 / 03</span>
+                     <span className="font-mono text-xs bg-purple-50 px-4 py-2 rounded-full text-purple-600 font-bold uppercase tracking-wider">RETAIL OPERATIONS</span>
+                  </div>
+                  <div className="max-w-4xl">
+                     <p className="font-mono text-sm text-zinc-400 uppercase tracking-widest mb-4">ALDO GO! DALAT • STORE MANAGER</p>
+                     <h3 className="text-6xl md:text-8xl font-space font-black tracking-tighter uppercase leading-none mb-8">
+                       GIẢM THẤT THOÁT KHO BÃI &lt;1%
+                     </h3>
+                     <p className="text-xl text-zinc-500 leading-relaxed font-light max-w-2xl">
+                       Sử dụng phương pháp kiểm soát kho tuyến tính và quản lý nhân sự bằng KPI chặt chẽ giúp thúc đẩy doanh số bán lẻ tăng 15%. Chịu trách nhiệm trực tiếp về phát triển ngành retail tại địa phương.
+                     </p>
+                  </div>
+                  <div className="flex gap-16 font-mono text-xs uppercase tracking-wider text-zinc-400">
+                     <div>
+                       <p className="text-[#121212] font-bold">Vận Hành Cửa Hàng Bán Lẻ</p>
+                     </div>
+                     <div>
+                       <p className="text-[#121212] font-bold">Kiểm Soát Tự Động Kho Bãi</p>
+                     </div>
+                  </div>
+                </div>
+
+                {/* PANEL 3: PHỦI STEAK */}
+                <div onMouseEnter={() => synth.playWhoosh()} className="w-screen h-full flex flex-col justify-between p-12 md:p-24 flex-shrink-0">
+                  <div className="flex justify-between items-start">
+                     <span className="font-space text-7xl font-black text-stroke-charcoal">03 / 03</span>
+                     <span className="font-mono text-xs bg-purple-50 px-4 py-2 rounded-full text-purple-600 font-bold uppercase tracking-wider">LOGISTICS OPERATIONS</span>
+                  </div>
+                  <div className="max-w-4xl">
+                     <p className="font-mono text-sm text-zinc-400 uppercase tracking-widest mb-4">PHUI STEAK • KITCHEN CAPTAIN</p>
+                     <h3 className="text-6xl md:text-8xl font-space font-black tracking-tighter uppercase leading-none mb-8">
+                       ĐIỀU PHỐI ĐẠT MỐC 100% HIỆU SUẤT
+                     </h3>
+                     <p className="text-xl text-zinc-500 leading-relaxed font-light max-w-2xl">
+                       Giảm 20% thời gian chờ của khách hàng bằng cách tối ưu hóa sơ đồ bếp và quy trình phân bổ nguyên liệu Âu. Tự học và chuẩn hóa kỹ thuật áp chảo Steak giúp đảm bảo chất lượng đồng đều.
+                     </p>
+                  </div>
+                  <div className="flex gap-16 font-mono text-xs uppercase tracking-wider text-zinc-400">
+                     <div>
+                       <p className="text-[#121212] font-bold">Tối Ưu Logistics Nguyên Liệu</p>
+                     </div>
+                     <div>
+                       <p className="text-[#121212] font-bold">Kỹ Thuật Âu (Steak, Salmon, Pasta)</p>
+                     </div>
+                  </div>
+                </div>
+
+              </motion.div>
+            </div>
+          </div>
+
+          {/* 4. MẠNG XÃ HỘI & CONTACT CHUẨN CHUYÊN NGHIỆP */}
+          <section className="py-40 px-6 md:px-12 border-t border-[#121212]/5">
             <div className="max-w-4xl mx-auto text-center">
-              <span className="font-mono text-[9px] tracking-[0.6em] text-purple-600 uppercase block mb-6">// ENTER_SYS_CORE</span>
-              <MagneticWrapper>
-                <a 
-                  href="mailto:studionopu@gmail.com" 
-                  className="text-[9vw] md:text-[6vw] font-black font-space leading-none tracking-tighter hover:text-purple-600 transition-colors border-b-4 border-[#141414] pb-2 inline-block"
-                >
-                  STUDIONOPU@GMAIL.COM
-                </a>
-              </MagneticWrapper>
-              
-              <div className="mt-32 pt-12 border-t border-[#141414]/10 flex flex-col md:flex-row justify-between items-center text-[9px] font-mono uppercase tracking-widest text-zinc-400 gap-6">
-                <span>SYSTEM REGION: DALAT, VN</span>
-                <span>All assets automated // v2.8</span>
-                <span>© NGÔ PHÚC 2026</span>
+              <span className="font-mono text-[9px] tracking-[0.5em] text-purple-600 uppercase block mb-12">// RECRUITMENT INQUIRY</span>
+              <a 
+                href="mailto:studionopu@gmail.com" 
+                onClick={() => synth.playSuccess()}
+                className="text-[9vw] md:text-[6vw] font-bold font-space leading-none tracking-tighter text-[#121212] hover:text-purple-600 border-b-4 border-[#121212] hover:border-purple-600 transition-all duration-300 pb-4 inline-block"
+              >
+                STUDIONOPU@GMAIL.COM
+              </a>
+
+              <div className="flex justify-center gap-10 mt-20">
+                {[
+                  { icon: <Music />, url: "https://open.spotify.com/artist/1GXZL8RGTHaxQVbo6yFB9n" },
+                  { icon: <Youtube />, url: "https://youtube.com/@postlain" },
+                  { icon: <Instagram />, url: "https://www.instagram.com/postlainagain" }
+                ].map((soc, idx) => (
+                  <a key={idx} href={soc.url} target="_blank" className="p-4 rounded-full border border-black/10 hover:bg-black hover:text-white transition-all">
+                     {soc.icon}
+                  </a>
+                ))}
+              </div>
+
+              <div className="mt-32 pt-12 border-t border-[#121212]/5 flex flex-col md:flex-row justify-between items-center text-[10px] font-mono uppercase tracking-widest text-zinc-400 gap-6">
+                <span>DALAT, VN</span>
+                <span>Ngô Phúc // POSTLAIN © 2026</span>
+                <span>+84 938-649-420</span>
               </div>
             </div>
-          </footer>
+          </section>
 
         </div>
       )}
