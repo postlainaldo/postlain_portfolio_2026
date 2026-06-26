@@ -42,7 +42,7 @@ html, body {
   -webkit-text-stroke: 1px rgba(197, 168, 128, 1);
 }
 
-/* LỚP PHỦ HẠT BỤI ĐIỆN ẢNH (CINEMATIC NOISE) */
+/* LỚP PHỦ HẠT BỤI ĐIỆN ẢNH (FILM GRAIN EFFECT) */
 body::after {
   content: "";
   position: fixed;
