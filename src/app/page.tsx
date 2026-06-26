@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { Bot, Zap, Music, Youtube, Instagram, Terminal, Award, Globe, ArrowUpRight, HelpCircle, Eye } from 'lucide-react';
-import Lenis from 'lenis';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Bot, Zap, Music, Youtube, Instagram, Terminal, Award, Globe, ArrowDown, ArrowUp } from 'lucide-react';
 
 // ----------------------------------------------------
 // BỘ TỔNG HỢP ÂM TẦN KỸ THUẬT SỐ (FM SYNTHESIZER ENGINE)
@@ -31,7 +30,7 @@ class TechSynth {
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = "triangle";
-    osc.frequency.setValueAtTime(120, this.ctx.currentTime);
+    osc.frequency.setValueAtTime(150, this.ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(450, this.ctx.currentTime + 0.15);
     gain.gain.setValueAtTime(0.012, this.ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.15);
@@ -43,8 +42,8 @@ class TechSynth {
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-    osc.frequency.setValueAtTime(880, this.ctx.currentTime + 0.08);
+    osc.frequency.setValueAtTime(520, this.ctx.currentTime);
+    osc.frequency.setValueAtTime(1040, this.ctx.currentTime + 0.08);
     gain.gain.setValueAtTime(0.015, this.ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.25);
     osc.connect(gain); gain.connect(this.ctx.destination);
@@ -54,7 +53,7 @@ class TechSynth {
 
 const synth = new TechSynth();
 
-// ĐỮ LIỆU CASE STUDIES VỚI CHỈ SỐ DOANH NGHIỆP CỰC MẠNH
+// THÔNG TIN CASE STUDIES CHUẨN KINH DOANH CHO CÔNG TY LỚN
 const careerImpacts = [
   {
     num: "01",
@@ -83,7 +82,7 @@ const careerImpacts = [
     period: "2024—2025",
     metrics: "Giảm 20% Thời Gian Chờ Của Khách",
     highlight: "Sắp Xếp Quy Trình Bếp Đạt Mốc 100%",
-    detail: "Áp dụng phương pháp di chuyển tam giác vàng trong bếp công nghiệp, phân phối mượt mà các món Âu chất lượng cao trong khung giờ cao điểm.",
+    detail: "Áp dụng phương pháp di chuyển tam giác vàng trong bếp công nghiệp, phân phối mượt mà các món Âu chất lượng cao trong khu giờ cao điểm.",
     icon: <Zap size={20} className="text-purple-600" />
   }
 ];
@@ -93,9 +92,11 @@ export default function Home() {
   const [progress, setProgress] = useState(0);
   const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
   const [isHovered, setIsHovered] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [isScrolling, setIsScrolling] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // 1. CHẠY CONSOLE LOADING GIẢ LẬP ĐẲNG CẤP CAO
+  // 1. CONSOLE LOADING GIẢ LẬP ĐẲNG CẤP CAO
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
@@ -108,22 +109,11 @@ export default function Home() {
         if (prev % 15 === 0) synth.playTick();
         return prev + 1;
       });
-    }, 20);
+    }, 15);
     return () => clearInterval(interval);
   }, []);
 
-  // 2. SMOOTH SCROLL LENIS
-  useEffect(() => {
-    if (loading) return;
-    const lenis = new Lenis({ lerp: 0.08 });
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-  }, [loading]);
-
-  // 3. THE CUSTOM MOUSE LENS
+  // 2. THE CUSTOM MOUSE LENS
   useEffect(() => {
     if (loading) return;
     const handleMouseMove = (e: MouseEvent) => {
@@ -133,7 +123,66 @@ export default function Home() {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [loading]);
 
-  // 4. NỀN NƯỚC CHẢY SINH HỌC CHUYỂN ĐỘNG CHẬM (FLUID WAVE NETWORKS)
+  // 3. THUẬT TOÁN ĐIỀU PHỐI CUỘN THÔNG MINH (SCROLL INTERCEPT ENGINE)
+  useEffect(() => {
+    if (loading) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      if (isScrolling) return;
+
+      if (e.deltaY > 30 && activeSlide < 3) {
+        setIsScrolling(true);
+        synth.playWhoosh();
+        setActiveSlide(prev => prev + 1);
+        setTimeout(() => setIsScrolling(false), 1000); // Khóa 1s để hiệu ứng hoàn tất
+      } else if (e.deltaY < -30 && activeSlide > 0) {
+        setIsScrolling(true);
+        synth.playWhoosh();
+        setActiveSlide(prev => prev - 1);
+        setTimeout(() => setIsScrolling(false), 1000);
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isScrolling) return;
+      if (e.key === "ArrowDown" && activeSlide < 3) {
+        setIsScrolling(true);
+        synth.playWhoosh();
+        setActiveSlide(prev => prev + 1);
+        setTimeout(() => setIsScrolling(false), 1000);
+      } else if (e.key === "ArrowUp" && activeSlide > 0) {
+        setIsScrolling(true);
+        synth.playWhoosh();
+        setActiveSlide(prev => prev - 1);
+        setTimeout(() => setIsScrolling(false), 1000);
+      }
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [loading, activeSlide, isScrolling]);
+
+  // 4. THUẬT TOÁN XOAY THẺ 3D (PERSPECTIVE TILT)
+  const handle3DTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    el.style.transform = `perspective(1000px) rotateY(${x * 0.07}deg) rotateX(${-y * 0.07}deg) scale3d(1.02, 1.02, 1.02)`;
+  };
+
+  const reset3DTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    el.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg) scale3d(1, 1, 1)`;
+  };
+
+  // 5. NỀN NƯỚC SINH HỌC CHẢY NGẦM PHÍA SAU
   useEffect(() => {
     if (loading || !canvasRef.current) return;
     const canvas = canvasRef.current;
@@ -153,34 +202,17 @@ export default function Home() {
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
-      tick += 0.003;
+      tick += 0.0025;
 
-      // Vẽ sóng lỏng mềm mại (Liquid Ink Flow)
       ctx.beginPath();
       ctx.moveTo(0, height);
-      
       for (let x = 0; x < width; x++) {
-        // Thuật toán sóng Sine kép tạo nhiễu sinh học cực mượt
-        const y = Math.sin(x * 0.002 + tick) * Math.cos(x * 0.001 + tick * 0.5) * 60 + height * 0.7;
+        const y = Math.sin(x * 0.0018 + tick) * Math.cos(x * 0.001 + tick * 0.4) * 55 + height * 0.72;
         ctx.lineTo(x, y);
       }
       ctx.lineTo(width, height);
       ctx.closePath();
-
-      ctx.fillStyle = "rgba(139, 92, 246, 0.02)"; // Tím rất mỏng
-      ctx.fill();
-
-      // Vẽ sóng lỏng 2
-      ctx.beginPath();
-      ctx.moveTo(0, height);
-      for (let x = 0; x < width; x++) {
-        const y = Math.sin(x * 0.0015 - tick * 0.8) * Math.cos(x * 0.0025 + tick) * 45 + height * 0.75;
-        ctx.lineTo(x, y);
-      }
-      ctx.lineTo(width, height);
-      ctx.closePath();
-
-      ctx.fillStyle = "rgba(20, 20, 20, 0.01)"; // Sóng kem đậm
+      ctx.fillStyle = "rgba(139, 92, 246, 0.02)";
       ctx.fill();
 
       animationFrameId = requestAnimationFrame(draw);
@@ -194,34 +226,16 @@ export default function Home() {
     };
   }, [loading]);
 
-  // 5. THUẬT TOÁN XOAY 3D THEO TỌA ĐỘ CHUỘT (PERSPECTIVE 3D ROTATION)
-  const handle3DTilt = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = e.currentTarget;
-    const rect = el.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    
-    // Điều chỉnh lực xoay mượt mà
-    el.style.transform = `perspective(1000px) rotateY(${x * 0.07}deg) rotateX(${-y * 0.07}deg) scale3d(1.02, 1.02, 1.02)`;
-    el.style.transition = "transform 0.1s ease-out";
-  };
-
-  const reset3DTilt = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = e.currentTarget;
-    el.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg) scale3d(1, 1, 1)`;
-    el.style.transition = "transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)";
-  };
-
   return (
-    <div className="relative min-h-screen bg-[#FAF8F5] text-[#121212] overflow-hidden">
+    <div className="relative h-screen w-screen overflow-hidden bg-[#FAF8F5]">
       
       {/* NỀN SÓNG NƯỚC CHẢY CHẬM */}
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-10" />
 
-      {/* CUSTOM CURSOR LENS (MẮT KÍNH THEO DÕI) */}
+      {/* CUSTOM CURSOR LENS */}
       {!loading && (
         <motion.div 
-          className="fixed w-10 h-10 border border-[#121212] rounded-full pointer-events-none z-[9999] custom-cursor mix-blend-difference"
+          className="fixed w-10 h-10 border border-[#121212] rounded-full pointer-events-none z-[9999] mix-blend-difference"
           animate={{
             x: cursorPos.x - 20,
             y: cursorPos.y - 20,
@@ -232,7 +246,7 @@ export default function Home() {
         />
       )}
 
-      {/* LOADING SCREEN CONSOLE CHUẨN XỊN */}
+      {/* CONSOLE LOADING SCREEN */}
       <AnimatePresence>
         {loading && (
           <motion.div 
@@ -242,15 +256,15 @@ export default function Home() {
           >
             <div className="flex justify-between items-center text-xs opacity-50 border-b border-white/5 pb-4">
               <span className="flex items-center gap-2">
-                <Terminal size={14} className="animate-pulse" /> POSTLAIN OS_
+                <Terminal size={14} /> POSTLAIN OS_
               </span>
-              <span>DALAT // CAMLY FLUID NODE</span>
+              <span>DALAT // SYSTEM CONSOLE</span>
             </div>
             <div className="text-center">
               <span className="text-[14vw] font-black leading-none font-space text-purple-500">{progress}%</span>
             </div>
             <div className="flex justify-between items-end text-xs opacity-50">
-              <span>CALIBRATING MULTI-STAGE MECHANISM...</span>
+              <span>INITIALIZING FULL-STAGE DECK...</span>
               <span>©2026 CORES</span>
             </div>
           </motion.div>
@@ -258,7 +272,7 @@ export default function Home() {
       </AnimatePresence>
 
       {!loading && (
-        <div className="relative z-20">
+        <div className="h-full w-full relative z-20">
           
           {/* HEADER NAV CHUẨN ĐAN MẠCH */}
           <nav className="fixed top-0 w-full z-50 flex justify-between items-center p-6 md:p-8 border-b border-[#121212]/5 bg-[#FAF8F5]/80 backdrop-blur-md">
@@ -269,213 +283,237 @@ export default function Home() {
             >
               POSTLAIN*
             </span>
-            <div className="flex gap-8 items-center text-[10px] font-mono tracking-widest uppercase opacity-60">
-              <a 
-                href="#case-studies" 
-                onClick={() => synth.playWhoosh()}
-                onMouseEnter={() => synth.playTick()}
-                className="hover:text-purple-600 transition"
-              >
-                01 / Portfolio
-              </a>
-              <a 
-                href="#values" 
-                onClick={() => synth.playWhoosh()}
-                onMouseEnter={() => synth.playTick()}
-                className="hover:text-purple-600 transition"
-              >
-                02 / Strengths
-              </a>
-              <a 
-                href="mailto:studionopu@gmail.com" 
-                onMouseEnter={() => { setIsHovered(true); synth.playTick(); }}
-                onMouseLeave={() => setIsHovered(false)}
-                className="bg-[#121212] text-white px-5 py-2.5 rounded-full hover:bg-purple-600 transition font-bold"
-              >
-                Inquire Core
-              </a>
+            <div className="flex gap-4 items-center">
+              <span className="w-2.5 h-2.5 bg-purple-600 rounded-full animate-pulse" />
+              <span className="font-mono text-[9px] uppercase tracking-widest opacity-60">Deck Active: Slide 0{activeSlide + 1}</span>
             </div>
           </nav>
 
-          {/* ==================================================== */}
-          {/* SECTION 1: HERO - TEXT REVEAL MASK */}
-          {/* ==================================================== */}
-          <section className="min-h-screen flex flex-col justify-between pt-40 px-6 md:px-12 relative border-b border-[#121212]/5">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-              <div className="md:col-span-8">
-                <div className="flex items-center gap-2 mb-6">
-                  <span className="w-10 h-[1px] bg-purple-600" />
-                  <span className="font-mono text-[9px] tracking-[0.4em] uppercase text-purple-600">The Operations & AI Architecture</span>
+          {/* BỘ CHỈ BÁO TRANG CỐ ĐỊNH PHÍA BÊN PHẢI (SIDE NAVIGATION BULLETS) */}
+          <div className="fixed right-10 top-1/2 -translate-y-1/2 z-[80] flex flex-col gap-6 hidden md:flex">
+            {[0, 1, 2, 3].map((idx) => (
+              <button 
+                key={idx}
+                onClick={() => { synth.playWhoosh(); setActiveSlide(idx); }}
+                className="group flex items-center justify-end gap-4"
+              >
+                <span className={`font-mono text-[9px] tracking-widest transition-opacity duration-300 ${activeSlide === idx ? "opacity-100 font-bold" : "opacity-0 group-hover:opacity-40"}`}>
+                  0{idx + 1}
+                </span>
+                <span className={`w-3 h-3 rounded-full border border-black/20 transition-all duration-300 ${activeSlide === idx ? "bg-purple-600 border-purple-600 scale-125" : "bg-transparent group-hover:bg-zinc-300"}`} />
+              </button>
+            ))}
+          </div>
+
+          {/* THÔNG BÁO HƯỚNG DẪN CUỘN */}
+          <div className="fixed bottom-8 left-8 z-50 font-mono text-[9px] tracking-widest uppercase opacity-40 flex items-center gap-4">
+             <div className="flex flex-col gap-1 items-center">
+               <ArrowUp size={12} className="animate-bounce" />
+               <ArrowDown size={12} className="animate-bounce" />
+             </div>
+             <span>Use Mouse Scroll or Arrow Keys to Swivel Sections</span>
+          </div>
+
+          {/* KHÔNG GIAN CHUYỂN SLIDE CHUYÊN NGHIỆP (STAGED SLIDE DECK) */}
+          <AnimatePresence mode="wait">
+            
+            {/* ---------------------------------------------------- */}
+            {/* SLIDE 01: HERO HEADER INTRO */}
+            {/* ---------------------------------------------------- */}
+            {activeSlide === 0 && (
+              <motion.section 
+                key="slide-1"
+                initial={{ y: "100%", opacity: 0, scale: 0.95 }}
+                animate={{ y: "0%", opacity: 1, scale: 1 }}
+                exit={{ y: "-100%", opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+                className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start relative z-10">
+                  <div className="md:col-span-8">
+                    <div className="flex items-center gap-2 mb-6">
+                      <span className="w-10 h-[1px] bg-purple-600" />
+                      <span className="font-mono text-[9px] tracking-[0.4em] uppercase text-purple-600">The Operations & AI Architecture</span>
+                    </div>
+                    <h1 className="text-[12vw] md:text-[8.5vw] font-black font-space leading-[0.8] tracking-[-0.06em] uppercase">
+                      OPERATIONS<br />
+                      <span className="italic font-light text-zinc-400">DESIGNED TO</span><br />
+                      PERFECT.
+                    </h1>
+                  </div>
+                  <div className="md:col-span-4 md:text-right md:pt-14">
+                    <span className="font-mono text-[9px] text-zinc-400 tracking-widest uppercase block mb-4">// EXECUTIVE PROFILE</span>
+                    <p className="text-xl text-zinc-600 font-light leading-relaxed">
+                      Tôi là Ngô Phúc (POSTLAIN) — Nhà điều hành hệ thống chuyên sâu về tối ưu hóa nhân sự và tích hợp tự động hóa trí tuệ nhân tạo (AI Engine).
+                    </p>
+                  </div>
                 </div>
-                <h1 className="text-[12vw] md:text-[8.5vw] font-black font-space leading-[0.8] tracking-[-0.06em] uppercase">
-                  OPERATIONS<br />
-                  <span className="italic font-light text-zinc-400">DESIGNED TO</span><br />
-                  PERFECT.
-                </h1>
-              </div>
-              <div className="md:col-span-4 md:text-right md:pt-14">
-                <span className="font-mono text-[9px] text-zinc-400 tracking-widest uppercase block mb-4">// EXECUTIVE PROFILE</span>
-                <p className="text-xl text-zinc-600 font-light leading-relaxed">
-                  Tôi là Ngô Phúc (POSTLAIN) — Nhà điều hành hệ thống chuyên sâu về tối ưu hóa nhân sự và tích hợp tự động hóa trí tuệ nhân tạo (AI Engine).
-                </p>
-              </div>
-            </div>
 
-            {/* Hệ Thống Grid Chân Trang */}
-            <div className="border-t border-[#121212]/5 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-[10px] font-mono uppercase tracking-widest text-zinc-500">
-              <div>
-                <p className="text-zinc-400 mb-1">01 / RETAIL LEADER</p>
-                <p className="font-bold text-[#121212]">ALDO GO! DALAT</p>
-              </div>
-              <div>
-                <p className="text-zinc-400 mb-1">02 / MEDIA DIRECTOR</p>
-                <p className="font-bold text-[#121212]">SB STUDIO</p>
-              </div>
-              <div>
-                <p className="text-zinc-400 mb-1">03 / PERFORMANCE</p>
-                <p className="font-bold text-purple-600">100% PROGRAMMED</p>
-              </div>
-              <div className="text-right flex justify-end items-end gap-2 text-purple-600">
-                <span>SCROLL TO SYSTEM DECK</span>
-              </div>
-            </div>
-          </section>
+                <div className="border-t border-[#121212]/5 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-[10px] font-mono uppercase tracking-widest text-zinc-500">
+                  <div>
+                    <p className="text-zinc-400 mb-1">01 / RETAIL LEADER</p>
+                    <p className="font-bold text-[#121212]">ALDO GO! DALAT</p>
+                  </div>
+                  <div>
+                    <p className="text-zinc-400 mb-1">02 / MEDIA DIRECTOR</p>
+                    <p className="font-bold text-[#121212]">SB STUDIO</p>
+                  </div>
+                  <div>
+                    <p className="text-zinc-400 mb-1">03 / PERFORMANCE</p>
+                    <p className="font-bold text-purple-600">100% PROGRAMMED</p>
+                  </div>
+                  <div className="text-right flex justify-end items-end gap-2 text-purple-600">
+                    <span>PANEL_01_READY</span>
+                  </div>
+                </div>
+              </motion.section>
+            )}
 
-          {/* ==================================================== */}
-          {/* SECTION 2: 3D PERSPECTIVE CARDS (PORTFOLIO CHI TIẾT) */}
-          {/* ==================================================== */}
-          <section id="case-studies" className="py-40 px-6 md:px-12 border-b border-[#121212]/5">
-            <div className="mb-24 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-[#121212]/5 pb-8">
-              <div>
-                <p className="font-mono text-[9px] uppercase text-zinc-400 tracking-widest">// SELECTED CASE STUDIES</p>
-                <h2 className="text-5xl md:text-7xl font-space font-black tracking-tighter uppercase mt-2">Dữ Liệu Thực Chiến</h2>
-              </div>
-              <p className="max-w-xs text-sm text-zinc-500 leading-relaxed italic">
-                 Di chuyển chuột lên các thẻ để cảm nhận không gian 3 chiều vật lý phản hồi theo thời gian thực.
-              </p>
-            </div>
-
-            {/* GRID THẺ 3D XOAY PERSPECTIVE */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {careerImpacts.map((item, idx) => (
-                <div 
-                  key={idx}
-                  onMouseMove={handle3DTilt}
-                  onMouseLeave={reset3DTilt}
-                  onMouseEnter={() => synth.playWhoosh()}
-                  className="bg-white border border-[#121212]/5 p-10 rounded-[48px] shadow-sm hover:shadow-2xl transition-all duration-500 h-[480px] flex flex-col justify-between group scan-glow"
-                >
-                  <div className="flex justify-between items-center">
-                    <span className="font-space text-5xl font-black text-zinc-300 group-hover:text-purple-600 transition-all">{item.num}</span>
-                    <div className="p-3 bg-purple-50 rounded-2xl">
-                      {item.icon}
+            {/* ---------------------------------------------------- */}
+            {/* SLIDE 02: THE VALUE & CORE BELIEFS */}
+            {/* ---------------------------------------------------- */}
+            {activeSlide === 1 && (
+              <motion.section 
+                key="slide-2"
+                initial={{ x: "100%", opacity: 0 }}
+                animate={{ x: "0%", opacity: 1 }}
+                exit={{ x: "-100%", opacity: 0 }}
+                transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+                className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24 bg-white"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start relative z-10">
+                  <div className="md:col-span-6">
+                    <p className="font-mono text-[9px] tracking-[0.4em] text-zinc-400 uppercase mb-4">// THE ARCHITECTURE OF PERFORMANCE</p>
+                    <h2 className="text-5xl md:text-7xl font-space font-black tracking-tighter uppercase leading-none mb-10">
+                      BẢN LĨNH<br />QUẢN TRỊ.
+                    </h2>
+                  </div>
+                  <div className="md:col-span-6 space-y-12">
+                    <div className="flex gap-6 items-start">
+                       <Bot size={32} className="text-purple-600 shrink-0 mt-1" />
+                       <div>
+                          <h4 className="text-xl font-bold uppercase font-space mb-2">Tự Động Hóa AI Thực Chiến</h4>
+                          <p className="text-zinc-500 font-light leading-relaxed">
+                            Không lý thuyết suông. Tôi có khả năng lập trình và ứng dụng AI để tạo ra các công cụ quản lý lịch, tối ưu phân phối việc làm tự động.
+                          </p>
+                       </div>
+                    </div>
+                    <div className="flex gap-6 items-start">
+                       <Zap size={32} className="text-purple-600 shrink-0 mt-1" />
+                       <div>
+                          <h4 className="text-xl font-bold uppercase font-space mb-2">Quản Trị Đa Ngành Cường Độ Cao</h4>
+                          <p className="text-zinc-500 font-light leading-relaxed">
+                            Thực chiến bền bỉ tại các môi trường khắt khe nhất: Quản trị Retail Quốc tế (ALDO), Phòng sản xuất nghệ thuật (SB Studio), và Bếp cao điểm (Phủi Steak).
+                          </p>
+                       </div>
                     </div>
                   </div>
-                  <div>
-                    <span className="font-mono text-[9px] text-zinc-400 uppercase tracking-widest block mb-2">{item.company} // {item.period}</span>
-                    <h3 className="text-3xl font-space font-black tracking-tight uppercase group-hover:text-purple-600 transition-colors mb-4">{item.role}</h3>
-                    <p className="text-zinc-500 font-light leading-relaxed text-sm italic">{item.detail}</p>
-                  </div>
-                  <div className="pt-6 border-t border-zinc-100">
-                    <h5 className="font-mono text-[11px] font-bold text-emerald-600 uppercase tracking-wider">{item.metrics}</h5>
-                    <p className="font-mono text-[9px] text-zinc-400 uppercase mt-1 tracking-widest">{item.highlight}</p>
-                  </div>
                 </div>
-              ))}
-            </div>
-          </section>
 
-          {/* ==================================================== */}
-          {/* SECTION 3: EDITORIAL GRID PANEL (CREATIVE DENMARK STYLE) */}
-          {/* ==================================================== */}
-          <section id="values" className="py-40 px-6 md:px-12 bg-white border-b border-[#121212]/5">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-              <div className="md:col-span-5 space-y-8">
-                <span className="font-mono text-[9px] text-zinc-400 tracking-widest uppercase block">// ARCHITECTURE OF AUTOMATION</span>
-                <h2 className="text-5xl md:text-6xl font-space font-black tracking-tighter uppercase leading-none">
-                  GIẢI PHÁP<br />TỰ ĐỘNG HÓA.
-                </h2>
-                <p className="text-zinc-600 font-light leading-relaxed text-lg">
-                  Tôi viết mã để quản lý thay vì dùng giấy tờ thủ công. Quy trình hóa hệ thống giúp các doanh nghiệp tiết kiệm hàng nghìn giờ làm việc mệt mỏi và loại bỏ hoàn toàn các lỗi sai lệch từ con người.
-                </p>
-                <div className="flex gap-4">
-                  <div className="p-5 border border-zinc-100 rounded-3xl flex-1">
-                    <h4 className="font-space font-bold text-xl mb-1">40%</h4>
-                    <p className="font-mono text-[9px] text-zinc-400 uppercase tracking-widest">Tiết Kiệm Chi Phí</p>
-                  </div>
-                  <div className="p-5 border border-zinc-100 rounded-3xl flex-1">
-                    <h4 className="font-space font-bold text-xl mb-1">200%</h4>
-                    <p className="font-mono text-[9px] text-zinc-400 uppercase tracking-widest">Tăng Trưởng Hiệu Suất</p>
-                  </div>
+                <div className="border-t border-[#121212]/5 py-8 text-[10px] font-mono uppercase tracking-widest text-zinc-400">
+                   // REAL-WORLD SOLUTIONS FOR SCALE // BUILT TO CONVERT RECRUITERS
                 </div>
-              </div>
+              </motion.section>
+            )}
 
-              <div className="md:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-8 border border-zinc-100 rounded-[36px] bg-[#FAF8F5] flex flex-col justify-between h-[300px] hover:border-purple-600/20 transition-all">
-                  <Terminal size={32} className="text-purple-600" />
-                  <div>
-                    <h4 className="font-space font-bold text-xl uppercase mb-2">Google API Integration</h4>
-                    <p className="text-sm text-zinc-500 font-light">Tự động kết nối dữ liệu kho bãi ALDO và lịch phòng thu SB Studio lên đám mây lưu trữ đồng bộ.</p>
-                  </div>
-                </div>
-                <div className="p-8 border border-zinc-100 rounded-[36px] bg-[#FAF8F5] flex flex-col justify-between h-[300px] hover:border-purple-600/20 transition-all">
-                  <Award size={32} className="text-purple-600" />
-                  <div>
-                    <h4 className="font-space font-bold text-xl uppercase mb-2">Tư Duy Thiết Kế Web</h4>
-                    <p className="text-sm text-zinc-500 font-light">Kiến thức nền tảng từ Cao đẳng FPT giúp tôi thiết lập các giao diện quản trị hệ thống đẹp mắt và tối ưu UI/UX.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* ==================================================== */}
-          {/* SECTION 4: THE ULTIMATE CONTACT CONNECTOR */}
-          {/* ==================================================== */}
-          <footer className="py-48 px-6 md:px-12 text-center bg-[#121212] text-[#FAF8F5] rounded-[60px] md:rounded-[100px] m-4">
-            <div className="max-w-4xl mx-auto">
-              <span className="font-mono text-[9px] tracking-[0.6em] text-purple-400 uppercase block mb-12">// RECRUITMENT GATEWAY</span>
-              
-              <div 
-                onMouseEnter={() => { setIsHovered(true); synth.playTick(); }}
-                onMouseLeave={() => setIsHovered(false)}
-                className="inline-block"
+            {/* ---------------------------------------------------- */}
+            {/* SLIDE 03: CASE STUDIES WITH 3D PERSPECTIVE */}
+            {/* ---------------------------------------------------- */}
+            {activeSlide === 2 && (
+              <motion.section 
+                key="slide-3"
+                initial={{ scale: 0.8, opacity: 0, rotate: -2 }}
+                animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                exit={{ scale: 1.2, opacity: 0, rotate: 2 }}
+                transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+                className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24"
               >
-                <a 
-                  href="mailto:studionopu@gmail.com" 
-                  onClick={() => synth.playSuccess()}
-                  className="text-[10vw] md:text-[6vw] font-bold font-space leading-none tracking-tighter text-[#FAF8F5] hover:text-purple-400 border-b-4 border-[#FAF8F5] hover:border-purple-400 transition-all duration-300 pb-4 inline-block"
-                >
-                  STUDIONOPU@GMAIL.COM
-                </a>
-              </div>
+                <div className="flex justify-between items-end border-b border-[#121212]/5 pb-6">
+                  <span className="font-mono text-[9px] tracking-widest text-zinc-400 uppercase">// CAREER DATA CASE STUDIES (CLICK AND HEAR)</span>
+                  <span className="font-mono text-[9px] text-purple-600 font-bold tracking-widest">TAP_CARDS_TO_WHOOSH</span>
+                </div>
 
-              <div className="flex justify-center gap-10 mt-20">
-                {[
-                  { icon: <Music />, url: "https://open.spotify.com/artist/1GXZL8RGTHaxQVbo6yFB9n" },
-                  { icon: <Youtube />, url: "https://youtube.com/@postlain" },
-                  { icon: <Instagram />, url: "https://www.instagram.com/postlainagain" }
-                ].map((soc, idx) => (
-                  <a 
-                    key={idx} 
-                    href={soc.url} 
-                    target="_blank" 
-                    onMouseEnter={() => { setIsHovered(true); synth.playTick(); }}
-                    onMouseLeave={() => setIsHovered(false)}
-                    className="p-4 rounded-full border border-white/10 hover:bg-white hover:text-black transition-all"
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto items-center">
+                  {careerImpacts.map((item, idx) => (
+                    <div 
+                      key={idx}
+                      onMouseMove={handle3DTilt}
+                      onMouseLeave={reset3DTilt}
+                      onMouseEnter={() => synth.playWhoosh()}
+                      className="bg-white border border-[#121212]/5 p-8 rounded-[36px] shadow-sm flex flex-col justify-between h-[420px] cursor-pointer group scan-glow"
+                    >
+                       <div className="flex justify-between items-start">
+                          <span className="font-space text-5xl font-black text-stroke">{item.num}</span>
+                          <span className="font-mono text-[9px] bg-purple-50 px-3 py-1 rounded-full text-purple-600 uppercase tracking-wider">{item.period}</span>
+                       </div>
+                       <div>
+                          <p className="font-mono text-[10px] text-zinc-400 uppercase tracking-widest mb-1">{item.company}</p>
+                          <h4 className="text-2xl font-space font-black tracking-tight text-[#121212] group-hover:text-purple-600 transition-colors uppercase leading-none mb-4">{item.role}</h4>
+                          <p className="text-sm text-zinc-500 font-light leading-relaxed italic">{item.detail}</p>
+                       </div>
+                       <div className="pt-4 border-t border-zinc-100 flex flex-col gap-1">
+                          <span className="font-mono text-[10px] font-bold text-emerald-600">{item.metrics}</span>
+                          <span className="font-mono text-[9px] uppercase tracking-widest text-zinc-400">{item.highlight}</span>
+                       </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="border-t border-[#121212]/5 py-8 text-[10px] font-mono uppercase tracking-widest text-zinc-400">
+                   // REALMETRICS // CLICK TO INQUIRE DETAILS
+                </div>
+              </motion.section>
+            )}
+
+            {/* ---------------------------------------------------- */}
+            {/* SLIDE 04: CONTACT PORTAL AND DETAILS */}
+            {/* ---------------------------------------------------- */}
+            {activeSlide === 3 && (
+              <motion.section 
+                key="slide-4"
+                initial={{ y: "-100%", opacity: 0 }}
+                animate={{ y: "0%", opacity: 1 }}
+                exit={{ y: "100%", opacity: 0 }}
+                transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+                className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24 bg-[#121212] text-white"
+              >
+                <div className="text-center my-auto">
+                  <span className="font-mono text-[9px] tracking-[0.6em] text-purple-400 uppercase block mb-12">// RECRUITMENT GATEWAY</span>
+                  <motion.div 
+                    whileHover={{ scale: 0.96 }}
+                    className="inline-block cursor-pointer"
                   >
-                     {soc.icon}
-                  </a>
-                ))}
-              </div>
+                    <a 
+                      href="mailto:studionopu@gmail.com" 
+                      onClick={() => synth.playSuccess()}
+                      className="text-[8vw] md:text-[5vw] font-bold font-space leading-none tracking-tighter hover:text-purple-400 border-b-4 border-white hover:border-purple-400 transition-all duration-300 pb-4 inline-block text-white"
+                    >
+                      STUDIONOPU@GMAIL.COM
+                    </a>
+                  </motion.div>
 
-              <div className="mt-32 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[10px] font-mono uppercase tracking-widest text-zinc-500 gap-6">
-                <span>SYSTEM LOCATION: DALAT, LÂM ĐỒNG</span>
-                <span>Ngô Phúc // POSTLAIN © 2026</span>
-                <span>+84 938-649-420</span>
-              </div>
-            </div>
-          </footer>
+                  <div className="flex justify-center gap-10 mt-16">
+                    {[
+                      { icon: <Music />, url: "https://open.spotify.com/artist/1GXZL8RGTHaxQVbo6yFB9n" },
+                      { icon: <Youtube />, url: "https://youtube.com/@postlain" },
+                      { icon: <Instagram />, url: "https://www.instagram.com/postlainagain" }
+                    ].map((soc, idx) => (
+                      <a key={idx} href={soc.url} target="_blank" className="p-4 rounded-full border border-white/10 hover:bg-white hover:text-black transition-all">
+                         {soc.icon}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-[9px] font-mono uppercase tracking-widest text-zinc-500 gap-6">
+                  <span>SYSTEM CONFIGURATION: NEXTJS + INTERCEPTOR + DECK</span>
+                  <span>Ngô Phúc // POSTLAIN © 2026</span>
+                  <span>+84 938-649-420</span>
+                </div>
+              </motion.section>
+            )}
+
+          </AnimatePresence>
 
         </div>
       )}
