@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Music, Youtube, Instagram, ArrowDown, ArrowUp } from 'lucide-react';
+import { Music, Youtube, Instagram, ArrowDown, ArrowUp, X, Sparkles, TrendingUp, BarChart } from 'lucide-react';
 import Lenis from 'lenis';
 
 // ----------------------------------------------------
-// BỘ THIẾT KẾ ÂM THANH SPA & LOUNGE CAO CẤP (BOUTIQUE ACOUSTIC ENGINE)
+// BỘ TỔNG HỢP ÂM TẦN SPA & LOUNGE CAO CẤP (BOUTIQUE AUDIO)
 // ----------------------------------------------------
 class LuxuryAudioEngine {
   private ctx: AudioContext | null = null;
@@ -24,7 +24,7 @@ class LuxuryAudioEngine {
         this.ctx.resume();
       }
     } catch (e) {
-      console.warn("AudioContext failed to initialize:", e);
+      console.warn("AudioContext failed:", e);
     }
   }
 
@@ -35,58 +35,57 @@ class LuxuryAudioEngine {
     }
   }
 
-  // TẠO NHẠC NỀN THIỀN ĐỊNH GENTLE AMBIENT DRONE (KHÔNG GIAN SPA XA XỈ)
   startAmbientMusic() {
     this.init();
     if (!this.ctx || this.isMusicPlaying) return;
     this.isMusicPlaying = true;
 
     try {
-      // Thiết lập volume Master cực nhỏ để nhạc nền chỉ ngân nga siêu nhẹ ở phía sau
       this.ambientGain = this.ctx.createGain();
       this.ambientGain.gain.setValueAtTime(0, this.ctx.currentTime);
-      this.ambientGain.gain.linearRampToValueAtTime(0.008, this.ctx.currentTime + 5); // Tăng âm lượng chậm rãi trong 5 giây
+      this.ambientGain.gain.linearRampToValueAtTime(0.008, this.ctx.currentTime + 5);
       this.ambientGain.connect(this.ctx.destination);
 
-      // Quãng 5 hoàn hảo (Perfect Fifth) êm ái và ổn định nhất: A2 (110Hz) và E3 (164.81Hz)
-      const baseNotes = [110.00, 164.81];
+      const luxuryChords = [110.00, 164.81];
 
-      baseNotes.forEach((freq, idx) => {
-        if (!this.ctx || !this.ambientGain) return;
-        const osc = this.ctx.createOscillator();
-        const filter = this.ctx.createBiquadFilter();
-        const oscGain = this.ctx.createGain();
-
-        osc.type = "sine"; // Sóng Sine tinh khiết và êm dịu nhất
-        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-
-        // Lọc hoàn toàn tần số cao chói tai, giữ lại tiếng trầm siêu ấm
-        filter.type = "lowpass";
-        filter.frequency.setValueAtTime(150, this.ctx.currentTime);
-
-        // Thuật toán Swell Breathing (Nhịp thở âm thanh): nốt này to thì nốt kia nhỏ
-        const now = this.ctx.currentTime;
-        oscGain.gain.setValueAtTime(0.05, now);
-        
-        const swellDuration = 8; // Chu kỳ thở 8 giây ngân nga lặp lại
-        for (let i = 0; i < 100; i++) {
-          const timeOffset = i * swellDuration;
-          const val1 = idx === 0 ? 0.08 : 0.02;
-          const val2 = idx === 0 ? 0.02 : 0.08;
-          oscGain.gain.linearRampToValueAtTime(val1, now + timeOffset);
-          oscGain.gain.linearRampToValueAtTime(val2, now + timeOffset + (swellDuration / 2));
-        }
-
-        osc.connect(filter);
-        filter.connect(oscGain);
-        oscGain.connect(this.ambientGain);
-
-        osc.start();
-        this.ambientOscillators.push(osc);
-      });
+      baseNotesForEach(luxuryChords);
     } catch (e) {
-      console.warn("Ambient music block bypass:", e);
+      console.warn("Ambient music error:", e);
     }
+  }
+
+  private baseNotesForEach(chords: number[]) {
+    chords.forEach((freq, idx) => {
+      if (!this.ctx || !this.ambientGain) return;
+      const osc = this.ctx.createOscillator();
+      const filter = this.ctx.createBiquadFilter();
+      const oscGain = this.ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(150, this.ctx.currentTime);
+
+      const now = this.ctx.currentTime;
+      oscGain.gain.setValueAtTime(0.05, now);
+      
+      const swellDuration = 8;
+      for (let i = 0; i < 100; i++) {
+        const timeOffset = i * swellDuration;
+        const val1 = idx === 0 ? 0.08 : 0.02;
+        const val2 = idx === 0 ? 0.02 : 0.08;
+        oscGain.gain.linearRampToValueAtTime(val1, now + timeOffset);
+        oscGain.gain.linearRampToValueAtTime(val2, now + timeOffset + (swellDuration / 2));
+      }
+
+      osc.connect(filter);
+      filter.connect(oscGain);
+      oscGain.connect(this.ambientGain);
+
+      osc.start();
+      this.ambientOscillators.push(osc);
+    });
   }
 
   playTick() {
@@ -98,11 +97,9 @@ class LuxuryAudioEngine {
       const gain = this.ctx.createGain();
       
       osc.type = "sine";
-      // Tiếng Click mộc tần số thấp ấm áp (Wood Click)
       osc.frequency.setValueAtTime(450, this.ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(80, this.ctx.currentTime + 0.015);
       
-      // Volume siêu nhỏ, biến mất cực nhanh sau 15 mili-giây
       gain.gain.setValueAtTime(0.006, this.ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.015);
       
@@ -123,7 +120,6 @@ class LuxuryAudioEngine {
       const gain = this.ctx.createGain();
       
       osc.type = "sine";
-      // Tiếng lướt đệm không khí trầm ấm
       osc.frequency.setValueAtTime(140, this.ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(60, this.ctx.currentTime + 0.35);
       
@@ -147,10 +143,10 @@ class LuxuryAudioEngine {
       const gain = this.ctx.createGain();
       
       osc1.type = "sine";
-      osc1.frequency.setValueAtTime(329.63, this.ctx.currentTime); // Nốt E4 (Thanh thản)
+      osc1.frequency.setValueAtTime(329.63, this.ctx.currentTime);
       
       osc2.type = "sine";
-      osc2.frequency.setValueAtTime(523.25, this.ctx.currentTime); // Nốt C5 (Mượt mà)
+      osc2.frequency.setValueAtTime(523.25, this.ctx.currentTime);
       
       gain.gain.setValueAtTime(0.005, this.ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.6);
@@ -169,6 +165,50 @@ class LuxuryAudioEngine {
 
 const synth = new LuxuryAudioEngine();
 
+// GIAO DIỆN CHỮ BIẾN HÌNH GIẢI MÃ MA TRẬN
+const ScrambleText = ({ text }: { text: string }) => {
+  const [displayText, setDisplayText] = useState(text);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_#%@$*+=-";
+
+  const handleMouseEnter = () => {
+    synth.playTick();
+    let iteration = 0;
+    if (intervalRef.current) clearInterval(intervalRef.current);
+
+    intervalRef.current = setInterval(() => {
+      setDisplayText(
+        text
+          .split("")
+          .map((char, index) => {
+            if (index < iteration || char === " ") {
+              return text[index];
+            }
+            return chars[Math.floor(Math.random() * chars.length)];
+          })
+          .join("")
+      );
+
+      if (iteration >= text.length) {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+      }
+      iteration += 1 / 2;
+    }, 25);
+  };
+
+  const handleMouseLeave = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    setDisplayText(text);
+  };
+
+  return (
+    <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="cursor-pointer">
+      {displayText}
+    </span>
+  );
+};
+
+// CẤU TRÚC CHI TIẾT KINH NGHIỆM ĐỂ BÙNG NỔ TRẢI NGHIỆM KHI CLICK MODAL
 const careerImpacts = [
   {
     num: "01",
@@ -177,7 +217,12 @@ const careerImpacts = [
     period: "2025 — 2026",
     metrics: "Giảm tỉ lệ thất thoát kho bãi xuống dưới 1%",
     highlight: "Thúc đẩy doanh thu tăng trưởng vượt mốc 15%",
-    detail: "Định vị và tái cơ cấu quy trình phân phối sản phẩm dựa trên phân tích tệp khách hàng cao cấp tại địa phương. Thiết lập hệ thống vận hành và điều phối nhân sự tối ưu."
+    detail: "Định vị và tái cơ cấu quy trình phân phối sản phẩm dựa trên phân tích tệp khách hàng cao cấp tại địa phương. Thiết lập hệ thống vận hành và điều phối nhân sự tối ưu.",
+    strategy: [
+      "Kiểm soát vòng xoay hàng tồn kho (Inventory Turnover) thông qua hệ thống phân tích doanh số thời gian thực.",
+      "Tối ưu sơ đồ trưng bày sản phẩm để gia tăng tỉ lệ mua kèm chéo (Uptown Cross-selling).",
+      "Xây dựng chương trình đào tạo đội ngũ bán hàng tập trung hoàn toàn vào kỹ năng giải quyết khiếu nại (Resolution Skills)."
+    ]
   },
   {
     num: "02",
@@ -186,7 +231,12 @@ const careerImpacts = [
     period: "2023 — 2024",
     metrics: "Tiết kiệm 40% tổng chi phí sản xuất",
     highlight: "Tăng trưởng hiệu suất vận hành lên đến 200%",
-    detail: "Hệ thống hóa toàn bộ quy trình làm việc giữa các nghệ sĩ, đối tác truyền thông quốc tế và MCN qua các giải pháp lưu trữ thông minh giúp loại bỏ các khâu trung gian thừa thãi."
+    detail: "Hệ thống hóa toàn bộ quy trình làm việc giữa các nghệ sĩ, đối tác truyền thông quốc tế và MCN qua các giải pháp lưu trữ thông minh giúp loại bỏ các khâu trung gian thừa thãi.",
+    strategy: [
+      "Lập trình cổng điều phối lịch trình thu âm tự động hóa tránh xung đột thời gian của các phòng ban kỹ thuật.",
+      "Thương thảo và quản lý hợp đồng quyền tác giả cho mạng lưới hơn 50 nghệ sĩ thuộc MCN.",
+      "Phát triển kế hoạch tiếp thị số thúc đẩy lưu lượng tương tác đạt hơn 4 triệu lượt tiếp cận tự nhiên."
+    ]
   },
   {
     num: "03",
@@ -195,9 +245,24 @@ const careerImpacts = [
     period: "2024 — 2025",
     metrics: "Rút ngắn 20% thời gian chờ đợi của khách",
     highlight: "Sắp xếp chuỗi cung ứng đạt mốc hoàn hảo 100%",
-    detail: "Áp dụng tư duy hình học không gian vào quản trị logistics nguyên vật liệu Âu cao cấp, đảm bảo hiệu suất phục vụ liên tục trong các khung giờ áp lực lớn nhất."
+    detail: "Áp dụng tư duy hình học không gian vào quản trị logistics nguyên vật liệu Âu cao cấp, đảm bảo hiệu suất phục vụ liên tục trong các khung giờ áp lực lớn nhất.",
+    strategy: [
+      "Thiết kế sơ đồ di chuyển tuyến tính trong nhà bếp giúp loại bỏ 30% quãng đường di chuyển thừa của nhân viên.",
+      "Chuẩn hóa và đồng nhất công thức làm nước sốt và áp chảo steak tiêu chuẩn châu Âu.",
+      "Thương thảo chuỗi cung ứng thực phẩm nhập khẩu đảm bảo nguyên liệu đạt độ tươi ngon hoàn hảo mỗi ngày."
+    ]
   }
 ];
+
+interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  alpha: number;
+  size: number;
+  color: string;
+}
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -205,13 +270,15 @@ export default function Home() {
   const [showGateway, setShowGateway] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [activeModal, setActiveModal] = useState<typeof careerImpacts[0] | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const clickParticles = useRef<Particle[]>([]);
 
-  // 1. MA TRẬN GIẢI MÃ SỐ (MATRIX SCRAMBLER DECODER CHẠY SIÊU MƯỢT)
+  // 1. CHU TRÌNH GIẢI MÃ SỐ CHUẨN 1:1
   useEffect(() => {
     let timer: NodeJS.Timeout;
     const startTime = Date.now();
-    const intervalTime = 40; // Tốc độ quét 40ms cực nhanh
+    const intervalTime = 40;
 
     synth.enableSound(true);
 
@@ -219,23 +286,19 @@ export default function Home() {
       const elapsed = Date.now() - startTime;
 
       if (elapsed < 1400) {
-        // Pha 1: Chạy số ngẫu nhiên cực nhanh
         const randomVal = Math.floor(Math.random() * 90 + 10).toString();
         setLastTwoDigits(randomVal);
         synth.playTick();
         timer = setTimeout(runDecoder, intervalTime);
       } else if (elapsed < 1850) {
-        // Pha 2: Hãm phanh nhẹ xuống số 24
         setLastTwoDigits("24");
         synth.playTick();
         timer = setTimeout(runDecoder, 450);
       } else if (elapsed < 2350) {
-        // Pha 3: Ghì chậm xuống số 25
         setLastTwoDigits("25");
         synth.playTick();
         timer = setTimeout(runDecoder, 500);
       } else {
-        // Pha 4: Chốt số 26, chạy nhạc chuông và mở khoá
         setLastTwoDigits("26");
         synth.playTick();
         synth.playSuccess();
@@ -258,9 +321,9 @@ export default function Home() {
     requestAnimationFrame(raf);
   }, [loading]);
 
-  // 3. SCROLL INTERCEPT ENGINE (KHÓA DỌC TRƯỢT NGANG SLIDE)
+  // 3. SCROLL INTERCEPT ENGINE
   useEffect(() => {
-    if (loading) return;
+    if (loading || activeModal) return;
 
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
@@ -301,7 +364,7 @@ export default function Home() {
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [loading, activeSlide, isScrolling]);
+  }, [loading, activeSlide, isScrolling, activeModal]);
 
   // 4. XOAY THẺ 3D PERSPECTIVE SANG TRỌNG
   const handle3DTilt = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -317,7 +380,7 @@ export default function Home() {
     el.style.transform = `perspective(1200px) rotateY(0deg) rotateX(0deg) scale3d(1, 1, 1)`;
   };
 
-  // 5. NỀN NƯỚC HỔ PHÁCH VÀ VÀNG ĐỒNG CHẢY CHẬM TOẢ SÁNG (GLOW EMISSION)
+  // 5. TOẢ SÁNG HÀO QUANG & BẮN HẠT SAO VÀNG KHI CLICK CHUỘT
   useEffect(() => {
     if (loading || !canvasRef.current) return;
     const canvas = canvasRef.current;
@@ -339,7 +402,7 @@ export default function Home() {
       ctx.clearRect(0, 0, width, height);
       tick += 0.0015;
 
-      // HÀO QUANG TOẢ SÁNG CỰC LỚN
+      // HÀO QUANG TOẢ SÁNG TRUNG TÂM
       const orbX = width * 0.5 + Math.sin(tick) * 50;
       const orbY = height * 0.5 + Math.cos(tick * 0.8) * 50;
       const grad = ctx.createRadialGradient(orbX, orbY, 10, orbX, orbY, 600);
@@ -351,6 +414,26 @@ export default function Home() {
       ctx.arc(orbX, orbY, 600, 0, Math.PI * 2);
       ctx.fill();
 
+      // VẼ VÀ CẬP NHẬT HẠT BỤI SAO VÀNG KHI USER CLICK CHUỘT (ADDDICTIVE SPLASH)
+      clickParticles.current.forEach((p, idx) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= 0.015; // Giảm dần độ mờ
+
+        if (p.alpha <= 0) {
+          clickParticles.current.splice(idx, 1);
+          return;
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.color.replace("1)", `${p.alpha})`);
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = "rgba(197, 168, 128, 0.5)";
+        ctx.fill();
+        ctx.shadowBlur = 0; // Reset shadow
+      });
+
       animationId = requestAnimationFrame(draw);
     };
 
@@ -361,22 +444,44 @@ export default function Home() {
     };
   }, [loading]);
 
-  // HÀM KÍCH HOẠT VÀO TRANG CÓ/KHÔNG CÓ NHẠC NỀN
+  // THUẬT TOÁN KÍCH PHÁT BỤI SAO VÀNG KHI CLICK VÀO BẤT KỲ ĐÂU (SURPRISE INTERACTION)
+  const handleGlobalClick = (e: React.MouseEvent) => {
+    synth.playTick(); // Âm click mộc êm ái
+
+    // Sinh ra 15 hạt sao phát quang bung toả từ lồng con trỏ chuột
+    for (let i = 0; i < 15; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 3 + 1;
+      clickParticles.current.push({
+        x: e.clientX,
+        y: e.clientY,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        alpha: 1,
+        size: Math.random() * 2.5 + 1,
+        color: i % 2 === 0 ? "rgba(197, 168, 128, 1)" : "rgba(139, 92, 246, 1)"
+      });
+    }
+  };
+
   const enterPortfolio = (withSound: boolean) => {
     synth.enableSound(withSound); 
     if (withSound) {
-      synth.startAmbientMusic(); // Nhạc nền bắt đầu chạy mượt từ gesture click chuột của user
+      synth.startAmbientMusic();
     }
     setLoading(false);
   };
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-[#1D2436] text-[#FAF8F5]">
+    <div 
+      onClick={handleGlobalClick}
+      className="relative h-screen w-screen overflow-hidden bg-[#1D2436] text-[#FAF8F5]"
+    >
       
-      {/* CANVAS HÀO QUANG VÀNG ĐỒNG */}
+      {/* CANVAS HÀO QUANG & HẠT CLICK */}
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-10" />
 
-      {/* 375 STUDIO YEAR PRELOADER GATEWAY */}
+      {/* 375 STUDIO PRELOADER */}
       <AnimatePresence>
         {loading && (
           <motion.div 
@@ -384,19 +489,14 @@ export default function Home() {
             transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
             className="fixed inset-0 bg-[#1D2436] text-[#FAF8F5] z-[9999] flex flex-col justify-center items-center font-sans"
           >
-            {/* Lớp hào quang đồng mờ đằng sau chữ năm */}
             <div className="absolute w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,rgba(197,168,128,0.12)_0%,transparent_60%)] pointer-events-none" />
 
-            {/* Bố cục khóa cứng chiều cao không gian năm - Không bao giờ xảy ra lỗi giật nảy màn hình */}
-            <div className="relative w-full h-80 flex flex-col items-center justify-center">
-              
-              {/* TRỤC QUÉT SỐ NGẪU NHIÊN DECODER */}
+            <div className="text-center space-y-12 z-10">
               <div className="flex items-center justify-center font-black tracking-tighter text-[#FAF8F5] select-none font-sans uppercase text-7xl md:text-[10rem] leading-none absolute top-12">
                 <span>20</span>
                 <span>{lastTwoDigits}</span>
               </div>
 
-              {/* HAI NÚT BẤM KÍNH MỜ XUẤT HIỆN TUYỆT ĐỐI KHÔNG LỆCH GRID */}
               <div className="absolute bottom-4 w-full flex justify-center">
                 <AnimatePresence>
                   {showGateway && (
@@ -422,7 +522,6 @@ export default function Home() {
                   )}
                 </AnimatePresence>
               </div>
-
             </div>
           </motion.div>
         )}
@@ -431,10 +530,10 @@ export default function Home() {
       {!loading && (
         <div className="h-full w-full relative z-20">
           
-          {/* HEADER NAV */}
+          {/* HEADER NAV CHỮ BIẾN HÌNH */}
           <nav className="fixed top-0 w-full z-50 flex justify-between items-center p-6 md:p-8 border-b border-white/5 bg-[#1D2436]/80 backdrop-blur-md">
             <span className="font-serif-luxury italic font-medium tracking-tight text-xl text-[#C5A880]">
-              POSTLAIN*
+              <ScrambleText text="POSTLAIN*" />
             </span>
             <div className="flex gap-4 items-center font-sans text-[9px] tracking-[0.25em] text-[#C5A880] uppercase">
               <span className="w-1.5 h-1.5 bg-[#C5A880] rounded-full animate-pulse" />
@@ -442,7 +541,7 @@ export default function Home() {
             </div>
           </nav>
 
-          {/* BLUEPRINT NAVIGATION PHÍA BÊN PHẢI */}
+          {/* CHỈ BÁO TRANG PHÍA BÊN PHẢI */}
           <div className="fixed right-10 top-1/2 -translate-y-1/2 z-[80] flex flex-col gap-8 hidden md:flex border-l border-white/5 pl-4 py-8">
             {[0, 1, 2, 3].map((idx) => (
               <button 
@@ -450,15 +549,15 @@ export default function Home() {
                 onClick={() => { synth.playWhoosh(); setActiveSlide(idx); }}
                 className="group flex items-center justify-end gap-4 relative"
               >
-                <span className={`font-sans text-[9px] tracking-[0.3em] transition-opacity duration-300 ${activeSlide === idx ? "opacity-100 font-bold text-[#C5A880]" : "opacity-30 group-hover:opacity-100 text-white"}`}>
-                  0{idx + 1}
+                <span className="font-sans text-[9px] tracking-[0.3em] opacity-30 group-hover:opacity-100 text-white transition-opacity duration-300">
+                  <ScrambleText text={`STAGE_0${idx + 1}`} />
                 </span>
-                <span className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${activeSlide === idx ? "bg-[#C5A880] scale-[2] ring-4 ring-[#C5A880]/10" : "bg-white/20 group-hover:bg-white"}`} />
+                <span className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${activeSlide === idx ? "bg-[#C5A880] scale-[2]" : "bg-white/20"}`} />
               </button>
             ))}
           </div>
 
-          {/* TIẾN TRÌNH CUỘN Ở CHÂN TRANG */}
+          {/* DÒNG TIẾN TRÌNH Ở CHÂN TRANG */}
           <div className="fixed bottom-8 left-8 z-50 font-sans text-[8px] tracking-[0.3em] uppercase opacity-30 flex items-center gap-6">
              <div className="flex gap-1 items-center">
                <ArrowUp size={10} className="text-[#C5A880]" />
@@ -468,7 +567,51 @@ export default function Home() {
              <span>Lăn chuột hoặc dùng phím mũi tên để xem các phần</span>
           </div>
 
-          {/* ANMATE PRESENCE CÁC SLIDES */}
+          {/* MODAL CHI TIẾT CHIẾN LƯỢC BÙNG NỔ TRẢI NGHIỆM KHI USER CLICK (SURPRISE GATE) */}
+          <AnimatePresence>
+            {activeModal && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-[#1D2436]/95 z-[999] flex items-center justify-center p-6 backdrop-blur-md"
+              >
+                <motion.div 
+                  initial={{ scale: 0.9, y: 30 }}
+                  animate={{ scale: 1, y: 0 }}
+                  exit={{ scale: 0.9, y: 30 }}
+                  transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                  className="bg-[#111111] border border-white/10 p-8 md:p-12 rounded-[40px] max-w-2xl w-full text-left relative shadow-2xl overflow-y-auto max-h-[85vh] scrollbar-none"
+                >
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); synth.playTick(); setActiveModal(null); }}
+                    className="absolute top-6 right-6 p-2 rounded-full border border-white/10 hover:bg-[#FAF8F5] hover:text-black transition-all"
+                  >
+                    <X size={18} />
+                  </button>
+
+                  <span className="font-mono text-[10px] text-[#C5A880] uppercase tracking-widest">{activeModal.company} // {activeModal.period}</span>
+                  <h3 className="text-4xl font-serif-luxury font-bold text-[#FAF8F5] mt-4 mb-2 uppercase italic">{activeModal.role}</h3>
+                  <p className="text-sm text-[#C5A880] font-mono mb-8 font-bold tracking-wider">{activeModal.metrics} • {activeModal.highlight}</p>
+                  
+                  <div className="space-y-6">
+                    <h5 className="font-sans text-xs font-bold uppercase tracking-widest text-[#FAF8F5] flex items-center gap-2 border-b border-white/5 pb-2">
+                      <Sparkles size={14} className="text-[#C5A880]"/> KỊCH BẢN TỐI ƯU HÓA HOÀN MỸ
+                    </h5>
+                    <ul className="space-y-4">
+                      {activeModal.strategy.map((item, idx) => (
+                        <li key={idx} className="flex gap-4 items-start text-xs text-zinc-400 leading-relaxed italic font-serif-luxury">
+                          <span className="text-[#C5A880] font-sans">0{idx + 1} —</span> {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* ANMATE PRESENCE CÁC SLIDES CHUYỂN CẢNH */}
           <AnimatePresence mode="wait">
             
             {/* SLIDE 01: HERO */}
@@ -485,7 +628,9 @@ export default function Home() {
                   <div className="md:col-span-8">
                     <div className="flex items-center gap-2 mb-6">
                       <span className="w-8 h-[1px] bg-[#C5A880] opacity-50" />
-                      <span className="font-sans text-[9px] tracking-[0.35em] uppercase text-[#C5A880]">Creative Operations Architect</span>
+                      <span className="font-sans text-[9px] tracking-[0.35em] uppercase text-[#C5A880]">
+                        <ScrambleText text="Creative Operations Architect" />
+                      </span>
                     </div>
                     <h1 className="text-[10vw] md:text-[7.5vw] font-bold font-serif-luxury leading-[0.85] tracking-tight text-[#FAF8F5]">
                       TƯ DUY VẬN HÀNH<br />
@@ -547,7 +692,7 @@ export default function Home() {
                      <div className="p-8 border border-white/5 rounded-[24px] bg-[#1C2333] flex flex-col justify-between h-[230px]">
                         <span className="text-[#C5A880] font-serif-luxury text-3xl italic">A.</span>
                         <div>
-                          <h4 className="text-lg font-medium font-serif-luxury text-[#FAF8F5]">Giải Pháp Công Nghệ</h4>
+                          <h4 className="text-lg font-medium font-serif-luxury text-[#FAF8F5] uppercase tracking-tight">Giải Pháp Công Nghệ</h4>
                           <p className="text-xs text-zinc-500 mt-2 font-light leading-relaxed">Phát triển phần mềm quản lý tự động, tinh giảm 80% sức lao động của các khâu trung gian.</p>
                         </div>
                      </div>
@@ -579,7 +724,7 @@ export default function Home() {
                 className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24"
               >
                 <div className="flex justify-between items-end border-b border-white/5 pb-6">
-                  <span className="font-sans text-[8px] tracking-[0.25em] text-zinc-500 uppercase">// DỮ LIỆU CASE STUDIES THỰC TIỄN //</span>
+                  <span className="font-sans text-[8px] tracking-[0.25em] text-zinc-500 uppercase">// DỮ LIỆU CASE STUDIES THỰC TIỄN (NHẤP CHUỘT VÀO THẺ ĐỂ KHÁM PHÁ) //</span>
                   <span className="font-sans text-[9px] text-[#C5A880] font-bold tracking-widest flex items-center gap-2">RECRUITER OVERVIEW</span>
                 </div>
 
@@ -589,8 +734,8 @@ export default function Home() {
                       key={idx}
                       onMouseMove={handle3DTilt}
                       onMouseLeave={reset3DTilt}
-                      onMouseEnter={() => synth.playWhoosh()}
-                      className="bg-[#111111] border border-white/5 p-10 rounded-[36px] shadow-sm flex flex-col justify-between h-[440px] cursor-pointer group scan-glow transition-all duration-300"
+                      onClick={(e) => { e.stopPropagation(); synth.playSuccess(); setActiveModal(item); }}
+                      className="bg-[#1C2333] border border-white/5 p-10 rounded-[36px] shadow-sm flex flex-col justify-between h-[440px] cursor-pointer group scan-glow transition-all duration-300"
                     >
                        <div className="flex justify-between items-start">
                           <span className="font-serif-luxury text-5xl font-light text-stroke-gold group-hover:text-[#C5A880] transition-all italic">{item.num}</span>
@@ -598,7 +743,9 @@ export default function Home() {
                        </div>
                        <div>
                           <p className="font-sans text-[8px] text-zinc-500 uppercase tracking-widest mb-1">{item.company}</p>
-                          <h4 className="text-xl font-serif-luxury font-bold tracking-tight text-[#FAF8F5] uppercase leading-tight mb-4">{item.role}</h4>
+                          <h4 className="text-xl font-serif-luxury font-bold tracking-tight text-[#FAF8F5] uppercase leading-tight mb-4">
+                            <ScrambleText text={item.role} />
+                          </h4>
                           <p className="text-xs text-zinc-400 font-light leading-relaxed font-serif-luxury italic">{item.detail}</p>
                        </div>
                        <div className="pt-6 border-t border-white/5 flex flex-col gap-1">
