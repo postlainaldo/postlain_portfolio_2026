@@ -3,40 +3,66 @@
 @tailwind utilities;
 
 :root {
-  --bg: #050505;
-  --primary: #2563eb;
+  --primary: #3b82f6;
+  --bg: #030303;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background-color: var(--bg);
-  color: white;
+  background: var(--bg);
+  color: #fff;
   overflow-x: hidden;
-  font-family: var(--font-inter), sans-serif;
+  cursor: default;
 }
 
-/* Hiệu ứng chữ chạy ngầm dưới nền */
-.bg-text {
-  font-size: 20vw;
-  font-weight: 900;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.05);
-  color: transparent;
-  position: absolute;
-  white-space: nowrap;
+/* HIỆU ỨNG GRAIN - ĐIỆN ẢNH */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* SMOOTH SCROLL LENIS */
+html.lenis {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* TEXT EFFECT - GIỐNG TRANG AWWWARDS */
+.mask-text {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  overflow: hidden;
+}
+
+/* NỀN GLOW CHẠY THEO TRANG */
+.bg-glow {
+  position: fixed;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle at center, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 0;
-}
-
-/* Custom Cursor cho giống website xịn */
-.custom-cursor {
-  mix-blend-mode: difference;
-}
-
-/* Chỉnh typography xịn cho font Space Grotesk */
-.font-space {
-  font-family: var(--font-space), sans-serif;
-  letter-spacing: -0.05em;
-}
-
-::-webkit-scrollbar {
-  width: 0px; /* Ẩn scrollbar để tạo cảm giác cinematic */
 }
