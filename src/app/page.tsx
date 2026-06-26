@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Youtube, Instagram, Music, ArrowDown, Bot, Zap, Globe } from 'lucide-react';
+import { ArrowUpRight, Zap, Bot, Mic, Monitor, HelpCircle } from 'lucide-react';
 import Lenis from 'lenis';
 import Magnetic from '../components/Magnetic';
 
@@ -15,172 +15,173 @@ export default function Page() {
     requestAnimationFrame(raf);
   }, []);
 
+  // Bộ phát âm thanh trượt (whoosh) nhẹ khi cuộn hoặc lướt qua card
+  const playSweepSound = () => {
+    if (typeof window === "undefined") return;
+    try {
+      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(150, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(450, ctx.currentTime + 0.1);
+      
+      gain.gain.setValueAtTime(0.01, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      
+      osc.start();
+      osc.stop(ctx.currentTime + 0.1);
+    } catch (e) {}
+  };
+
   const experiences = [
-    { title: "ALDO GO! DALAT", role: "STORE MANAGER", detail: "6/2025 - 4/2026 • Retail Excellence", icon: <Globe size={24}/> },
-    { title: "SB STUDIO", role: "STUDIO MANAGER", detail: "3/2023 - 10/2024 • Artistic Management", icon: <Music size={24}/> },
-    { title: "PHUI STEAK", role: "KITCHEN CAPTAIN", detail: "10/2024 - 6/2025 • Operational Logic", icon: <Zap size={24}/> }
+    { num: "01", title: "ALDO GO! DALAT", role: "STORE MANAGER", tag: "Operations", desc: "Quản trị chuỗi retail, tối ưu quy trình kho và nhân sự dựa trên dữ liệu thực tế." },
+    { num: "02", title: "SB STUDIO", role: "STUDIO MANAGER", tag: "Artistic", desc: "Định hướng marketing, chăm sóc đối tác MCN lớn, điều phối sản xuất nghệ thuật." },
+    { num: "03", title: "PHUI STEAK", role: "KITCHEN CAPTAIN", tag: "Logistics", desc: "Sắp xếp quy trình bếp đạt hiệu suất cao nhất trong các khung giờ áp lực." }
   ];
 
   return (
-    <div className="bg-[#030303] min-h-screen text-[#e0e0e0]">
-      <div className="bg-glow" />
-
-      {/* HEADER NAVIGATION */}
-      <nav className="fixed top-0 w-full flex justify-between items-center p-8 z-[100] mix-blend-difference">
+    <div className="min-h-screen relative font-sans">
+      
+      {/* HEADER: Kẻ Line cực mỏng */}
+      <header className="fixed top-0 w-full z-50 flex justify-between items-center p-6 md:p-8 border-b hairline backdrop-blur-md bg-[#F5F2EB]/80">
         <Magnetic>
-          <span className="font-black text-2xl tracking-tighter uppercase cursor-pointer italic">POSTLAIN.</span>
+          <span className="font-space font-bold tracking-[-0.08em] text-lg cursor-pointer">POSTLAIN*</span>
         </Magnetic>
-        <div className="flex gap-10 font-mono text-[10px] tracking-[0.3em] uppercase opacity-40">
-          <Magnetic>
-            <a href="mailto:studionopu@gmail.com" className="hover:opacity-100 transition text-blue-500 underline underline-offset-8">Inquire Project</a>
-          </Magnetic>
+        <div className="flex gap-8 items-center text-[10px] font-mono tracking-widest uppercase opacity-60">
+          <Magnetic><a href="mailto:studionopu@gmail.com" className="hover:opacity-100 transition text-[#7C3AED]">Get in touch</a></Magnetic>
         </div>
-      </nav>
+      </header>
 
-      {/* HERO SECTION */}
-      <section className="h-screen flex flex-col justify-center px-6 md:px-24 relative z-10">
-        <motion.div 
-           initial={{ opacity: 0, y: 50 }} 
-           animate={{ opacity: 1, y: 0 }} 
-           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <div className="flex items-center gap-4 mb-8">
-            <span className="w-12 h-[1px] bg-blue-600" />
-            <p className="font-mono text-[10px] tracking-[1em] opacity-30 uppercase">Operational Strategist</p>
+      {/* HERO SECTION: Phong cách Typographic của 28K */}
+      <section className="min-h-screen pt-32 flex flex-col justify-between px-6 md:px-12 relative border-b hairline">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start mt-10">
+          <div className="md:col-span-8">
+            <span className="text-[10px] font-mono tracking-[0.4em] text-[#7C3AED] uppercase block mb-6">/ EST. 2026</span>
+            <h1 className="text-[10vw] md:text-[7.5vw] font-bold font-space leading-[0.9] tracking-[-0.06em] text-[#141414]">
+              DESIGNING <br />
+              <span className="italic font-light text-zinc-500">OPERATIONAL</span> <br />
+              SYSTEMS.
+            </h1>
           </div>
-          
-          <h1 className="text-[14vw] md:text-[11vw] font-black leading-[0.8] tracking-tighter flex flex-col uppercase">
-            <span className="hover:italic transition-all duration-700">NGÔ PHÚC</span>
-            <span className="stroke-text">POSTLAIN</span>
-          </h1>
-
-          <div className="mt-20 flex flex-col md:flex-row justify-between items-start md:items-end gap-16">
-             <div className="max-w-[480px]">
-                <p className="text-xl md:text-2xl text-zinc-500 font-light leading-relaxed">
-                  "Sắp xếp thế giới bằng <span className="text-white font-medium italic">Logic</span>, vận hành tương lai bằng <span className="text-blue-500 font-medium italic">AI Automation</span>."
-                </p>
-             </div>
-             
-             <div className="flex gap-4">
-               {[
-                 { icon: <Music />, url: "https://open.spotify.com/artist/1GXZL8RGTHaxQVbo6yFB9n" },
-                 { icon: <Youtube />, url: "https://youtube.com/@postlain" },
-                 { icon: <Instagram />, url: "https://www.instagram.com/postlainagain" }
-               ].map((soc, i) => (
-                 <Magnetic key={i}>
-                   <a href={soc.url} target="_blank" className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500">
-                      {soc.icon}
-                   </a>
-                 </Magnetic>
-               ))}
-             </div>
-          </div>
-        </motion.div>
-
-        <motion.div 
-          animate={{ y: [0, 20, 0] }} 
-          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }} 
-          className="absolute bottom-12 right-24 opacity-20 hidden md:block"
-        >
-           <ArrowDown size={32} />
-        </motion.div>
-      </section>
-
-      {/* SERVICES / CORE */}
-      <section className="py-40 px-6 md:px-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-           <motion.div 
-             whileHover={{ y: -10 }}
-             className="bg-[#080808] border border-white/5 p-16 rounded-[48px] flex flex-col justify-between h-[500px] group overflow-hidden relative"
-           >
-              <div className="absolute top-[-10%] right-[-10%] w-64 h-64 bg-blue-600/5 blur-[80px] rounded-full group-hover:bg-blue-600/10 transition-all" />
-              <Bot size={48} className="text-blue-500 relative z-10" />
-              <div className="relative z-10">
-                <h4 className="font-mono text-blue-600 text-xs mb-4 uppercase tracking-[0.4em]">// System Design</h4>
-                <h3 className="text-5xl font-black italic uppercase leading-none tracking-tighter">AI AGENT DEVELOPMENT</h3>
-                <p className="text-zinc-500 mt-8 text-lg font-light leading-relaxed">Xây dựng giải pháp tự động hoá, tối ưu hoá nhân lực qua công nghệ AI Agent.</p>
-              </div>
-           </motion.div>
-
-           <motion.div 
-             whileHover={{ y: -10 }}
-             className="bg-blue-600 p-16 rounded-[48px] flex flex-col justify-between h-[500px] overflow-hidden relative group"
-           >
-              <Zap size={48} className="text-white relative z-10" />
-              <div className="relative z-10 text-white">
-                <h4 className="font-mono text-blue-200 text-xs mb-4 uppercase tracking-[0.4em]">// Leadership</h4>
-                <h3 className="text-5xl font-black italic uppercase leading-none tracking-tighter">CREATIVE MANAGEMENT</h3>
-                <p className="text-blue-100 mt-8 text-lg font-light leading-relaxed">Khả năng điều phối nghệ sĩ, nhân sự Retail và giữ vững KPI hệ thống.</p>
-              </div>
-           </motion.div>
-        </div>
-      </section>
-
-      {/* EXPERIENCE LIST */}
-      <section className="py-40 border-t border-white/5">
-        <div className="px-6 md:px-24 mb-32 flex flex-col md:flex-row md:items-end justify-between gap-8">
-          <h2 className="text-8xl md:text-[10vw] font-black uppercase italic leading-none tracking-tighter">THE JOURNEY</h2>
-          <div className="max-w-[300px] opacity-40 font-mono text-[10px] uppercase tracking-widest leading-loose text-right">
-             Quá trình chuyển dịch từ quản lý dịch vụ sang tư duy hệ thống.
+          <div className="md:col-span-4 md:text-right pt-4">
+             <p className="font-mono text-[9px] uppercase tracking-widest text-zinc-400 mb-2">SPECS // LOGIC // ART</p>
+             <p className="text-sm text-zinc-600 leading-relaxed max-w-xs md:ml-auto">
+               Dựa trên tư duy logic tự động hoá của AI và sự nhạy bén của một người làm quản lý nghệ thuật.
+             </p>
           </div>
         </div>
 
-        <div className="group/list">
-           {experiences.map((exp, i) => (
-             <motion.div 
-               key={i}
-               className="relative py-14 px-6 md:px-24 border-b border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center transition-all duration-500 hover:bg-white cursor-none overflow-hidden"
-             >
-                <div className="flex items-center gap-12 relative z-10 transition-all duration-700">
-                   <span className="text-blue-500 font-mono text-xl group-hover:text-black transition-colors italic">0{i+1}</span>
-                   <div>
-                     <h4 className="text-4xl md:text-7xl font-black italic text-zinc-300 group-hover:text-black transition-all uppercase tracking-tighter">
-                        {exp.title}
-                     </h4>
-                     <p className="font-mono text-[10px] text-zinc-500 group-hover:text-blue-600 uppercase mt-4 tracking-[0.3em]">
-                        {exp.detail}
-                     </p>
-                   </div>
-                </div>
-                <div className="text-left md:text-right mt-10 md:mt-0 relative z-10">
-                  <h5 className="text-2xl font-bold text-zinc-500 group-hover:text-black uppercase italic tracking-tight">{exp.role}</h5>
-                  <div className="opacity-0 group-hover:opacity-30 mt-6 transition-all text-black">
-                     {exp.icon}
-                  </div>
-                </div>
-             </motion.div>
-           ))}
+        {/* Khối Panel lớn ở cuối màn Hero */}
+        <div className="border-t hairline py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-[10px] font-mono uppercase tracking-widest text-zinc-500">
+           <div>
+              <p className="text-zinc-400 mb-1">01 / ROLE</p>
+              <p className="font-bold text-[#141414]">SYSTEMS MANAGER</p>
+           </div>
+           <div>
+              <p className="text-zinc-400 mb-1">02 / CORE</p>
+              <p className="font-bold text-[#141414]">AI INTEGRATION</p>
+           </div>
+           <div>
+              <p className="text-zinc-400 mb-1">03 / SOUND</p>
+              <p className="font-bold text-[#7C3AED]">ACTIVE INTERACTIVE</p>
+           </div>
+           <div className="text-right flex justify-end items-end gap-2 text-zinc-400">
+              <span>Scroll to navigate</span>
+              <ArrowUpRight size={14} />
+           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="px-4 py-4 mt-20">
-         <div className="bg-white text-black rounded-[60px] md:rounded-[100px] py-40 md:py-60 px-6 text-center overflow-hidden">
-            <motion.div whileHover={{ scale: 0.98 }} className="transition-all duration-700">
-              <p className="text-[10px] uppercase font-mono tracking-[0.6em] mb-16 opacity-40">Let's talk about the future</p>
-              <a href="mailto:studionopu@gmail.com" className="text-[14vw] font-black uppercase italic leading-[0.8] tracking-tighter hover:text-blue-600 transition-colors border-b-[6px] md:border-b-[18px] border-black pb-4 inline-block">
-                 CONNECT.
-              </a>
-            </motion.div>
-
-            <div className="mt-60 grid md:grid-cols-3 gap-16 px-10 md:px-20 text-[10px] uppercase font-mono tracking-widest opacity-40">
-               <div className="flex flex-col gap-3 md:text-left">
-                  <span>Dalat, Lâm Đồng — VN</span>
-                  <span>+84 938-649-420</span>
-               </div>
-               <div className="flex flex-col gap-3">
-                  <span className="font-bold italic">POSTLAIN Portfolio V2</span>
-                  <span>Code & Design by Expert-Agent</span>
-               </div>
-               <div className="flex flex-col gap-3 md:text-right italic underline underline-offset-4 decoration-blue-600">
-                  <a href="#hero">Back to top ↑</a>
-               </div>
+      {/* CORE EXPERTISE: Bản vẽ thiết kế Grid của 375.studio */}
+      <section className="py-32 px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-px bg-[#141414]/5">
+         
+         <div 
+           onMouseEnter={playSweepSound}
+           className="bg-[#F5F2EB] p-12 flex flex-col justify-between h-[450px] border-r hairline group relative overflow-hidden"
+         >
+            <Bot size={36} className="text-[#7C3AED] relative z-10" />
+            <div className="relative z-10">
+               <span className="font-mono text-[9px] uppercase text-zinc-400 tracking-widest">SYSTEM // 01</span>
+               <h3 className="text-4xl font-space font-bold mt-4 mb-4 tracking-tighter text-[#141414]">Tự Động Hoá AI</h3>
+               <p className="text-sm text-zinc-500 leading-relaxed max-w-sm">
+                  Triển khai các kịch bản AI tự động xử lý và tối ưu hóa hệ thống quản trị, giảm tải 80% công tác thủ công.
+               </p>
             </div>
          </div>
-         <div className="py-12 text-center text-[10px] font-mono tracking-[1.5em] opacity-20 uppercase">
-            Built with GSAP — Framer — NextJS
+
+         <div 
+           onMouseEnter={playSweepSound}
+           className="bg-[#F5F2EB] p-12 flex flex-col justify-between h-[450px] group relative overflow-hidden"
+         >
+            <Zap size={36} className="text-[#7C3AED] relative z-10" />
+            <div className="relative z-10">
+               <span className="font-mono text-[9px] uppercase text-zinc-400 tracking-widest">PEOPLE // 02</span>
+               <h3 className="text-4xl font-space font-bold mt-4 mb-4 tracking-tighter text-[#141414]">Điều Phối & Giữ Lửa</h3>
+               <p className="text-sm text-zinc-500 leading-relaxed max-w-sm">
+                  Năng lực quan sát sắc bén, gắn kết toàn bộ nhân sự và đưa hiệu năng đội ngũ đạt mốc tối đa.
+               </p>
+            </div>
+         </div>
+
+      </section>
+
+      {/* TIMELINE / ARCHIVE: Phong cách bảng điểm của 28K */}
+      <section className="py-40 px-6 md:px-12 bg-[#F3EFE9]">
+         <div className="mb-24 flex justify-between items-end border-b hairline pb-6">
+            <span className="font-mono text-xs text-zinc-400 uppercase tracking-widest">Selected Works Archive</span>
+            <span className="font-mono text-xs text-zinc-400 uppercase tracking-widest">2023—2026</span>
+         </div>
+
+         <div className="space-y-6">
+            {experiences.map((exp, idx) => (
+              <motion.div 
+                key={idx}
+                whileHover={{ scale: 0.99 }}
+                onMouseEnter={playSweepSound}
+                className="bg-[#F5F2EB] p-10 md:p-14 rounded-[32px] border border-black/5 flex flex-col md:flex-row justify-between items-start md:items-center hover:shadow-2xl transition-all duration-500 cursor-none"
+              >
+                 <div className="flex gap-10 items-start">
+                    <span className="font-mono text-xs text-[#7C3AED] pt-1">{exp.num}</span>
+                    <div>
+                      <h3 className="text-3xl md:text-4xl font-space font-bold text-[#141414] tracking-tight">{exp.title}</h3>
+                      <p className="font-mono text-[10px] text-zinc-400 uppercase mt-2 tracking-widest">{exp.role} • {exp.tag}</p>
+                    </div>
+                 </div>
+                 <div className="mt-6 md:mt-0 max-w-sm">
+                    <p className="text-sm text-zinc-500 leading-relaxed">{exp.desc}</p>
+                 </div>
+              </motion.div>
+            ))}
+         </div>
+      </section>
+
+      {/* FOOTER: Bản thu nhỏ cực ấn tượng */}
+      <footer className="py-40 px-6 md:px-12 text-center border-t hairline relative bg-[#F5F2EB]">
+         <div className="max-w-4xl mx-auto">
+            <span className="font-mono text-[10px] tracking-[0.5em] text-[#7C3AED] uppercase block mb-8">NEXT PHASE START</span>
+            
+            <Magnetic>
+              <a 
+                href="mailto:studionopu@gmail.com" 
+                className="text-[8vw] md:text-[6vw] font-bold font-space leading-none tracking-[-0.06em] text-[#141414] border-b-2 border-[#141414] hover:text-[#7C3AED] hover:border-[#7C3AED] transition-all duration-300 inline-block pb-4"
+              >
+                STUDIONOPU@GMAIL.COM
+              </a>
+            </Magnetic>
+
+            <div className="mt-32 pt-12 border-t hairline flex flex-col md:flex-row justify-between items-center text-[10px] font-mono uppercase tracking-widest text-zinc-400 gap-6">
+               <span>DL / LÂM ĐỒNG — VN</span>
+               <span>Ngô Phúc // POSTLAIN © 2026</span>
+               <span>0938-649-420</span>
+            </div>
          </div>
       </footer>
+
     </div>
   );
 }
