@@ -5,11 +5,14 @@ import { Music, Youtube, Instagram, ArrowDown, ArrowUp } from 'lucide-react';
 import Lenis from 'lenis';
 
 // ----------------------------------------------------
-// BỘ TỔNG HỢP ÂM TẦN KỸ THUẬT SỐ (REAL-TIME SYNTH ENGINE)
+// BỘ TỔNG HỢP NHẠC NỀN & SFX CHUẨN ĐIỆN ẢNH (WEB AUDIO ENGINE)
 // ----------------------------------------------------
-class TechSynth {
+class LuxuryAudioEngine {
   private ctx: AudioContext | null = null;
   private soundEnabled: boolean = false;
+  private ambientOscillators: OscillatorNode[] = [];
+  private ambientGain: GainNode | null = null;
+  private isMusicPlaying: boolean = false;
 
   init() {
     if (typeof window === "undefined") return;
@@ -18,13 +21,60 @@ class TechSynth {
         this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
       }
     } catch (e) {
-      console.warn("AudioContext failed to initialize:", e);
+      console.warn("AudioContext failed:", e);
     }
   }
 
   enableSound(status: boolean) {
     this.soundEnabled = status;
-    if (status) this.init();
+    if (status) {
+      this.init();
+      this.startAmbientMusic();
+    }
+  }
+
+  // TỰ ĐỘNG SẢN XUẤT NHẠC NỀN HOÀNG GIA (CHAMPAGNE AMBIENT PAD)
+  startAmbientMusic() {
+    this.init();
+    if (!this.ctx || this.isMusicPlaying) return;
+    this.isMusicPlaying = true;
+
+    try {
+      // Bộ điều phối âm lượng master cho nhạc nền
+      this.ambientGain = this.ctx.createGain();
+      this.ambientGain.gain.setValueAtTime(0, this.ctx.currentTime);
+      // Fade in nhạc nền cực kỳ êm ái trong 4 giây đầu
+      this.ambientGain.gain.linearRampToValueAtTime(0.03, this.ctx.currentTime + 4);
+      this.ambientGain.connect(this.ctx.destination);
+
+      // Dải hợp âm Tím Đêm sang trọng: C#3, G#3, C#4, F4, C5
+      const luxuryChords = [138.59, 207.65, 277.18, 349.23, 523.25];
+
+      luxuryChords.forEach((freq) => {
+        if (!this.ctx || !this.ambientGain) return;
+        const osc = this.ctx.createOscillator();
+        const filter = this.ctx.createBiquadFilter();
+        const oscGain = this.ctx.createGain();
+
+        osc.type = "sine";
+        osc.frequency.value = freq;
+
+        // Lớp lọc tần số thấp (lowpass) để tạo tiếng trầm ấm, không chói tai
+        filter.type = "lowpass";
+        filter.frequency.value = 350;
+
+        oscGain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+
+        osc.connect(filter);
+        filter.connect(oscGain);
+        oscGain.connect(this.ambientGain);
+
+        osc.start();
+        this.ambientOscillators.push(osc);
+      });
+    } catch (e) {
+      console.warn("Music play blocked by browser policy");
+    }
   }
 
   playTick() {
@@ -78,7 +128,7 @@ class TechSynth {
   }
 }
 
-const synth = new TechSynth();
+const synth = new LuxuryAudioEngine();
 
 const careerImpacts = [
   {
@@ -125,13 +175,13 @@ export default function Home() {
       if (index < 3) {
         index += 1;
         setActiveYearIndex(index);
-        synth.enableSound(true);
+        synth.enableSound(true); // tạm bật âm thanh click đếm số
         synth.playTick();
       } else {
         clearInterval(interval);
         setShowGateway(true);
       }
-    }, 700); // 0.7 giây lăn một khấc số
+    }, 800); // 0.8 giây mỗi khấc lăn số cực kỳ đầm
     return () => clearInterval(interval);
   }, []);
 
@@ -249,12 +299,9 @@ export default function Home() {
     };
   }, [loading]);
 
-  // HÀM KÍCH HOẠT VÀO TRANG CÓ/KHÔNG CÓ NHẠC
+  // HÀM KÍCH HOẠT VÀO TRANG CÓ/KHÔNG CÓ NHẠC NỀN
   const enterPortfolio = (withSound: boolean) => {
-    synth.enableSound(withSound);
-    if (withSound) {
-      synth.playSuccess();
-    }
+    synth.enableSound(withSound); // status này quyết định khởi chạy background music sinh học
     setLoading(false);
   };
 
@@ -277,27 +324,28 @@ export default function Home() {
 
             <div className="text-center space-y-12 z-10">
               
-              {/* TRỤC XOAY SỐ VẬT LÝ ODOMETER (SỬA LỖI LỆCH TỌA ĐỘ) */}
-              <div className="flex items-center justify-center font-black tracking-tighter text-[#FAF8F5] select-none font-sans uppercase text-[18vw] md:text-[12vw] leading-none">
-                {/* 20 giữ chiều cao chuẩn */}
-                <span className="h-[18vw] md:h-[12vw] flex items-center">20</span>
+              {/* TRỤC XOAY SỐ VẬT LÝ ODOMETER (SỬA LỖI LỆCH TỌA ĐỘ VÀ KHÓA ĐƠN VỊ CỐ ĐỊNH CHỐNG GIẬT LAG) */}
+              <div className="flex items-center justify-center font-black tracking-tighter text-[#FAF8F5] select-none font-sans uppercase text-7xl md:text-[10rem] leading-none">
+                {/* Khóa cứng kích thước dọc bằng đơn vị h-24 / h-40 của GPU */}
+                <span className="h-24 md:h-40 flex items-center">20</span>
                 
-                {/* Khung bọc trục trượt - Loại bỏ flex-center để bắt đầu đúng từ Top: 0 */}
-                <div className="relative overflow-hidden h-[18vw] md:h-[12vw] flex items-start">
+                {/* Trục trượt - Sử dụng will-change-transform để ép card chạy mượt 60fps */}
+                <div className="relative overflow-hidden h-24 md:h-40 flex items-start">
                   <motion.div
                     animate={{ y: `-${activeYearIndex * 25}%` }}
-                    transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
-                    className="flex flex-col h-[400%]" 
+                    transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }} // Sử dụng ease Thụy Sĩ vuốt chậm dần cực mượt
+                    className="flex flex-col h-[400%] will-change-transform"
+                    style={{ transform: "translateZ(0)" }} // Kích hoạt bộ tăng tốc phần cứng của trình duyệt
                   >
-                    <span className="h-[18vw] md:h-[12vw] flex items-center">23</span>
-                    <span className="h-[18vw] md:h-[12vw] flex items-center">24</span>
-                    <span className="h-[18vw] md:h-[12vw] flex items-center">25</span>
-                    <span className="h-[18vw] md:h-[12vw] flex items-center">26</span>
+                    <span className="h-24 md:h-40 flex items-center">23</span>
+                    <span className="h-24 md:h-40 flex items-center">24</span>
+                    <span className="h-24 md:h-40 flex items-center">25</span>
+                    <span className="h-24 md:h-40 flex items-center">26</span>
                   </motion.div>
                 </div>
               </div>
 
-              {/* HAI NÚT BẤM KÍNH MỜ KHUẾCH TÁN ÂM THANH */}
+              {/* HAI NÚT BẤM KÍNH MỜ KHUẾCH TÁN NHẠC NỀN HOÀNG GIA */}
               <AnimatePresence>
                 {showGateway && (
                   <motion.div 
@@ -310,13 +358,13 @@ export default function Home() {
                       onClick={() => enterPortfolio(true)}
                       className="px-8 py-3.5 border border-[#C5A880] rounded-full text-xs font-mono tracking-widest uppercase hover:bg-[#C5A880] hover:text-[#1C2333] transition-all duration-300 bg-transparent text-[#C5A880]"
                     >
-                      ENTER WITH SOUND
+                      ENTER WITH MUSIC
                     </button>
                     <button 
                       onClick={() => enterPortfolio(false)}
                       className="px-8 py-3.5 border border-white/20 rounded-full text-xs font-mono tracking-widest uppercase hover:bg-white hover:text-[#1C2333] transition-all duration-300 bg-transparent text-white/70"
                     >
-                      ENTER WITHOUT SOUND
+                      ENTER WITHOUT MUSIC
                     </button>
                   </motion.div>
                 )}
