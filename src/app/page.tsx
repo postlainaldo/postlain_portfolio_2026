@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Music, Youtube, Instagram, ArrowDown, ArrowUp, X, Sparkles, TrendingUp, BarChart } from 'lucide-react';
+import { Music, Youtube, Instagram, ArrowDown, ArrowUp, X, Sparkles, Terminal, Globe, Zap, Activity, ArrowRight } from 'lucide-react';
 import Lenis from 'lenis';
 
 // ----------------------------------------------------
@@ -24,7 +24,7 @@ class LuxuryAudioEngine {
         this.ctx.resume();
       }
     } catch (e) {
-      console.warn("AudioContext failed:", e);
+      console.warn("AudioContext failed to initialize:", e);
     }
   }
 
@@ -48,7 +48,7 @@ class LuxuryAudioEngine {
 
       const luxuryChords = [110.00, 164.81];
 
-      baseNotesForEach(luxuryChords);
+      this.baseNotesForEach(luxuryChords);
     } catch (e) {
       console.warn("Ambient music error:", e);
     }
@@ -218,10 +218,16 @@ const careerImpacts = [
     metrics: "Giảm tỉ lệ thất thoát kho bãi xuống dưới 1%",
     highlight: "Thúc đẩy doanh thu tăng trưởng vượt mốc 15%",
     detail: "Định vị và tái cơ cấu quy trình phân phối sản phẩm dựa trên phân tích tệp khách hàng cao cấp tại địa phương. Thiết lập hệ thống vận hành và điều phối nhân sự tối ưu.",
+    flowchart: [
+      { name: "Hàng Nhập Kho", desc: "Xử lý & phân loại nhãn RFID" },
+      { name: "Đồng Bộ API Cloud", desc: "Cập nhật dữ liệu tồn kho real-time" },
+      { name: "Phân Tách Sức Mua", desc: "Bố cục sơ đồ quầy kệ thông minh" },
+      { name: "Retail checkout", desc: "Tối ưu hóa thời gian thanh toán" }
+    ],
     strategy: [
-      "Kiểm soát vòng xoay hàng tồn kho (Inventory Turnover) thông qua hệ thống phân tích doanh số thời gian thực.",
-      "Tối ưu sơ đồ trưng bày sản phẩm để gia tăng tỉ lệ mua kèm chéo (Uptown Cross-selling).",
-      "Xây dựng chương trình đào tạo đội ngũ bán hàng tập trung hoàn toàn vào kỹ năng giải quyết khiếu nại (Resolution Skills)."
+      "Quản trị dữ liệu tồn kho tự động hóa giúp đưa chỉ số sai lệch bãi kho về mốc tiệm cận 0%.",
+      "Phân bổ ca trực nhân sự linh hoạt dựa trên chu kỳ dao động lượng khách du lịch tại Đà Lạt.",
+      "Tối ưu hóa Layout trưng bày nhằm gia tăng hệ số mua kèm chéo (Uptown Cross-selling) đạt 18%."
     ]
   },
   {
@@ -232,10 +238,16 @@ const careerImpacts = [
     metrics: "Tiết kiệm 40% tổng chi phí sản xuất",
     highlight: "Tăng trưởng hiệu suất vận hành lên đến 200%",
     detail: "Hệ thống hóa toàn bộ quy trình làm việc giữa các nghệ sĩ, đối tác truyền thông quốc tế và MCN qua các giải pháp lưu trữ thông minh giúp loại bỏ các khâu trung gian thừa thãi.",
+    flowchart: [
+      { name: "Nghệ Sĩ Book Lịch", desc: "Thông qua Landing Page tự động" },
+      { name: "Trigger Webhook", desc: "Tự động kiểm tra xung đột phòng ban" },
+      { name: "Auto-Scheduler", desc: "Phân chia dữ liệu lịch trình rảnh" },
+      { name: "Telegram Alert", desc: "Thông báo tức thì cho kỹ sư âm thanh" }
+    ],
     strategy: [
-      "Lập trình cổng điều phối lịch trình thu âm tự động hóa tránh xung đột thời gian của các phòng ban kỹ thuật.",
-      "Thương thảo và quản lý hợp đồng quyền tác giả cho mạng lưới hơn 50 nghệ sĩ thuộc MCN.",
-      "Phát triển kế hoạch tiếp thị số thúc đẩy lưu lượng tương tác đạt hơn 4 triệu lượt tiếp cận tự nhiên."
+      "Xây dựng kịch bản điều phối API tự động quản trị lịch trình phòng thu của hơn 50 nghệ sĩ.",
+      "Đóng gói quy trình bàn giao file âm thanh thô qua máy chủ đám mây, triệt tiêu 100% rủi ro thất thoát dữ liệu.",
+      "Lãnh đạo dự án truyền thông số giúp mở rộng tệp tiếp cận tự nhiên vượt mốc 4 triệu lượt."
     ]
   },
   {
@@ -246,10 +258,16 @@ const careerImpacts = [
     metrics: "Rút ngắn 20% thời gian chờ đợi của khách",
     highlight: "Sắp xếp chuỗi cung ứng đạt mốc hoàn hảo 100%",
     detail: "Áp dụng tư duy hình học không gian vào quản trị logistics nguyên vật liệu Âu cao cấp, đảm bảo hiệu suất phục vụ liên tục trong các khung giờ áp lực lớn nhất.",
+    flowchart: [
+      { name: "Nhận Order Khách", desc: "Phân loại món Âu qua hệ thống bếp" },
+      { name: "Logistics Phân Tách", desc: "Chuẩn bị nguyên liệu theo sơ đồ" },
+      { name: "Sơ Đồ Tuyến Tính", desc: "Tối ưu hóa quãng đường di chuyển bếp" },
+      { name: "Thermal Control", desc: "Kiểm soát nhiệt độ Steak áp chảo" }
+    ],
     strategy: [
-      "Thiết kế sơ đồ di chuyển tuyến tính trong nhà bếp giúp loại bỏ 30% quãng đường di chuyển thừa của nhân viên.",
-      "Chuẩn hóa và đồng nhất công thức làm nước sốt và áp chảo steak tiêu chuẩn châu Âu.",
-      "Thương thảo chuỗi cung ứng thực phẩm nhập khẩu đảm bảo nguyên liệu đạt độ tươi ngon hoàn hảo mỗi ngày."
+      "Ứng dụng sơ đồ di chuyển tuyến tính trong khu bếp, giảm 30% thời gian hao phí vô ích của đầu bếp.",
+      "Kiểm soát chi phí nguyên vật liệu bằng công thức định lượng định kỳ tự động hóa.",
+      "Chuẩn hóa quy trình kỹ nghệ món Âu cao cấp đảm bảo tính đồng đều chất lượng 100%."
     ]
   }
 ];
@@ -271,6 +289,7 @@ export default function Home() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const [activeModal, setActiveModal] = useState<typeof careerImpacts[0] | null>(null);
+  const [showDiagnostics, setShowDiagnostics] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const clickParticles = useRef<Particle[]>([]);
 
@@ -323,7 +342,7 @@ export default function Home() {
 
   // 3. SCROLL INTERCEPT ENGINE
   useEffect(() => {
-    if (loading || activeModal) return;
+    if (loading || activeModal || showDiagnostics) return;
 
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
@@ -364,7 +383,7 @@ export default function Home() {
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [loading, activeSlide, isScrolling, activeModal]);
+  }, [loading, activeSlide, isScrolling, activeModal, showDiagnostics]);
 
   // 4. XOAY THẺ 3D PERSPECTIVE SANG TRỌNG
   const handle3DTilt = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -414,11 +433,11 @@ export default function Home() {
       ctx.arc(orbX, orbY, 600, 0, Math.PI * 2);
       ctx.fill();
 
-      // VẼ VÀ CẬP NHẬT HẠT BỤI SAO VÀNG KHI USER CLICK CHUỘT (ADDDICTIVE SPLASH)
+      // VẼ VÀ CẬP NHẬT HẠT BỤI SAO VÀNG KHI USER CLICK CHUỘT
       clickParticles.current.forEach((p, idx) => {
         p.x += p.vx;
         p.y += p.vy;
-        p.alpha -= 0.015; // Giảm dần độ mờ
+        p.alpha -= 0.015;
 
         if (p.alpha <= 0) {
           clickParticles.current.splice(idx, 1);
@@ -431,7 +450,7 @@ export default function Home() {
         ctx.shadowBlur = 10;
         ctx.shadowColor = "rgba(197, 168, 128, 0.5)";
         ctx.fill();
-        ctx.shadowBlur = 0; // Reset shadow
+        ctx.shadowBlur = 0;
       });
 
       animationId = requestAnimationFrame(draw);
@@ -444,11 +463,10 @@ export default function Home() {
     };
   }, [loading]);
 
-  // THUẬT TOÁN KÍCH PHÁT BỤI SAO VÀNG KHI CLICK VÀO BẤT KỲ ĐÂU (SURPRISE INTERACTION)
+  // THUẬT TOÁN KÍCH PHÁT BỤI SAO VÀNG KHI CLICK VÀO BẤT KỲ ĐÂU (ADDDICTIVE SPLASH)
   const handleGlobalClick = (e: React.MouseEvent) => {
-    synth.playTick(); // Âm click mộc êm ái
+    synth.playTick();
 
-    // Sinh ra 15 hạt sao phát quang bung toả từ lồng con trỏ chuột
     for (let i = 0; i < 15; i++) {
       const angle = Math.random() * Math.PI * 2;
       const speed = Math.random() * 3 + 1;
@@ -567,7 +585,69 @@ export default function Home() {
              <span>Lăn chuột hoặc dùng phím mũi tên để xem các phần</span>
           </div>
 
-          {/* MODAL CHI TIẾT CHIẾN LƯỢC BÙNG NỔ TRẢI NGHIỆM KHI USER CLICK (SURPRISE GATE) */}
+          {/* BẢNG CHẨN ĐOÁN HỆ THỐNG NỔI */}
+          <div className="fixed bottom-8 right-8 z-[90]">
+            <button 
+              onClick={(e) => { e.stopPropagation(); synth.playSuccess(); setShowDiagnostics(!showDiagnostics); }}
+              className="px-5 py-2.5 border border-[#C5A880]/30 hover:border-[#C5A880] rounded-full text-[9px] font-mono tracking-widest text-[#C5A880] uppercase bg-[#1C2333]/90 backdrop-blur-md transition-all flex items-center gap-2 hover:scale-105"
+            >
+              <Activity size={10} className="sys-pulse text-purple-400" />
+              <span>HỆ SỐ VẬN HÀNH CHUYÊN SÂU</span>
+            </button>
+          </div>
+
+          {/* PANEL CHẨN ĐOÁN TRƯỢT SANG TRỌNG */}
+          <AnimatePresence>
+            {showDiagnostics && (
+              <motion.div 
+                initial={{ x: "100%" }}
+                animate={{ x: "0%" }}
+                exit={{ x: "100%" }}
+                transition={{ type: "spring", stiffness: 180, damping: 25 }}
+                className="fixed top-0 right-0 h-screen w-full md:w-[450px] bg-[#111111]/98 border-l border-white/5 z-[999] p-10 flex flex-col justify-between overflow-y-auto"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="space-y-12">
+                  <div className="flex justify-between items-center border-b border-white/5 pb-6">
+                     <h3 className="font-space font-black text-xl tracking-tighter uppercase text-[#C5A880]">CHẨN ĐOÁN VẬN HÀNH</h3>
+                     <button 
+                       onClick={() => { synth.playTick(); setShowDiagnostics(false); }}
+                       className="p-1 rounded-full border border-white/10 hover:bg-white hover:text-black transition-all"
+                     >
+                       <X size={14} />
+                     </button>
+                  </div>
+
+                  <div className="space-y-6 font-mono text-[10px] text-zinc-400">
+                     <p className="text-[#C5A880] border-b border-white/5 pb-2 uppercase tracking-widest">// CHỈ SỐ AUDIT HIỆU NĂNG //</p>
+                     
+                     <div className="flex justify-between items-center bg-[#1C2333]/40 p-4 rounded-xl">
+                        <span>TỔNG GIỜ LÃNH ĐẠO LÂM SÀNG</span>
+                        <span className="text-[#FAF8F5] font-bold">24,000+ GIỜ</span>
+                     </div>
+                     <div className="flex justify-between items-center bg-[#1C2333]/40 p-4 rounded-xl">
+                        <span>TỈ LỆ GIỮ CHÂN NHÂN SỰ</span>
+                        <span className="text-emerald-400 font-bold">98.5%</span>
+                     </div>
+                     <div className="flex justify-between items-center bg-[#1C2333]/40 p-4 rounded-xl">
+                        <span>TỈ LỆ THẤT THOÁT RETAIL</span>
+                        <span className="text-emerald-400 font-bold">&lt; 0.8%</span>
+                     </div>
+                     <div className="flex justify-between items-center bg-[#1C2333]/40 p-4 rounded-xl">
+                        <span>KỊCH BẢN AI AUTOMATION</span>
+                        <span className="text-purple-400 font-bold">14 API NODES ACTIVE</span>
+                     </div>
+                  </div>
+                </div>
+
+                <div className="border-t border-white/5 pt-6 text-[8px] font-mono text-zinc-500 uppercase tracking-widest leading-loose">
+                   SYSTEM LOGS: ONLINE // STATUS SECURE // MMXXVI
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* MODAL SƠ ĐỒ CHUỖI KHỐI BLUEPRINT ĐIỆN ẢNH */}
           <AnimatePresence>
             {activeModal && (
               <motion.div 
@@ -575,16 +655,17 @@ export default function Home() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 className="fixed inset-0 bg-[#1D2436]/95 z-[999] flex items-center justify-center p-6 backdrop-blur-md"
+                onClick={(e) => e.stopPropagation()}
               >
                 <motion.div 
                   initial={{ scale: 0.9, y: 30 }}
                   animate={{ scale: 1, y: 0 }}
                   exit={{ scale: 0.9, y: 30 }}
                   transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                  className="bg-[#111111] border border-white/10 p-8 md:p-12 rounded-[40px] max-w-2xl w-full text-left relative shadow-2xl overflow-y-auto max-h-[85vh] scrollbar-none"
+                  className="bg-[#111111] border border-white/10 p-8 md:p-12 rounded-[40px] max-w-3xl w-full text-left relative shadow-2xl overflow-y-auto max-h-[85vh] scrollbar-none"
                 >
                   <button 
-                    onClick={(e) => { e.stopPropagation(); synth.playTick(); setActiveModal(null); }}
+                    onClick={() => { synth.playTick(); setActiveModal(null); }}
                     className="absolute top-6 right-6 p-2 rounded-full border border-white/10 hover:bg-[#FAF8F5] hover:text-black transition-all"
                   >
                     <X size={18} />
@@ -594,6 +675,28 @@ export default function Home() {
                   <h3 className="text-4xl font-serif-luxury font-bold text-[#FAF8F5] mt-4 mb-2 uppercase italic">{activeModal.role}</h3>
                   <p className="text-sm text-[#C5A880] font-mono mb-8 font-bold tracking-wider">{activeModal.metrics} • {activeModal.highlight}</p>
                   
+                  {/* SƠ ĐỒ CHUỖI KHỐI LOGIC */}
+                  <div className="mb-10 p-6 bg-zinc-900/40 rounded-3xl border border-white/5 space-y-4">
+                     <h5 className="font-sans text-[10px] font-bold uppercase tracking-widest text-[#FAF8F5] border-b border-white/5 pb-2">// SƠ ĐỒ CHUỖI KHỐI LOGIC QUY TRÌNH //</h5>
+                     
+                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center pt-2">
+                        {activeModal.flowchart.map((node, nIdx) => (
+                           <React.Fragment key={nIdx}>
+                              <div className="p-4 bg-[#1C2333]/50 rounded-2xl border border-white/5 text-center relative">
+                                 <span className="absolute top-2 left-3 font-mono text-[8px] text-[#C5A880]">0{nIdx+1}</span>
+                                 <h6 className="font-space font-bold text-xs text-white uppercase tracking-tight">{node.name}</h6>
+                                 <p className="text-[9px] text-zinc-500 font-mono mt-1 leading-tight">{node.desc}</p>
+                              </div>
+                              {nIdx < 3 && (
+                                 <div className="hidden md:flex justify-center text-purple-500">
+                                    <ArrowRight size={14} className="animate-pulse" />
+                                 </div>
+                              )}
+                           </React.Fragment>
+                        ))}
+                     </div>
+                  </div>
+
                   <div className="space-y-6">
                     <h5 className="font-sans text-xs font-bold uppercase tracking-widest text-[#FAF8F5] flex items-center gap-2 border-b border-white/5 pb-2">
                       <Sparkles size={14} className="text-[#C5A880]"/> KỊCH BẢN TỐI ƯU HÓA HOÀN MỸ
@@ -724,7 +827,7 @@ export default function Home() {
                 className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24"
               >
                 <div className="flex justify-between items-end border-b border-white/5 pb-6">
-                  <span className="font-sans text-[8px] tracking-[0.25em] text-zinc-500 uppercase">// DỮ LIỆU CASE STUDIES THỰC TIỄN (NHẤP CHUỘT VÀO THẺ ĐỂ KHÁM PHÁ) //</span>
+                  <span className="font-sans text-[8px] tracking-[0.25em] text-zinc-500 uppercase">// DỮ LIỆU CASE STUDIES THỰC TIỄN (NHẤP CHUỘT VÀO THỂ ĐỂ KHÁM PHÁ) //</span>
                   <span className="font-sans text-[9px] text-[#C5A880] font-bold tracking-widest flex items-center gap-2">RECRUITER OVERVIEW</span>
                 </div>
 
