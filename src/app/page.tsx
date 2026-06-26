@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Bot, Zap, Music, Youtube, Instagram, Terminal, Cpu, Layers } from 'lucide-react';
+import { ArrowRight, Bot, Zap, Music, Youtube, Instagram, Terminal } from 'lucide-react';
 import Lenis from 'lenis';
 
 // ----------------------------------------------------
@@ -54,10 +54,41 @@ class TechSynth {
 
 const synth = new TechSynth();
 
+// ĐƯA DỮ LIỆU CV RA PHẠM VI TOÀN CỤC ĐỂ ĐẢM BẢO COMPILER PHÁT HIỆN ĐÚNG
+const careerImpacts = [
+  {
+    num: "01",
+    role: "STORE MANAGER",
+    company: "ALDO GO! DALAT",
+    period: "2025—2026",
+    metrics: "Giảm Thất Thoát Kho Bãi <1%",
+    highlight: "Tăng Trưởng Doanh Số 15%",
+    detail: "Phân tích hành vi tệp khách hàng du lịch để cơ cấu lại danh mục sản phẩm chủ lực. Ứng dụng quy trình quản lý tinh giản giúp tối ưu hiệu năng làm việc của đội ngũ bán lẻ."
+  },
+  {
+    num: "02",
+    role: "STUDIO MANAGER",
+    company: "SB STUDIO",
+    period: "2023—2024",
+    metrics: "Tiết Kiệm 40% Chi Phí Sản Xuất",
+    highlight: "Tăng Hiệu Suất Vận Hành 200%",
+    detail: "Hệ thống hóa toàn bộ lịch trình thu âm, quản lý nghệ sĩ và đối tác truyền thông qua nền tảng số. Loại bỏ các khâu thừa thãi giúp đẩy mạnh tốc độ sản xuất nội dung."
+  },
+  {
+    num: "03",
+    role: "KITCHEN CAPTAIN / CHEF",
+    company: "PHUI STEAK",
+    period: "2024—2025",
+    metrics: "Giảm 20% Thời Gian Chờ Của Khách",
+    highlight: "Sắp Xếp Quy Trình Bếp Đạt Mốc 100%",
+    detail: "Ứng dụng sơ đồ di chuyển tuyến tính trong bếp. Điều phối ca cao điểm mượt mà bằng logic sắp xếp nguyên liệu thông minh."
+  }
+];
+
 export default function Page() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const horizontalSectionRef = useRef<HTMLDivElement>(null);
 
   // 1. CHẠY PRELOADER CONSOLE
   useEffect(() => {
@@ -213,7 +244,7 @@ export default function Page() {
                      </div>
                   </div>
                   <div className="flex gap-6 items-start">
-                     <Layers size={32} className="text-purple-600 shrink-0 mt-1" />
+                     <Zap size={32} className="text-purple-600 shrink-0 mt-1" />
                      <div>
                         <h4 className="text-xl font-bold uppercase font-space mb-2">Quản Trị Đa Ngành Cường Độ Cao</h4>
                         <p className="text-zinc-500 font-light leading-relaxed">
