@@ -1,32 +1,43 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Music, Youtube, Instagram, ArrowDown, ArrowUp, Compass } from 'lucide-react';
+import { Music, Youtube, Instagram, ArrowDown, ArrowUp } from 'lucide-react';
 import Lenis from 'lenis';
 
 // ----------------------------------------------------
-// BỘ TỔNG HỢP ÂM TẦN PHẢN HỒI CƠ HỌC (LUXURY AUDIO SYNTH)
+// BỘ TỔNG HỢP ÂM TẦN KỸ THUẬT SỐ (REAL-TIME SYNTH ENGINE)
 // ----------------------------------------------------
 class TechSynth {
   private ctx: AudioContext | null = null;
+  private soundEnabled: boolean = false;
+
   init() {
     if (!this.ctx && typeof window !== "undefined") {
       this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
     }
   }
+
+  enableSound(status: boolean) {
+    this.soundEnabled = status;
+    if (status) this.init();
+  }
+
   playTick() {
+    if (!this.soundEnabled) return;
     this.init(); if (!this.ctx) return;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(1200, this.ctx.currentTime);
+    osc.frequency.setValueAtTime(1400, this.ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(300, this.ctx.currentTime + 0.04);
-    gain.gain.setValueAtTime(0.008, this.ctx.currentTime);
+    gain.gain.setValueAtTime(0.012, this.ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.04);
     osc.connect(gain); gain.connect(this.ctx.destination);
     osc.start(); osc.stop(this.ctx.currentTime + 0.04);
   }
+
   playWhoosh() {
+    if (!this.soundEnabled) return;
     this.init(); if (!this.ctx) return;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
@@ -38,6 +49,7 @@ class TechSynth {
     osc.connect(gain); gain.connect(this.ctx.destination);
     osc.start(); osc.stop(this.ctx.currentTime + 0.18);
   }
+
   playSuccess() {
     this.init(); if (!this.ctx) return;
     const osc = this.ctx.createOscillator();
@@ -54,7 +66,6 @@ class TechSynth {
 
 const synth = new TechSynth();
 
-// HỒ SƠ DOANH NGHIỆP THỰC CHIẾN - ĐÃ VIỆT HÓA CHUẨN SANG TRỌNG
 const careerImpacts = [
   {
     num: "01",
@@ -87,25 +98,27 @@ const careerImpacts = [
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
-  const [progress, setProgress] = useState(0);
+  const [currentYear, setCurrentYear] = useState(2023);
+  const [showGateway, setShowGateway] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // 1. LOADING SCREEN TINH TẾ
+  // 1. CONSOLE LOADING: ĐẾM NĂM 2023 -> 2026 CHUẨN 375 STUDIO
   useEffect(() => {
+    let year = 2023;
     const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          synth.playSuccess();
-          setTimeout(() => setLoading(false), 500);
-          return 100;
-        }
-        if (prev % 15 === 0) synth.playTick();
-        return prev + 1;
-      });
-    }, 15);
+      if (year < 2026) {
+        year += 1;
+        setCurrentYear(year);
+        // Tự động kích hoạt Audio Context ảo để phát click nhẹ
+        synth.enableSound(true);
+        synth.playTick();
+      } else {
+        clearInterval(interval);
+        setShowGateway(true);
+      }
+    }, 600); // Mỗi năm chạy 0.6 giây
     return () => clearInterval(interval);
   }, []);
 
@@ -120,7 +133,7 @@ export default function Home() {
     requestAnimationFrame(raf);
   }, [loading]);
 
-  // 3. SCROLL INTERCEPT ENGINE
+  // 3. SCROLL INTERCEPT ENGINE (KHÓA DỌC TRƯỢT NGANG SLIDE)
   useEffect(() => {
     if (loading) return;
 
@@ -179,7 +192,7 @@ export default function Home() {
     el.style.transform = `perspective(1200px) rotateY(0deg) rotateX(0deg) scale3d(1, 1, 1)`;
   };
 
-  // 5. NỀN NƯỚC HỔ PHÁCH VÀ VÀNG ĐỒNG CHẢY CHẬM (LUXURY AMBIENT ORB)
+  // 5. NỀN NƯỚC HỔ PHÁCH VÀ VÀNG ĐỒNG CHẢY CHẬM TOẢ SÁNG (GLOW EMISSION)
   useEffect(() => {
     if (loading || !canvasRef.current) return;
     const canvas = canvasRef.current;
@@ -201,15 +214,16 @@ export default function Home() {
       ctx.clearRect(0, 0, width, height);
       tick += 0.0015;
 
-      // HÀO QUANG VÀNG SANG TRỌNG (CHAMPAGNE GOLD AMBIENT ORB)
-      const orbX = width * 0.75 + Math.sin(tick) * 80;
-      const orbY = height * 0.25 + Math.cos(tick * 1.2) * 80;
-      const grad = ctx.createRadialGradient(orbX, orbY, 5, orbX, orbY, 400);
-      grad.addColorStop(0, "rgba(197, 168, 128, 0.04)"); /* Màu vàng Champagne cực mỏng */
-      grad.addColorStop(1, "rgba(8, 8, 8, 0)");
+      // HÀO QUANG TOẢ SÁNG CỰC LỚN (GIẢM SỰ TỐI TĂM CHO WEB)
+      const orbX = width * 0.5 + Math.sin(tick) * 50;
+      const orbY = height * 0.5 + Math.cos(tick * 0.8) * 50;
+      const grad = ctx.createRadialGradient(orbX, orbY, 10, orbX, orbY, 600);
+      grad.addColorStop(0, "rgba(197, 168, 128, 0.08)"); /* Vầng hào quang Champagne rực rỡ từ tâm */
+      grad.addColorStop(0.5, "rgba(139, 92, 246, 0.02)"); /* Tím nhẹ mờ */
+      grad.addColorStop(1, "rgba(28, 35, 51, 0)");
       ctx.fillStyle = grad;
       ctx.beginPath();
-      ctx.arc(orbX, orbY, 400, 0, Math.PI * 2);
+      ctx.arc(orbX, orbY, 600, 0, Math.PI * 2);
       ctx.fill();
 
       animationId = requestAnimationFrame(draw);
@@ -222,30 +236,64 @@ export default function Home() {
     };
   }, [loading]);
 
+  // HÀM KÍCH HOẠT VÀO TRANG CÓ/KHÔNG CÓ NHẠC
+  const enterPortfolio = (withSound: boolean) => {
+    synth.enableSound(withSound);
+    if (withSound) {
+      synth.playSuccess();
+    }
+    setLoading(false);
+  };
+
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-[#080808] text-[#FAF8F5]">
+    <div className="relative h-screen w-screen overflow-hidden bg-[#1C2333] text-[#FAF8F5]">
       
       {/* CANVAS HÀO QUANG VÀNG ĐỒNG */}
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-10" />
 
-      {/* CONSOLE LOADING SCREEN */}
+      {/* 375 STUDIO YEAR PRELOADER GATEWAY */}
       <AnimatePresence>
         {loading && (
           <motion.div 
-            exit={{ y: "-100%" }}
+            exit={{ opacity: 0, scale: 1.05 }}
             transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 bg-[#080808] text-[#FAF8F5] z-[9999] flex flex-col justify-between p-8 font-serif-luxury"
+            className="fixed inset-0 bg-[#1C2333] text-[#FAF8F5] z-[9999] flex flex-col justify-center items-center font-sans"
           >
-            <div className="flex justify-between items-center text-xs opacity-40 border-b border-white/5 pb-4 font-sans">
-              <span>POSTLAIN PORTFOLIO</span>
-              <span>DA LAT, VN</span>
-            </div>
-            <div className="text-center">
-              <span className="text-[12vw] font-light leading-none text-[#C5A880] italic">{progress}%</span>
-            </div>
-            <div className="flex justify-between items-end text-[10px] opacity-40 font-sans tracking-widest">
-              <span>ĐANG KHỞI TẠO KHÔNG GIAN TRIỂN LÃM SỐ...</span>
-              <span>MMXVI</span>
+            <div className="text-center space-y-12">
+              {/* ĐẾM NĂM KHỔNG LỒ CHUẨN 375 */}
+              <motion.h2 
+                key={currentYear}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                className="text-[14vw] md:text-[10vw] font-black tracking-tighter text-[#FAF8F5] select-none"
+              >
+                {currentYear}
+              </motion.h2>
+
+              {/* HAI NÚT BẤM KÍNH MỜ KHUẾCH TÁN ÂM THANH */}
+              <AnimatePresence>
+                {showGateway && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="flex flex-col md:flex-row gap-4 justify-center items-center"
+                  >
+                    <button 
+                      onClick={() => enterPortfolio(true)}
+                      className="px-8 py-3.5 border border-[#C5A880] rounded-full text-xs font-mono tracking-widest uppercase hover:bg-[#C5A880] hover:text-[#1C2333] transition-all duration-300 bg-transparent text-[#C5A880]"
+                    >
+                      ENTER WITH SOUND
+                    </button>
+                    <button 
+                      onClick={() => enterPortfolio(false)}
+                      className="px-8 py-3.5 border border-white/20 rounded-full text-xs font-mono tracking-widest uppercase hover:bg-white hover:text-[#1C2333] transition-all duration-300 bg-transparent text-white/70"
+                    >
+                      ENTER WITHOUT SOUND
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </motion.div>
         )}
@@ -254,8 +302,8 @@ export default function Home() {
       {!loading && (
         <div className="h-full w-full relative z-20">
           
-          {/* HEADER NAV CHUẨN THỜI TRANG CAO CẤP */}
-          <nav className="fixed top-0 w-full z-50 flex justify-between items-center p-6 md:p-8 border-b border-white/5 bg-[#080808]/80 backdrop-blur-md">
+          {/* HEADER NAV */}
+          <nav className="fixed top-0 w-full z-50 flex justify-between items-center p-6 md:p-8 border-b border-white/5 bg-[#1C2333]/80 backdrop-blur-md">
             <span className="font-serif-luxury italic font-medium tracking-tight text-xl text-[#C5A880]">
               POSTLAIN*
             </span>
@@ -265,7 +313,7 @@ export default function Home() {
             </div>
           </nav>
 
-          {/* CHỈ BÁO TRANG CỐ ĐỊNH PHÍA BÊN PHẢI (BLUEPRINT NAVIGATION) */}
+          {/* BLUEPRINT NAVIGATION PHÍA BÊN PHẢI */}
           <div className="fixed right-10 top-1/2 -translate-y-1/2 z-[80] flex flex-col gap-8 hidden md:flex border-l border-white/5 pl-4 py-8">
             {[0, 1, 2, 3].map((idx) => (
               <button 
@@ -281,22 +329,20 @@ export default function Home() {
             ))}
           </div>
 
-          {/* DÒNG TIẾN TRÌNH CUỘN Ở CHÂN TRANG */}
+          {/* TIẾN TRÌNH CUỘN Ở CHÂN TRANG */}
           <div className="fixed bottom-8 left-8 z-50 font-sans text-[8px] tracking-[0.3em] uppercase opacity-30 flex items-center gap-6">
              <div className="flex gap-1 items-center">
                <ArrowUp size={10} className="text-[#C5A880]" />
                <div className="w-8 h-[1px] bg-white/20" />
                <ArrowDown size={10} className="text-[#C5A880]" />
              </div>
-             <span>Lăn chuột hoặc dùng phím mũi tên để tham quan</span>
+             <span>Lăn chuột hoặc dùng phím mũi tên để xem các phần</span>
           </div>
 
-          {/* KHÔNG GIAN TRÌNH DIỄN CHUYỂN SLIDE ĐỘC BẢN */}
+          {/* ANMATE PRESENCE CÁC SLIDES */}
           <AnimatePresence mode="wait">
             
-            {/* ---------------------------------------------------- */}
-            {/* SLIDE 01: HERO - SANG TRỌNG & ĐẲNG CẤP */}
-            {/* ---------------------------------------------------- */}
+            {/* SLIDE 01: HERO */}
             {activeSlide === 0 && (
               <motion.section 
                 key="slide-1"
@@ -326,7 +372,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Grid Chân Trang lấp đầy khoảng trống cực sang trọng */}
+                {/* Grid Chân Trang */}
                 <div className="border-t border-white/5 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-[9px] font-sans uppercase tracking-[0.25em] text-zinc-500 relative z-10">
                   <div className="flex flex-col gap-2">
                     <p className="text-[#C5A880] flex items-center gap-1">01 / STORE MANAGER</p>
@@ -347,9 +393,7 @@ export default function Home() {
               </motion.section>
             )}
 
-            {/* ---------------------------------------------------- */}
-            {/* SLIDE 02: TRIẾT LÝ QUẢN TRỊ (EDITORIAL MINIMALISM) */}
-            {/* ---------------------------------------------------- */}
+            {/* SLIDE 02: BẢN LĨNH QUẢN TRỊ */}
             {activeSlide === 1 && (
               <motion.section 
                 key="slide-2"
@@ -357,7 +401,7 @@ export default function Home() {
                 animate={{ y: "0%", opacity: 1 }}
                 exit={{ y: "-100%", opacity: 0 }}
                 transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-                className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24 bg-[#0a0a0a]"
+                className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24 bg-[#181F2F]"
               >
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center relative z-10 my-auto">
                   <div className="md:col-span-5 space-y-8">
@@ -371,14 +415,14 @@ export default function Home() {
                   </div>
 
                   <div className="md:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-6">
-                     <div className="p-8 border border-white/5 rounded-[24px] bg-[#111111] flex flex-col justify-between h-[230px]">
+                     <div className="p-8 border border-white/5 rounded-[24px] bg-[#1C2333] flex flex-col justify-between h-[230px]">
                         <span className="text-[#C5A880] font-serif-luxury text-3xl italic">A.</span>
                         <div>
                           <h4 className="text-lg font-medium font-serif-luxury text-[#FAF8F5]">Giải Pháp Công Nghệ</h4>
                           <p className="text-xs text-zinc-500 mt-2 font-light leading-relaxed">Phát triển phần mềm quản lý tự động, tinh giảm 80% sức lao động của các khâu trung gian.</p>
                         </div>
                      </div>
-                     <div className="p-8 border border-white/5 rounded-[24px] bg-[#111111] flex flex-col justify-between h-[230px]">
+                     <div className="p-8 border border-white/5 rounded-[24px] bg-[#1C2333] flex flex-col justify-between h-[230px]">
                         <span className="text-[#C5A880] font-serif-luxury text-3xl italic">B.</span>
                         <div>
                           <h4 className="text-lg font-medium font-serif-luxury text-[#FAF8F5]">Quản Trị Đội Ngũ</h4>
@@ -395,9 +439,7 @@ export default function Home() {
               </motion.section>
             )}
 
-            {/* ---------------------------------------------------- */}
-            {/* SLIDE 03: CASE STUDIES (3D GLASS PERSPECTIVE) */}
-            {/* ---------------------------------------------------- */}
+            {/* SLIDE 03: CASE STUDIES */}
             {activeSlide === 2 && (
               <motion.section 
                 key="slide-3"
@@ -419,7 +461,7 @@ export default function Home() {
                       onMouseMove={handle3DTilt}
                       onMouseLeave={reset3DTilt}
                       onMouseEnter={() => synth.playWhoosh()}
-                      className="bg-[#111111] border border-white/5 p-10 rounded-[36px] shadow-sm flex flex-col justify-between h-[440px] cursor-pointer group scan-glow transition-all duration-300"
+                      className="bg-[#1C2333] border border-white/5 p-10 rounded-[36px] shadow-sm flex flex-col justify-between h-[440px] cursor-pointer group scan-glow transition-all duration-300"
                     >
                        <div className="flex justify-between items-start">
                           <span className="font-serif-luxury text-5xl font-light text-stroke-gold group-hover:text-[#C5A880] transition-all italic">{item.num}</span>
@@ -444,9 +486,7 @@ export default function Home() {
               </motion.section>
             )}
 
-            {/* ---------------------------------------------------- */}
-            {/* SLIDE 04: CONTACT PORTAL (BOUTIQUE SANG TRỌNG) */}
-            {/* ---------------------------------------------------- */}
+            {/* SLIDE 04: CONTACT PORTAL */}
             {activeSlide === 3 && (
               <motion.section 
                 key="slide-4"
@@ -454,7 +494,7 @@ export default function Home() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.05 }}
                 transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-                className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24 bg-[#0a0a0a]"
+                className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24 bg-[#141923]"
               >
                 <div className="text-center my-auto relative z-10">
                   <span className="font-sans text-[8px] tracking-[0.4em] text-[#C5A880] uppercase block mb-12 animate-pulse">// THÔNG TIN LIÊN HỆ TRỰC TIẾP //</span>
