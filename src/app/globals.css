@@ -3,12 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --bg-cream: #FAF8F5;
-  --text-charcoal: #121212;
-  --accent-violet: #8B5CF6;
+  --bg-cream: #FAF8F5; /* Tông kem ấm hoàng gia */
+  --text-charcoal: #111111; /* Màu chữ than sang trọng */
+  --accent-violet: #7C3AED; /* Tím nhạt */
 }
 
-/* KHÓA CỨNG HOÀN TOÀN CUỘN DỌC CỦA TRÌNH DUYỆT */
 html, body {
   background-color: var(--bg-cream);
   color: var(--text-charcoal);
@@ -17,7 +16,7 @@ html, body {
   width: 100vw !important;
   font-family: var(--font-inter), sans-serif;
   user-select: none;
-  cursor: none; /* Ẩn chuột để dùng thấu kính */
+  cursor: none; /* Ẩn chuột mặc định để dùng Cursor Lens */
 }
 
 /* LỚP BỤI PHIM DI ĐỘNG (CINEMATIC GRAIN) */
@@ -34,18 +33,28 @@ body::after {
   z-index: 9999;
 }
 
-/* CHỮ RỖNG STROKE */
-.text-stroke {
-  -webkit-text-stroke: 1px rgba(18, 18, 18, 0.2);
-  color: transparent;
+/* KHUNG LƯỚI TOÁN HỌC (ARCHITECTURAL COORDINATE GRID) */
+.blueprint-grid {
+  background-size: 50px 50px;
+  background-image: 
+    linear-gradient(to right, rgba(18, 18, 18, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(18, 18, 18, 0.03) 1px, transparent 1px);
 }
 
-.text-stroke-white {
-  -webkit-text-stroke: 1px rgba(250, 248, 245, 0.2);
-  color: transparent;
+/* ĐƯỜNG KẺ TOÁN HỌC MỎNG NHƯ SỢI TÓC */
+.hairline-b { border-bottom: 1px solid rgba(18, 18, 18, 0.06); }
+.hairline-r { border-right: 1px solid rgba(18, 18, 18, 0.06); }
+.hairline-all { border: 1px solid rgba(18, 18, 18, 0.06); }
+
+/* HIỆU ỨNG ÁNH SÁNG KÍNH MỜ (LUXURY GLASSMORPHISM) */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
-/* HIỆU ỨNG ÁNH SÁNG CHẠY QUA THẺ (GLOW INDEX) */
+/* HIỆU ỨNG QUÉT TIA SÁNG (GLOW SCANNER) */
 .scan-glow {
   position: relative;
   overflow: hidden;
@@ -60,13 +69,17 @@ body::after {
   background: linear-gradient(
     45deg,
     transparent 45%,
-    rgba(139, 92, 246, 0.08) 50%,
+    rgba(124, 58, 237, 0.12) 50%,
     transparent 55%
   );
   transform: translate(-30%, -30%);
-  transition: transform 0.8s ease;
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   pointer-events: none;
 }
 .scan-glow:hover::before {
   transform: translate(30%, 30%);
+}
+
+::-webkit-scrollbar {
+  width: 0px;
 }
