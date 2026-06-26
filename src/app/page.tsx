@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Youtube, Instagram, Music, ArrowDown, ArrowRight, Bot, Layout, Zap } from 'lucide-react';
-import Lenis from '@studio-freight/lenis';
-import Magnetic from '@/components/Magnetic';
+import { motion } from 'framer-motion';
+import { Youtube, Instagram, Music, ArrowDown, Bot, Zap, Globe } from 'lucide-react';
+import Lenis from 'lenis';
+import Magnetic from '../components/Magnetic';
 
 export default function Page() {
   useEffect(() => {
     const lenis = new Lenis();
-    function raf(time: any) {
+    function raf(time: number) {
       lenis.raf(time);
       requestAnimationFrame(raf);
     }
@@ -16,139 +16,169 @@ export default function Page() {
   }, []);
 
   const experiences = [
-    { title: "STORE MANAGER", place: "ALDO GO! ĐÀ LẠT", tech: "RETAIL OPERATIONS", date: "2025—2026" },
-    { title: "STUDIO MANAGER", place: "SB STUDIO", tech: "ARTISTIC MARKETING", date: "2023—2024" },
-    { title: "KITCHEN CAPTAIN", place: "PHỦI STEAK", tech: "TEAM ORCHESTRATION", date: "2024—2025" }
+    { title: "ALDO GO! DALAT", role: "STORE MANAGER", detail: "6/2025 - 4/2026 • Retail Excellence", icon: <Globe size={24}/> },
+    { title: "SB STUDIO", role: "STUDIO MANAGER", detail: "3/2023 - 10/2024 • Artistic Management", icon: <Music size={24}/> },
+    { title: "PHUI STEAK", role: "KITCHEN CAPTAIN", detail: "10/2024 - 6/2025 • Operational Logic", icon: <Zap size={24}/> }
   ];
 
   return (
-    <div className="bg-[#030303] min-h-screen text-[#e0e0e0] overflow-hidden">
+    <div className="bg-[#030303] min-h-screen text-[#e0e0e0]">
       <div className="bg-glow" />
 
       {/* HEADER NAVIGATION */}
-      <nav className="fixed top-0 w-full flex justify-between items-center p-8 z-[100] backdrop-blur-3xl mix-blend-difference">
-        <Magnetic><span className="font-black text-xl tracking-tighter uppercase cursor-pointer italic">POSTLAIN.</span></Magnetic>
-        <div className="flex gap-10 font-mono text-[10px] tracking-[0.3em] uppercase opacity-40 md:flex hidden">
-          <Magnetic><a href="#experience" className="hover:opacity-100 transition">Works</a></Magnetic>
-          <Magnetic><a href="#about" className="hover:opacity-100 transition">About</a></Magnetic>
-          <Magnetic><a href="mailto:studionopu@gmail.com" className="hover:opacity-100 transition text-blue-500">Contact</a></Magnetic>
+      <nav className="fixed top-0 w-full flex justify-between items-center p-8 z-[100] mix-blend-difference">
+        <Magnetic>
+          <span className="font-black text-2xl tracking-tighter uppercase cursor-pointer italic">POSTLAIN.</span>
+        </Magnetic>
+        <div className="flex gap-10 font-mono text-[10px] tracking-[0.3em] uppercase opacity-40">
+          <Magnetic>
+            <a href="mailto:studionopu@gmail.com" className="hover:opacity-100 transition text-blue-500 underline underline-offset-8">Inquire Project</a>
+          </Magnetic>
         </div>
       </nav>
 
-      {/* HERO: CINEMATIC OPENING */}
+      {/* HERO SECTION */}
       <section className="h-screen flex flex-col justify-center px-6 md:px-24 relative z-10">
         <motion.div 
-           initial={{ opacity: 0, y: 100 }} 
+           initial={{ opacity: 0, y: 50 }} 
            animate={{ opacity: 1, y: 0 }} 
-           transition={{ duration: 1.2, ease: [0.33, 1, 0.68, 1] }}
+           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
         >
-          <p className="font-mono text-[10px] tracking-[1em] mb-12 opacity-30">// 022_MANAGER_&_TECH_ARTIST</p>
-          <h1 className="text-[12vw] font-black leading-[0.85] font-space tracking-tighter flex flex-col">
-            <span>NGÔ</span>
-            <span className="flex items-center">
-              PHÚC 
-              <motion.span 
-                initial={{ width: 0 }} 
-                animate={{ width: "18vw" }} 
-                transition={{ duration: 1.5, delay: 0.5 }} 
-                className="h-[1vw] bg-blue-600 ml-4 inline-block hidden md:block" 
-              />
-            </span>
-          </h1>
-          <h2 className="text-[12vw] font-black leading-[0.85] font-space italic text-transparent stroke-white" style={{ WebkitTextStroke: "1.5px rgba(255,255,255,0.2)" }}>POSTLAIN</h2>
-        </motion.div>
-
-        {/* BOTTOM SOCIALS & STATS */}
-        <div className="absolute bottom-16 left-6 md:left-24 flex items-end gap-16">
-          <div className="flex gap-4">
-             {[
-               { icon: <Music size={16}/>, url: "https://open.spotify.com/artist/1GXZL8RGTHaxQVbo6yFB9n" },
-               { icon: <Youtube size={16}/>, url: "https://youtube.com/@postlain" },
-               { icon: <Instagram size={16}/>, url: "https://www.instagram.com/postlainagain" }
-             ].map((soc, i) => (
-               <Magnetic key={i}>
-                 <a href={soc.url} target="_blank" className="w-14 h-14 rounded-full border border-white/5 flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500">
-                    {soc.icon}
-                 </a>
-               </Magnetic>
-             ))}
+          <div className="flex items-center gap-4 mb-8">
+            <span className="w-12 h-[1px] bg-blue-600" />
+            <p className="font-mono text-[10px] tracking-[1em] opacity-30 uppercase">Operational Strategist</p>
           </div>
-          <p className="hidden md:block max-w-[200px] text-[10px] font-mono opacity-20 uppercase tracking-[0.2em] leading-relaxed">
-            Biến logic thành trải nghiệm thông qua nghệ thuật và tự động hóa AI.
-          </p>
-        </div>
+          
+          <h1 className="text-[14vw] md:text-[11vw] font-black leading-[0.8] tracking-tighter flex flex-col uppercase">
+            <span className="hover:italic transition-all duration-700">NGÔ PHÚC</span>
+            <span className="stroke-text">POSTLAIN</span>
+          </h1>
 
-        <motion.div animate={{ y: [0, 10, 0] }} transition={{ repeat: Infinity, duration: 3 }} className="absolute bottom-16 right-24 opacity-30 hidden md:block">
-           <ArrowDown size={30} />
+          <div className="mt-20 flex flex-col md:flex-row justify-between items-start md:items-end gap-16">
+             <div className="max-w-[480px]">
+                <p className="text-xl md:text-2xl text-zinc-500 font-light leading-relaxed">
+                  "Sắp xếp thế giới bằng <span className="text-white font-medium italic">Logic</span>, vận hành tương lai bằng <span className="text-blue-500 font-medium italic">AI Automation</span>."
+                </p>
+             </div>
+             
+             <div className="flex gap-4">
+               {[
+                 { icon: <Music />, url: "https://open.spotify.com/artist/1GXZL8RGTHaxQVbo6yFB9n" },
+                 { icon: <Youtube />, url: "https://youtube.com/@postlain" },
+                 { icon: <Instagram />, url: "https://www.instagram.com/postlainagain" }
+               ].map((soc, i) => (
+                 <Magnetic key={i}>
+                   <a href={soc.url} target="_blank" className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500">
+                      {soc.icon}
+                   </a>
+                 </Magnetic>
+               ))}
+             </div>
+          </div>
+        </motion.div>
+
+        <motion.div 
+          animate={{ y: [0, 20, 0] }} 
+          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }} 
+          className="absolute bottom-12 right-24 opacity-20 hidden md:block"
+        >
+           <ArrowDown size={32} />
         </motion.div>
       </section>
 
-      {/* CORE EXPERTISE - BOLD GRIDS */}
+      {/* SERVICES / CORE */}
       <section className="py-40 px-6 md:px-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-           <div className="aspect-video bg-[#0a0a0a] rounded-3xl p-12 flex flex-col justify-between border border-white/5 hover:border-blue-600/30 transition-all duration-500 group">
-              <Bot size={48} className="group-hover:text-blue-500 group-hover:scale-110 transition-all" />
-              <div>
-                <h4 className="text-sm font-mono opacity-40 mb-4 tracking-[0.5em] uppercase">// 01 — AUTOMATION</h4>
-                <h3 className="text-4xl font-black italic tracking-tighter">PHÁT TRIỂN <span className="text-blue-600">AI</span></h3>
-                <p className="text-zinc-500 mt-6 max-w-sm">Tự động hoá quản trị nhân sự và quy trình doanh nghiệp hiện đại.</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+           <motion.div 
+             whileHover={{ y: -10 }}
+             className="bg-[#080808] border border-white/5 p-16 rounded-[48px] flex flex-col justify-between h-[500px] group overflow-hidden relative"
+           >
+              <div className="absolute top-[-10%] right-[-10%] w-64 h-64 bg-blue-600/5 blur-[80px] rounded-full group-hover:bg-blue-600/10 transition-all" />
+              <Bot size={48} className="text-blue-500 relative z-10" />
+              <div className="relative z-10">
+                <h4 className="font-mono text-blue-600 text-xs mb-4 uppercase tracking-[0.4em]">// System Design</h4>
+                <h3 className="text-5xl font-black italic uppercase leading-none tracking-tighter">AI AGENT DEVELOPMENT</h3>
+                <p className="text-zinc-500 mt-8 text-lg font-light leading-relaxed">Xây dựng giải pháp tự động hoá, tối ưu hoá nhân lực qua công nghệ AI Agent.</p>
               </div>
-           </div>
-           <div className="aspect-video bg-blue-600 rounded-3xl p-12 flex flex-col justify-between border border-blue-600">
-              <Zap size={48} />
-              <div className="text-white">
-                <h4 className="text-sm font-mono opacity-70 mb-4 tracking-[0.5em] uppercase text-blue-200">// 02 — OPERATIONS</h4>
-                <h3 className="text-4xl font-black italic tracking-tighter uppercase">Quản Lý & Điều Phối</h3>
-                <p className="text-blue-100 mt-6 max-w-sm">Duy trì và truyền lửa đội ngũ với năng lực quan sát nhạy bén.</p>
+           </motion.div>
+
+           <motion.div 
+             whileHover={{ y: -10 }}
+             className="bg-blue-600 p-16 rounded-[48px] flex flex-col justify-between h-[500px] overflow-hidden relative group"
+           >
+              <Zap size={48} className="text-white relative z-10" />
+              <div className="relative z-10 text-white">
+                <h4 className="font-mono text-blue-200 text-xs mb-4 uppercase tracking-[0.4em]">// Leadership</h4>
+                <h3 className="text-5xl font-black italic uppercase leading-none tracking-tighter">CREATIVE MANAGEMENT</h3>
+                <p className="text-blue-100 mt-8 text-lg font-light leading-relaxed">Khả năng điều phối nghệ sĩ, nhân sự Retail và giữ vững KPI hệ thống.</p>
               </div>
-           </div>
+           </motion.div>
         </div>
       </section>
 
-      {/* HORIZONTAL EXPERIENCE REVEAL */}
-      <section id="experience" className="py-40">
-        <div className="px-6 md:px-24 mb-32 flex justify-between items-end">
-           <div>
-             <span className="text-blue-600 font-mono tracking-widest text-xs">PROJECTS_&_HISTORY</span>
-             <h3 className="text-7xl font-black uppercase mt-4 italic font-space tracking-tighter leading-none">Chặng Đường</h3>
-           </div>
-           <ArrowRight size={80} className="opacity-10 hidden md:block" />
+      {/* EXPERIENCE LIST */}
+      <section className="py-40 border-t border-white/5">
+        <div className="px-6 md:px-24 mb-32 flex flex-col md:flex-row md:items-end justify-between gap-8">
+          <h2 className="text-8xl md:text-[10vw] font-black uppercase italic leading-none tracking-tighter">THE JOURNEY</h2>
+          <div className="max-w-[300px] opacity-40 font-mono text-[10px] uppercase tracking-widest leading-loose text-right">
+             Quá trình chuyển dịch từ quản lý dịch vụ sang tư duy hệ thống.
+          </div>
         </div>
 
-        <div className="space-y-[1px] border-t border-b border-white/10 bg-white/5">
-          {experiences.map((exp, idx) => (
-            <div key={idx} className="group hover:bg-white flex flex-col md:flex-row justify-between p-12 md:px-24 items-start md:items-center transition-all duration-700 cursor-none">
-              <div className="relative overflow-hidden group-hover:translate-x-10 transition-all duration-500">
-                 <p className="font-mono text-[10px] text-blue-500 mb-2 opacity-0 group-hover:opacity-100 transition-opacity tracking-widest">{exp.date}</p>
-                 <h4 className="text-4xl md:text-6xl font-black font-space tracking-tighter group-hover:text-black uppercase italic transition-colors">
-                    {exp.title}
-                 </h4>
-              </div>
-              <div className="text-left md:text-right mt-6 md:mt-0 transition-all duration-500 group-hover:-translate-x-10">
-                 <p className="text-lg md:text-xl font-bold group-hover:text-black uppercase leading-tight tracking-tight">{exp.place}</p>
-                 <p className="text-sm font-mono opacity-40 group-hover:opacity-100 group-hover:text-blue-600 transition-all tracking-[0.2em] mt-2 uppercase">{exp.tech}</p>
-              </div>
+        <div className="group/list">
+           {experiences.map((exp, i) => (
+             <motion.div 
+               key={i}
+               className="relative py-14 px-6 md:px-24 border-b border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center transition-all duration-500 hover:bg-white cursor-none overflow-hidden"
+             >
+                <div className="flex items-center gap-12 relative z-10 transition-all duration-700">
+                   <span className="text-blue-500 font-mono text-xl group-hover:text-black transition-colors italic">0{i+1}</span>
+                   <div>
+                     <h4 className="text-4xl md:text-7xl font-black italic text-zinc-300 group-hover:text-black transition-all uppercase tracking-tighter">
+                        {exp.title}
+                     </h4>
+                     <p className="font-mono text-[10px] text-zinc-500 group-hover:text-blue-600 uppercase mt-4 tracking-[0.3em]">
+                        {exp.detail}
+                     </p>
+                   </div>
+                </div>
+                <div className="text-left md:text-right mt-10 md:mt-0 relative z-10">
+                  <h5 className="text-2xl font-bold text-zinc-500 group-hover:text-black uppercase italic tracking-tight">{exp.role}</h5>
+                  <div className="opacity-0 group-hover:opacity-30 mt-6 transition-all text-black">
+                     {exp.icon}
+                  </div>
+                </div>
+             </motion.div>
+           ))}
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="px-4 py-4 mt-20">
+         <div className="bg-white text-black rounded-[60px] md:rounded-[100px] py-40 md:py-60 px-6 text-center overflow-hidden">
+            <motion.div whileHover={{ scale: 0.98 }} className="transition-all duration-700">
+              <p className="text-[10px] uppercase font-mono tracking-[0.6em] mb-16 opacity-40">Let's talk about the future</p>
+              <a href="mailto:studionopu@gmail.com" className="text-[14vw] font-black uppercase italic leading-[0.8] tracking-tighter hover:text-blue-600 transition-colors border-b-[6px] md:border-b-[18px] border-black pb-4 inline-block">
+                 CONNECT.
+              </a>
+            </motion.div>
+
+            <div className="mt-60 grid md:grid-cols-3 gap-16 px-10 md:px-20 text-[10px] uppercase font-mono tracking-widest opacity-40">
+               <div className="flex flex-col gap-3 md:text-left">
+                  <span>Dalat, Lâm Đồng — VN</span>
+                  <span>+84 938-649-420</span>
+               </div>
+               <div className="flex flex-col gap-3">
+                  <span className="font-bold italic">POSTLAIN Portfolio V2</span>
+                  <span>Code & Design by Expert-Agent</span>
+               </div>
+               <div className="flex flex-col gap-3 md:text-right italic underline underline-offset-4 decoration-blue-600">
+                  <a href="#hero">Back to top ↑</a>
+               </div>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* FOOTER: THE CONTACT DROP */}
-      <footer className="h-[70vh] flex items-center justify-center relative overflow-hidden px-6 text-center">
-         <motion.div 
-            initial={{ scale: 1 }}
-            whileHover={{ scale: 0.95 }}
-            transition={{ duration: 0.8 }}
-            className="cursor-pointer"
-          >
-            <span className="text-xs uppercase tracking-[0.8em] font-mono opacity-40 mb-12 block leading-loose">Bạn đang tìm kiếm sự khác biệt?</span>
-            <a href="mailto:studionopu@gmail.com" className="text-[12vw] md:text-[9vw] font-black italic tracking-tighter border-b-[5px] md:border-b-[15px] border-blue-600 leading-none">LET'S BUILD</a>
-         </motion.div>
-
-         <div className="absolute bottom-10 w-full flex justify-between px-24 opacity-10 text-[10px] tracking-widest font-mono">
-            <span>// DA LAT / VIETNAM</span>
-            <span>0938-649-420</span>
-            <span>POSTLAIN © 2026</span>
+         </div>
+         <div className="py-12 text-center text-[10px] font-mono tracking-[1.5em] opacity-20 uppercase">
+            Built with GSAP — Framer — NextJS
          </div>
       </footer>
     </div>
