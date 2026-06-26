@@ -12,8 +12,13 @@ class TechSynth {
   private soundEnabled: boolean = false;
 
   init() {
-    if (!this.ctx && typeof window !== "undefined") {
-      this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    if (typeof window === "undefined") return;
+    try {
+      if (!this.ctx) {
+        this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      }
+    } catch (e) {
+      console.warn("AudioContext failed to initialize:", e);
     }
   }
 
@@ -24,43 +29,52 @@ class TechSynth {
 
   playTick() {
     if (!this.soundEnabled) return;
-    this.init(); if (!this.ctx) return;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(1400, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(300, this.ctx.currentTime + 0.04);
-    gain.gain.setValueAtTime(0.012, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.04);
-    osc.connect(gain); gain.connect(this.ctx.destination);
-    osc.start(); osc.stop(this.ctx.currentTime + 0.04);
+    try {
+      this.init(); 
+      if (!this.ctx) return;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(1400, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(300, this.ctx.currentTime + 0.04);
+      gain.gain.setValueAtTime(0.012, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.04);
+      osc.connect(gain); gain.connect(this.ctx.destination);
+      osc.start(); osc.stop(this.ctx.currentTime + 0.04);
+    } catch (e) {}
   }
 
   playWhoosh() {
     if (!this.soundEnabled) return;
-    this.init(); if (!this.ctx) return;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(100, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(350, this.ctx.currentTime + 0.18);
-    gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.18);
-    osc.connect(gain); gain.connect(this.ctx.destination);
-    osc.start(); osc.stop(this.ctx.currentTime + 0.18);
+    try {
+      this.init(); 
+      if (!this.ctx) return;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(100, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(350, this.ctx.currentTime + 0.18);
+      gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.18);
+      osc.connect(gain); gain.connect(this.ctx.destination);
+      osc.start(); osc.stop(this.ctx.currentTime + 0.18);
+    } catch (e) {}
   }
 
   playSuccess() {
-    this.init(); if (!this.ctx) return;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-    osc.frequency.setValueAtTime(660, this.ctx.currentTime + 0.1);
-    gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.3);
-    osc.connect(gain); gain.connect(this.ctx.destination);
-    osc.start(); osc.stop(this.ctx.currentTime + 0.3);
+    try {
+      this.init(); 
+      if (!this.ctx) return;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+      osc.frequency.setValueAtTime(660, this.ctx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.3);
+      osc.connect(gain); gain.connect(this.ctx.destination);
+      osc.start(); osc.stop(this.ctx.currentTime + 0.3);
+    } catch (e) {}
   }
 }
 
@@ -111,7 +125,6 @@ export default function Home() {
       if (year < 2026) {
         year += 1;
         setCurrentYear(year);
-        // Tự động kích hoạt Audio Context ảo để phát click nhẹ
         synth.enableSound(true);
         synth.playTick();
       } else {
@@ -259,13 +272,16 @@ export default function Home() {
             transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
             className="fixed inset-0 bg-[#1C2333] text-[#FAF8F5] z-[9999] flex flex-col justify-center items-center font-sans"
           >
-            <div className="text-center space-y-12">
+            {/* Lớp hào quang đồng mờ đằng sau chữ năm */}
+            <div className="absolute w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,rgba(197,168,128,0.12)_0%,transparent_60%)] pointer-events-none" />
+
+            <div className="text-center space-y-12 z-10">
               {/* ĐẾM NĂM KHỔNG LỒ CHUẨN 375 */}
               <motion.h2 
                 key={currentYear}
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                className="text-[14vw] md:text-[10vw] font-black tracking-tighter text-[#FAF8F5] select-none"
+                className="text-[18vw] md:text-[12vw] font-black tracking-tighter text-[#FAF8F5] select-none uppercase font-sans leading-none"
               >
                 {currentYear}
               </motion.h2>
