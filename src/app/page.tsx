@@ -131,7 +131,7 @@ export default function Home() {
         clearInterval(interval);
         setShowGateway(true);
       }
-    }, 700); // 0.7 giây lăn một khấc số cực kỳ đầm và sang
+    }, 700); // 0.7 giây lăn một khấc số
     return () => clearInterval(interval);
   }, []);
 
@@ -227,12 +227,12 @@ export default function Home() {
       ctx.clearRect(0, 0, width, height);
       tick += 0.0015;
 
-      // HÀO QUANG TOẢ SÁNG CỰC LỚN (GIẢM SỰ TỐI TĂM CHO WEB)
+      // HÀO QUANG TOẢ SÁNG CỰC LỚN
       const orbX = width * 0.5 + Math.sin(tick) * 50;
       const orbY = height * 0.5 + Math.cos(tick * 0.8) * 50;
       const grad = ctx.createRadialGradient(orbX, orbY, 10, orbX, orbY, 600);
-      grad.addColorStop(0, "rgba(197, 168, 128, 0.08)"); /* Vầng hào quang Champagne rực rỡ từ tâm */
-      grad.addColorStop(0.5, "rgba(139, 92, 246, 0.02)"); /* Tím nhẹ mờ */
+      grad.addColorStop(0, "rgba(197, 168, 128, 0.08)"); 
+      grad.addColorStop(0.5, "rgba(139, 92, 246, 0.02)"); 
       grad.addColorStop(1, "rgba(28, 35, 51, 0)");
       ctx.fillStyle = grad;
       ctx.beginPath();
@@ -277,17 +277,17 @@ export default function Home() {
 
             <div className="text-center space-y-12 z-10">
               
-              {/* TRỤC XOAY SỐ VẬT LÝ ODOMETER (STATIC 20 + ROLLING STRIP) */}
-              <div className="flex items-center justify-center font-black tracking-tighter text-[#FAF8F5] select-none font-sans uppercase text-[18vw] md:text-[12vw] leading-none h-[18vw] md:h-[12vw]">
-                {/* 20 được giữ nguyên */}
-                <span>20</span>
+              {/* TRỤC XOAY SỐ VẬT LÝ ODOMETER (SỬA LỖI LỆCH TỌA ĐỘ) */}
+              <div className="flex items-center justify-center font-black tracking-tighter text-[#FAF8F5] select-none font-sans uppercase text-[18vw] md:text-[12vw] leading-none">
+                {/* 20 giữ chiều cao chuẩn */}
+                <span className="h-[18vw] md:h-[12vw] flex items-center">20</span>
                 
-                {/* Trục trượt dọc cho hai chữ số cuối */}
-                <div className="relative overflow-hidden h-[18vw] md:h-[12vw] flex items-center">
+                {/* Khung bọc trục trượt - Loại bỏ flex-center để bắt đầu đúng từ Top: 0 */}
+                <div className="relative overflow-hidden h-[18vw] md:h-[12vw] flex items-start">
                   <motion.div
-                    animate={{ y: `-${activeYearIndex * 25}%` }} // Di chuyển tịnh tiến 25% mỗi khấc số (vì có 4 số)
+                    animate={{ y: `-${activeYearIndex * 25}%` }}
                     transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
-                    className="flex flex-col h-[400%]" // Tổng chiều cao gấp 4 lần h-[18vw]/[12vw]
+                    className="flex flex-col h-[400%]" 
                   >
                     <span className="h-[18vw] md:h-[12vw] flex items-center">23</span>
                     <span className="h-[18vw] md:h-[12vw] flex items-center">24</span>
@@ -488,7 +488,7 @@ export default function Home() {
                       onMouseMove={handle3DTilt}
                       onMouseLeave={reset3DTilt}
                       onMouseEnter={() => synth.playWhoosh()}
-                      className="bg-[#111111] border border-white/5 p-8 rounded-[36px] shadow-sm flex flex-col justify-between h-[420px] cursor-pointer group scan-glow transition-all duration-300"
+                      className="bg-[#111111] border border-white/5 p-10 rounded-[36px] shadow-sm flex flex-col justify-between h-[440px] cursor-pointer group scan-glow transition-all duration-300"
                     >
                        <div className="flex justify-between items-start">
                           <span className="font-serif-luxury text-5xl font-light text-stroke-gold group-hover:text-[#C5A880] transition-all italic">{item.num}</span>
