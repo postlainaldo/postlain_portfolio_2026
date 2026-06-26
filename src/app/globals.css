@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: #050505;
+  color: white;
+}
+
+::selection {
+  background: #2563eb;
+  color: white;
+}
