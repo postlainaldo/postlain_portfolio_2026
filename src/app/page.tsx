@@ -35,7 +35,7 @@ class LuxuryAudioEngine {
     }
   }
 
-  // KHỞI CHẠY NHẠC NỀN KHÔNG GIAN (AMBIENT PAD CHUẨN SHOW DIỄN PHÁP)
+  // KHỞI CHẠY NHẠC NỀN KHÔNG GIAN (CHAMPAGNE AMBIENT PAD LO-FI)
   startAmbientMusic() {
     this.init();
     if (!this.ctx || this.isMusicPlaying) return;
@@ -44,11 +44,9 @@ class LuxuryAudioEngine {
     try {
       this.ambientGain = this.ctx.createGain();
       this.ambientGain.gain.setValueAtTime(0, this.ctx.currentTime);
-      // Gạt volume nhạc nền to dần dịu mắt trong 3 giây
       this.ambientGain.gain.linearRampToValueAtTime(0.04, this.ctx.currentTime + 3);
       this.ambientGain.connect(this.ctx.destination);
 
-      // Hợp âm Champagne mượt mà sâu thẳm: C#3, G#3, C#4, F4, C5
       const luxuryChords = [138.59, 207.65, 277.18, 349.23, 523.25];
 
       luxuryChords.forEach((freq) => {
@@ -60,7 +58,6 @@ class LuxuryAudioEngine {
         osc.type = "sine";
         osc.frequency.value = freq;
 
-        // Bộ lọc tần số thấp cực ấm để nhạc nền êm đềm như mây bay
         filter.type = "lowpass";
         filter.frequency.value = 250; 
 
@@ -74,7 +71,7 @@ class LuxuryAudioEngine {
         this.ambientOscillators.push(osc);
       });
     } catch (e) {
-      console.warn("Autoplay block bypass error:", e);
+      console.warn("Music playing error:", e);
     }
   }
 
@@ -134,30 +131,30 @@ const synth = new LuxuryAudioEngine();
 const careerImpacts = [
   {
     num: "01",
-    role: "STORE MANAGER",
+    role: "QUẢN LÝ CỬA HÀNG (STORE MANAGER)",
     company: "ALDO GO! DALAT",
-    period: "2025—2026",
-    metrics: "Giảm Thất Thoát Kho Bãi <1%",
-    highlight: "Tăng Trưởng Doanh Số 15%",
-    detail: "Tối ưu hóa sơ đồ trưng bày sản phẩm dựa trên dữ liệu khách du lịch địa phương. Thiết lập KPI thực chiến giúp thúc đẩy tối đa doanh số bán lẻ."
+    period: "2025 — 2026",
+    metrics: "Giảm tỉ lệ thất thoát kho bãi xuống dưới 1%",
+    highlight: "Thúc đẩy doanh thu tăng trưởng vượt mốc 15%",
+    detail: "Định vị và tái cơ cấu quy trình phân phối sản phẩm dựa trên phân tích tệp khách hàng cao cấp tại địa phương. Thiết lập hệ thống vận hành và điều phối nhân sự tối ưu."
   },
   {
     num: "02",
-    role: "STUDIO MANAGER",
+    role: "QUẢN LÝ PHÒNG THU (STUDIO MANAGER)",
     company: "SB STUDIO",
-    period: "2023—2024",
-    metrics: "Tiết kiệm 40% chi phí sản xuất",
+    period: "2023 — 2024",
+    metrics: "Tiết kiệm 40% tổng chi phí sản xuất",
     highlight: "Tăng trưởng hiệu suất vận hành lên đến 200%",
-    detail: "Hệ thống hóa toàn bộ lịch trình thu âm, quản lý nghệ sĩ và đối tác truyền thông qua Google Sheets API, rút ngắn 50% thời gian điều phối."
+    detail: "Hệ thống hóa toàn bộ quy trình làm việc giữa các nghệ sĩ, đối tác truyền thông quốc tế và MCN qua các giải pháp lưu trữ thông minh giúp loại bỏ các khâu trung gian thừa thãi."
   },
   {
     num: "03",
     role: "TRƯỞNG CA / ĐIỀU HÀNH LOGISTICS BẾP",
-    company: "PHUI STEAK",
-    period: "2024—2025",
-    metrics: "Giảm 20% Thời Gian Chờ Của Khách",
-    highlight: "Sắp Xếp Quy Trình Bếp Đạt Mốc 100%",
-    detail: "Áp dụng phương pháp di chuyển tam giác vàng trong bếp công nghiệp, phân phối mượt mà các món Âu chất lượng cao trong khung giờ cao điểm."
+    company: "PHỦI STEAK",
+    period: "2024 — 2025",
+    metrics: "Rút ngắn 20% thời gian chờ đợi của khách",
+    highlight: "Sắp xếp chuỗi cung ứng đạt mốc hoàn hảo 100%",
+    detail: "Áp dụng tư duy hình học không gian vào quản trị logistics nguyên vật liệu Âu cao cấp, đảm bảo hiệu suất phục vụ liên tục trong các khung giờ áp lực lớn nhất."
   }
 ];
 
@@ -169,35 +166,35 @@ export default function Home() {
   const [isScrolling, setIsScrolling] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // 1. MA TRẬN GIẢI MÃ SỐ (MATRIX SCRAMBLER DECODER CHẠY SIÊU MƯỢT)
+  // 1. CHU TRÌNH GIẢI MÃ SỐ KHÔNG GIAN GIA TỐC (MƯỢT 100%)
   useEffect(() => {
     let timer: NodeJS.Timeout;
     const startTime = Date.now();
-    const intervalTime = 40; // Tốc độ quét cực đại 40ms/số
+    const intervalTime = 40; // Tốc độ quét 40ms cực nhanh
 
-    synth.enableSound(true); // tạm kích hoạt click quét ma trận số
+    synth.enableSound(true);
 
     const runDecoder = () => {
       const elapsed = Date.now() - startTime;
 
       if (elapsed < 1400) {
-        // Pha 1: Quét số ngẫu nhiên cực nhanh (1.4 giây đầu)
+        // Pha 1: Chạy số ngẫu nhiên cực nhanh
         const randomVal = Math.floor(Math.random() * 90 + 10).toString();
         setLastTwoDigits(randomVal);
         synth.playTick();
         timer = setTimeout(runDecoder, intervalTime);
       } else if (elapsed < 1850) {
-        // Pha 2: Giảm tốc và hạ cánh xuống số 24
+        // Pha 2: Hãm phanh nhẹ xuống số 24
         setLastTwoDigits("24");
         synth.playTick();
         timer = setTimeout(runDecoder, 450);
       } else if (elapsed < 2350) {
-        // Pha 3: Ghì nhẹ qua số 25
+        // Pha 3: Ghì chậm xuống số 25
         setLastTwoDigits("25");
         synth.playTick();
         timer = setTimeout(runDecoder, 500);
       } else {
-        // Pha 4: Khóa cứng ở số 26 chuẩn xác
+        // Pha 4: Chốt số 26, chạy nhạc chuông và mở khoá
         setLastTwoDigits("26");
         synth.playTick();
         synth.playSuccess();
@@ -220,7 +217,7 @@ export default function Home() {
     requestAnimationFrame(raf);
   }, [loading]);
 
-  // 3. SCROLL INTERCEPT ENGINE (KHÓA DỌC TRƯỢT NGANG SLIDE)
+  // 3. SCROLL INTERCEPT ENGINE
   useEffect(() => {
     if (loading) return;
 
@@ -301,6 +298,7 @@ export default function Home() {
       ctx.clearRect(0, 0, width, height);
       tick += 0.0015;
 
+      // HÀO QUANG TOẢ SÁNG CỰC LỚN
       const orbX = width * 0.5 + Math.sin(tick) * 50;
       const orbY = height * 0.5 + Math.cos(tick * 0.8) * 50;
       const grad = ctx.createRadialGradient(orbX, orbY, 10, orbX, orbY, 600);
@@ -332,7 +330,7 @@ export default function Home() {
   };
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-[#1C2333] text-[#FAF8F5]">
+    <div className="relative h-screen w-screen overflow-hidden bg-[#1D2436] text-[#FAF8F5]">
       
       {/* CANVAS HÀO QUANG VÀNG ĐỒNG */}
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-10" />
@@ -343,45 +341,34 @@ export default function Home() {
           <motion.div 
             exit={{ opacity: 0, scale: 1.05 }}
             transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 bg-[#1C2333] text-[#FAF8F5] z-[9999] flex flex-col justify-center items-center font-sans"
+            className="fixed inset-0 bg-[#1D2436] text-[#FAF8F5] z-[9999] flex flex-col justify-center items-center font-sans"
           >
             {/* Lớp hào quang đồng mờ đằng sau chữ năm */}
             <div className="absolute w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,rgba(197,168,128,0.12)_0%,transparent_60%)] pointer-events-none" />
 
             {/* Bố cục khóa cứng chiều cao không gian năm - Không bao giờ xảy ra lỗi giật nảy màn hình */}
-            <div className="relative w-full h-80 flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center gap-10 z-10 select-none">
               
               {/* TRỤC QUÉT SỐ NGẪU NHIÊN DECODER */}
-              <div className="flex items-center justify-center font-black tracking-tighter text-[#FAF8F5] select-none font-sans uppercase text-7xl md:text-[10rem] leading-none absolute top-12">
+              <div className="font-sans font-black text-center text-[#FAF8F5] text-[20vw] md:text-[14vw] tracking-tighter leading-none select-none flex items-center justify-center">
                 <span>20</span>
-                <span className="text-[#FAF8F5]">{lastTwoDigits}</span>
+                <span>{lastTwoDigits}</span>
               </div>
 
               {/* HAI NÚT BẤM KÍNH MỜ XUẤT HIỆN TUYỆT ĐỐI KHÔNG LỆCH GRID */}
-              <div className="absolute bottom-4 w-full flex justify-center">
-                <AnimatePresence>
-                  {showGateway && (
-                    <motion.div 
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5 }}
-                      className="flex flex-col md:flex-row gap-4 justify-center items-center"
-                    >
-                      <button 
-                        onClick={() => enterPortfolio(true)}
-                        className="px-8 py-3.5 border border-[#C5A880] rounded-full text-xs font-mono tracking-widest uppercase hover:bg-[#C5A880] hover:text-[#1C2333] transition-all duration-300 bg-transparent text-[#C5A880]"
-                      >
-                        ENTER WITH MUSIC
-                      </button>
-                      <button 
-                        onClick={() => enterPortfolio(false)}
-                        className="px-8 py-3.5 border border-white/20 rounded-full text-xs font-mono tracking-widest uppercase hover:bg-white hover:text-[#1C2333] transition-all duration-300 bg-transparent text-white/70"
-                      >
-                        ENTER WITHOUT MUSIC
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+              <div className={`flex flex-col md:flex-row gap-4 justify-center items-center transition-all duration-[1000ms] ${showGateway ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6 pointer-events-none"}`}>
+                <button 
+                  onClick={() => enterPortfolio(true)}
+                  className="px-8 py-3.5 border border-[#C5A880] rounded-full text-xs font-mono tracking-widest uppercase hover:bg-[#C5A880] hover:text-[#1D2436] transition-all duration-300 bg-transparent text-[#C5A880]"
+                >
+                  ENTER WITH MUSIC
+                </button>
+                <button 
+                  onClick={() => enterPortfolio(false)}
+                  className="px-8 py-3.5 border border-white/20 rounded-full text-xs font-mono tracking-widest uppercase hover:bg-white hover:text-[#1D2436] transition-all duration-300 bg-transparent text-white/70"
+                >
+                  ENTER WITHOUT MUSIC
+                </button>
               </div>
 
             </div>
@@ -393,7 +380,7 @@ export default function Home() {
         <div className="h-full w-full relative z-20">
           
           {/* HEADER NAV */}
-          <nav className="fixed top-0 w-full z-50 flex justify-between items-center p-6 md:p-8 border-b border-white/5 bg-[#1C2333]/80 backdrop-blur-md">
+          <nav className="fixed top-0 w-full z-50 flex justify-between items-center p-6 md:p-8 border-b border-white/5 bg-[#1D2436]/80 backdrop-blur-md">
             <span className="font-serif-luxury italic font-medium tracking-tight text-xl text-[#C5A880]">
               POSTLAIN*
             </span>
