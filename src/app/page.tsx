@@ -5,7 +5,7 @@ import { Music, Youtube, Instagram, ArrowDown, ArrowUp, X, Sparkles, Terminal, G
 import Lenis from 'lenis';
 
 // ----------------------------------------------------
-// BỘ TỔNG HỢP ÂM TẦN SPA & LOUNGE CAO CẤP (BOUTIQUE AUDIO)
+// BỘ TỔNG HỢP NHẠC NỀN & SFX CHUẨN ĐIỆN ẢNH (WEB AUDIO ENGINE)
 // ----------------------------------------------------
 class LuxuryAudioEngine {
   private ctx: AudioContext | null = null;
@@ -293,8 +293,12 @@ export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const clickParticles = useRef<Particle[]>([]);
 
-  // 1. CHU TRÌNH GIẢI MÃ SỐ CHUẨN 1:1
+  // 1. CHU TRÌNH GIẢI MÃ SỐ CHUẨN 1:1 & KHÓA TỌA ĐỘ TRÌNH DUYỆT TRÁNH LỆCH PRELOADER
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.scrollTo(0, 0); // Đảm bảo luôn cuộn lên đầu để Preloader căn giữa hoàn hảo
+    }
+
     let timer: NodeJS.Timeout;
     const startTime = Date.now();
     const intervalTime = 40;
@@ -499,47 +503,50 @@ export default function Home() {
       {/* CANVAS HÀO QUANG & HẠT CLICK */}
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-10" />
 
-      {/* 375 STUDIO PRELOADER */}
+      {/* 375 STUDIO PRELOADER (SỬA LỖI CĂN GIỮA TUYỆT ĐỐI) */}
       <AnimatePresence>
         {loading && (
           <motion.div 
             exit={{ opacity: 0, scale: 1.05 }}
             transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 bg-[#1D2436] text-[#FAF8F5] z-[9999] flex flex-col justify-center items-center font-sans"
+            className="fixed top-0 left-0 w-screen h-screen bg-[#1D2436] text-[#FAF8F5] z-[9999] flex flex-col justify-center items-center font-sans"
           >
+            {/* Lớp hào quang đồng mờ đằng sau chữ năm */}
             <div className="absolute w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,rgba(197,168,128,0.12)_0%,transparent_60%)] pointer-events-none" />
 
-            <div className="text-center space-y-12 z-10">
-              <div className="flex items-center justify-center font-black tracking-tighter text-[#FAF8F5] select-none font-sans uppercase text-7xl md:text-[10rem] leading-none absolute top-12">
+            <div className="text-center space-y-12 z-10 select-none flex flex-col items-center justify-center">
+              
+              {/* TRỤC QUÉT SỐ NGẪU NHIÊN DECODER CHUẨN ĐẸP KHÔNG DÙNG ABSOLUTE LỆCH TÂM */}
+              <div className="font-sans font-black text-center text-[#FAF8F5] text-[18vw] md:text-[12vw] tracking-tighter leading-none select-none flex items-center justify-center">
                 <span>20</span>
                 <span>{lastTwoDigits}</span>
               </div>
 
-              <div className="absolute bottom-4 w-full flex justify-center">
-                <AnimatePresence>
-                  {showGateway && (
-                    <motion.div 
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5 }}
-                      className="flex flex-col md:flex-row gap-4 justify-center items-center"
+              {/* HAI NÚT BẤM CĂN THEO DÒNG TĨNH CHỐNG GIẬT NẢY */}
+              <div className="h-16 flex items-center justify-center">
+                {showGateway && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="flex flex-col md:flex-row gap-4 justify-center items-center"
+                  >
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); enterPortfolio(true); }}
+                      className="px-8 py-3.5 border border-[#C5A880] rounded-full text-xs font-mono tracking-widest uppercase hover:bg-[#C5A880] hover:text-[#1D2436] transition-all duration-300 bg-transparent text-[#C5A880]"
                     >
-                      <button 
-                        onClick={() => enterPortfolio(true)}
-                        className="px-8 py-3.5 border border-[#C5A880] rounded-full text-xs font-mono tracking-widest uppercase hover:bg-[#C5A880] hover:text-[#1D2436] transition-all duration-300 bg-transparent text-[#C5A880]"
-                      >
-                        ENTER WITH MUSIC
-                      </button>
-                      <button 
-                        onClick={() => enterPortfolio(false)}
-                        className="px-8 py-3.5 border border-white/20 rounded-full text-xs font-mono tracking-widest uppercase hover:bg-white hover:text-[#1D2436] transition-all duration-300 bg-transparent text-white/70"
-                      >
-                        ENTER WITHOUT MUSIC
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      ENTER WITH MUSIC
+                    </button>
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); enterPortfolio(false); }}
+                      className="px-8 py-3.5 border border-white/20 rounded-full text-xs font-mono tracking-widest uppercase hover:bg-white hover:text-[#1D2436] transition-all duration-300 bg-transparent text-white/70"
+                    >
+                      ENTER WITHOUT MUSIC
+                    </button>
+                  </motion.div>
+                )}
               </div>
+
             </div>
           </motion.div>
         )}
@@ -558,22 +565,6 @@ export default function Home() {
               <span>STAGE // 0{activeSlide + 1}</span>
             </div>
           </nav>
-
-          {/* CHỈ BÁO TRANG PHÍA BÊN PHẢI */}
-          <div className="fixed right-10 top-1/2 -translate-y-1/2 z-[80] flex flex-col gap-8 hidden md:flex border-l border-white/5 pl-4 py-8">
-            {[0, 1, 2, 3].map((idx) => (
-              <button 
-                key={idx}
-                onClick={() => { synth.playWhoosh(); setActiveSlide(idx); }}
-                className="group flex items-center justify-end gap-4 relative"
-              >
-                <span className="font-sans text-[9px] tracking-[0.3em] opacity-30 group-hover:opacity-100 text-white transition-opacity duration-300">
-                  <ScrambleText text={`STAGE_0${idx + 1}`} />
-                </span>
-                <span className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${activeSlide === idx ? "bg-[#C5A880] scale-[2]" : "bg-white/20"}`} />
-              </button>
-            ))}
-          </div>
 
           {/* DÒNG TIẾN TRÌNH Ở CHÂN TRANG */}
           <div className="fixed bottom-8 left-8 z-50 font-sans text-[8px] tracking-[0.3em] uppercase opacity-30 flex items-center gap-6">
@@ -596,54 +587,63 @@ export default function Home() {
             </button>
           </div>
 
-          {/* PANEL CHẨN ĐOÁN TRƯỢT SANG TRỌNG */}
+          {/* ĐÈN NỀN PHỦ TỐI MỜ KHI MỞ BẢNG CHẨN ĐOÁN TRÁNH CHỒNG CHỮ */}
           <AnimatePresence>
             {showDiagnostics && (
-              <motion.div 
-                initial={{ x: "100%" }}
-                animate={{ x: "0%" }}
-                exit={{ x: "100%" }}
-                transition={{ type: "spring", stiffness: 180, damping: 25 }}
-                className="fixed top-0 right-0 h-screen w-full md:w-[450px] bg-[#111111]/98 border-l border-white/5 z-[999] p-10 flex flex-col justify-between overflow-y-auto"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="space-y-12">
-                  <div className="flex justify-between items-center border-b border-white/5 pb-6">
-                     <h3 className="font-space font-black text-xl tracking-tighter uppercase text-[#C5A880]">CHẨN ĐOÁN VẬN HÀNH</h3>
-                     <button 
-                       onClick={() => { synth.playTick(); setShowDiagnostics(false); }}
-                       className="p-1 rounded-full border border-white/10 hover:bg-white hover:text-black transition-all"
-                     >
-                       <X size={14} />
-                     </button>
+              <>
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.6 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setShowDiagnostics(false)}
+                  className="fixed inset-0 bg-black/60 z-[998] backdrop-blur-sm"
+                />
+                <motion.div 
+                  initial={{ x: "100%" }}
+                  animate={{ x: "0%" }}
+                  exit={{ x: "100%" }}
+                  transition={{ type: "spring", stiffness: 180, damping: 25 }}
+                  className="fixed top-0 right-0 h-screen w-full md:w-[450px] bg-[#111111]/98 border-l border-white/5 z-[999] p-10 flex flex-col justify-between overflow-y-auto"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="space-y-12">
+                    <div className="flex justify-between items-center border-b border-white/5 pb-6">
+                       <h3 className="font-space font-black text-xl tracking-tighter uppercase text-[#C5A880]">CHẨN ĐOÁN VẬN HÀNH</h3>
+                       <button 
+                         onClick={() => { synth.playTick(); setShowDiagnostics(false); }}
+                         className="p-1 rounded-full border border-white/10 hover:bg-white hover:text-black transition-all"
+                       >
+                         <X size={14} />
+                       </button>
+                    </div>
+
+                    <div className="space-y-6 font-mono text-[10px] text-zinc-400">
+                       <p className="text-[#C5A880] border-b border-white/5 pb-2 uppercase tracking-widest">// CHỈ SỐ AUDIT HIỆU NĂNG //</p>
+                       
+                       <div className="flex justify-between items-center bg-[#1C2333]/40 p-4 rounded-xl">
+                          <span>TỔNG GIỜ LÃNH ĐẠO LÂM SÀNG</span>
+                          <span className="text-[#FAF8F5] font-bold">24,000+ GIỜ</span>
+                       </div>
+                       <div className="flex justify-between items-center bg-[#1C2333]/40 p-4 rounded-xl">
+                          <span>TỈ LỆ GIỮ CHÂN NHÂN SỰ</span>
+                          <span className="text-emerald-400 font-bold">98.5%</span>
+                       </div>
+                       <div className="flex justify-between items-center bg-[#1C2333]/40 p-4 rounded-xl">
+                          <span>TỈ LỆ THẤT THOÁT RETAIL</span>
+                          <span className="text-emerald-400 font-bold">&lt; 0.8%</span>
+                       </div>
+                       <div className="flex justify-between items-center bg-[#1C2333]/40 p-4 rounded-xl">
+                          <span>KỊCH BẢN AI AUTOMATION</span>
+                          <span className="text-purple-400 font-bold">14 API NODES ACTIVE</span>
+                       </div>
+                    </div>
                   </div>
 
-                  <div className="space-y-6 font-mono text-[10px] text-zinc-400">
-                     <p className="text-[#C5A880] border-b border-white/5 pb-2 uppercase tracking-widest">// CHỈ SỐ AUDIT HIỆU NĂNG //</p>
-                     
-                     <div className="flex justify-between items-center bg-[#1C2333]/40 p-4 rounded-xl">
-                        <span>TỔNG GIỜ LÃNH ĐẠO LÂM SÀNG</span>
-                        <span className="text-[#FAF8F5] font-bold">24,000+ GIỜ</span>
-                     </div>
-                     <div className="flex justify-between items-center bg-[#1C2333]/40 p-4 rounded-xl">
-                        <span>TỈ LỆ GIỮ CHÂN NHÂN SỰ</span>
-                        <span className="text-emerald-400 font-bold">98.5%</span>
-                     </div>
-                     <div className="flex justify-between items-center bg-[#1C2333]/40 p-4 rounded-xl">
-                        <span>TỈ LỆ THẤT THOÁT RETAIL</span>
-                        <span className="text-emerald-400 font-bold">&lt; 0.8%</span>
-                     </div>
-                     <div className="flex justify-between items-center bg-[#1C2333]/40 p-4 rounded-xl">
-                        <span>KỊCH BẢN AI AUTOMATION</span>
-                        <span className="text-purple-400 font-bold">14 API NODES ACTIVE</span>
-                     </div>
+                  <div className="border-t border-white/5 pt-6 text-[8px] font-mono text-zinc-500 uppercase tracking-widest leading-loose">
+                     SYSTEM LOGS: ONLINE // STATUS SECURE // MMXXVI
                   </div>
-                </div>
-
-                <div className="border-t border-white/5 pt-6 text-[8px] font-mono text-zinc-500 uppercase tracking-widest leading-loose">
-                   SYSTEM LOGS: ONLINE // STATUS SECURE // MMXXVI
-                </div>
-              </motion.div>
+                </motion.div>
+              </>
             )}
           </AnimatePresence>
 
@@ -727,7 +727,7 @@ export default function Home() {
                 transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
                 className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24"
               >
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start relative z-10">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start relative z-10 w-full my-auto">
                   <div className="md:col-span-8">
                     <div className="flex items-center gap-2 mb-6">
                       <span className="w-8 h-[1px] bg-[#C5A880] opacity-50" />
@@ -750,7 +750,7 @@ export default function Home() {
                 </div>
 
                 {/* Grid Chân Trang */}
-                <div className="border-t border-white/5 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-[9px] font-sans uppercase tracking-[0.25em] text-zinc-500 relative z-10">
+                <div className="border-t border-white/5 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-[9px] font-sans uppercase tracking-[0.25em] text-zinc-500 relative z-10 w-full">
                   <div className="flex flex-col gap-2">
                     <p className="text-[#C5A880] flex items-center gap-1">01 / STORE MANAGER</p>
                     <p className="font-medium text-[#FAF8F5]">ALDO GO! DALAT</p>
