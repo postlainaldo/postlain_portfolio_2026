@@ -20,6 +20,9 @@ class LuxuryAudioEngine {
       if (!this.ctx) {
         this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
       }
+      if (this.ctx && this.ctx.state === "suspended") {
+        this.ctx.resume();
+      }
     } catch (e) {
       console.warn("AudioContext failed:", e);
     }
@@ -29,25 +32,23 @@ class LuxuryAudioEngine {
     this.soundEnabled = status;
     if (status) {
       this.init();
-      this.startAmbientMusic();
     }
   }
 
-  // TỰ ĐỘNG SẢN XUẤT NHẠC NỀN HOÀNG GIA (CHAMPAGNE AMBIENT PAD)
+  // KHỞI CHẠY NHẠC NỀN KHÔNG GIAN (AMBIENT PAD CHUẨN SHOW DIỄN PHÁP)
   startAmbientMusic() {
     this.init();
     if (!this.ctx || this.isMusicPlaying) return;
     this.isMusicPlaying = true;
 
     try {
-      // Bộ điều phối âm lượng master cho nhạc nền
       this.ambientGain = this.ctx.createGain();
       this.ambientGain.gain.setValueAtTime(0, this.ctx.currentTime);
-      // Fade in nhạc nền cực kỳ êm ái trong 4 giây đầu
-      this.ambientGain.gain.linearRampToValueAtTime(0.03, this.ctx.currentTime + 4);
+      // Gạt volume nhạc nền to dần dịu mắt trong 3 giây
+      this.ambientGain.gain.linearRampToValueAtTime(0.04, this.ctx.currentTime + 3);
       this.ambientGain.connect(this.ctx.destination);
 
-      // Dải hợp âm Tím Đêm sang trọng: C#3, G#3, C#4, F4, C5
+      // Hợp âm Champagne mượt mà sâu thẳm: C#3, G#3, C#4, F4, C5
       const luxuryChords = [138.59, 207.65, 277.18, 349.23, 523.25];
 
       luxuryChords.forEach((freq) => {
@@ -59,11 +60,11 @@ class LuxuryAudioEngine {
         osc.type = "sine";
         osc.frequency.value = freq;
 
-        // Lớp lọc tần số thấp (lowpass) để tạo tiếng trầm ấm, không chói tai
+        // Bộ lọc tần số thấp cực ấm để nhạc nền êm đềm như mây bay
         filter.type = "lowpass";
-        filter.frequency.value = 350;
+        filter.frequency.value = 250; 
 
-        oscGain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+        oscGain.gain.setValueAtTime(0.12, this.ctx.currentTime);
 
         osc.connect(filter);
         filter.connect(oscGain);
@@ -73,7 +74,7 @@ class LuxuryAudioEngine {
         this.ambientOscillators.push(osc);
       });
     } catch (e) {
-      console.warn("Music play blocked by browser policy");
+      console.warn("Autoplay block bypass error:", e);
     }
   }
 
@@ -162,27 +163,50 @@ const careerImpacts = [
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
-  const [activeYearIndex, setActiveYearIndex] = useState(0); // 0: 23, 1: 24, 2: 25, 3: 26
+  const [lastTwoDigits, setLastTwoDigits] = useState("23");
   const [showGateway, setShowGateway] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // 1. TRỤC XOAY SỐ ODOMETER ENGINE (23 ➔ 24 ➔ 25 ➔ 26)
+  // 1. MA TRẬN GIẢI MÃ SỐ (MATRIX SCRAMBLER DECODER CHẠY SIÊU MƯỢT)
   useEffect(() => {
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index < 3) {
-        index += 1;
-        setActiveYearIndex(index);
-        synth.enableSound(true); // tạm bật âm thanh click đếm số
+    let timer: NodeJS.Timeout;
+    const startTime = Date.now();
+    const intervalTime = 40; // Tốc độ quét cực đại 40ms/số
+
+    synth.enableSound(true); // tạm kích hoạt click quét ma trận số
+
+    const runDecoder = () => {
+      const elapsed = Date.now() - startTime;
+
+      if (elapsed < 1400) {
+        // Pha 1: Quét số ngẫu nhiên cực nhanh (1.4 giây đầu)
+        const randomVal = Math.floor(Math.random() * 90 + 10).toString();
+        setLastTwoDigits(randomVal);
         synth.playTick();
+        timer = setTimeout(runDecoder, intervalTime);
+      } else if (elapsed < 1850) {
+        // Pha 2: Giảm tốc và hạ cánh xuống số 24
+        setLastTwoDigits("24");
+        synth.playTick();
+        timer = setTimeout(runDecoder, 450);
+      } else if (elapsed < 2350) {
+        // Pha 3: Ghì nhẹ qua số 25
+        setLastTwoDigits("25");
+        synth.playTick();
+        timer = setTimeout(runDecoder, 500);
       } else {
-        clearInterval(interval);
+        // Pha 4: Khóa cứng ở số 26 chuẩn xác
+        setLastTwoDigits("26");
+        synth.playTick();
+        synth.playSuccess();
         setShowGateway(true);
       }
-    }, 800); // 0.8 giây mỗi khấc lăn số cực kỳ đầm
-    return () => clearInterval(interval);
+    };
+
+    runDecoder();
+    return () => clearTimeout(timer);
   }, []);
 
   // 2. SMOOTH SCROLL LENIS
@@ -277,7 +301,6 @@ export default function Home() {
       ctx.clearRect(0, 0, width, height);
       tick += 0.0015;
 
-      // HÀO QUANG TOẢ SÁNG CỰC LỚN
       const orbX = width * 0.5 + Math.sin(tick) * 50;
       const orbY = height * 0.5 + Math.cos(tick * 0.8) * 50;
       const grad = ctx.createRadialGradient(orbX, orbY, 10, orbX, orbY, 600);
@@ -301,7 +324,10 @@ export default function Home() {
 
   // HÀM KÍCH HOẠT VÀO TRANG CÓ/KHÔNG CÓ NHẠC NỀN
   const enterPortfolio = (withSound: boolean) => {
-    synth.enableSound(withSound); // status này quyết định khởi chạy background music sinh học
+    synth.enableSound(withSound); 
+    if (withSound) {
+      synth.startAmbientMusic(); // Nhạc nền bắt đầu chạy mượt từ gesture click chuột của user
+    }
     setLoading(false);
   };
 
@@ -322,53 +348,42 @@ export default function Home() {
             {/* Lớp hào quang đồng mờ đằng sau chữ năm */}
             <div className="absolute w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,rgba(197,168,128,0.12)_0%,transparent_60%)] pointer-events-none" />
 
-            <div className="text-center space-y-12 z-10">
+            {/* Bố cục khóa cứng chiều cao không gian năm - Không bao giờ xảy ra lỗi giật nảy màn hình */}
+            <div className="relative w-full h-80 flex flex-col items-center justify-center">
               
-              {/* TRỤC XOAY SỐ VẬT LÝ ODOMETER (SỬA LỖI LỆCH TỌA ĐỘ VÀ KHÓA ĐƠN VỊ CỐ ĐỊNH CHỐNG GIẬT LAG) */}
-              <div className="flex items-center justify-center font-black tracking-tighter text-[#FAF8F5] select-none font-sans uppercase text-7xl md:text-[10rem] leading-none">
-                {/* Khóa cứng kích thước dọc bằng đơn vị h-24 / h-40 của GPU */}
-                <span className="h-24 md:h-40 flex items-center">20</span>
-                
-                {/* Trục trượt - Sử dụng will-change-transform để ép card chạy mượt 60fps */}
-                <div className="relative overflow-hidden h-24 md:h-40 flex items-start">
-                  <motion.div
-                    animate={{ y: `-${activeYearIndex * 25}%` }}
-                    transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }} // Sử dụng ease Thụy Sĩ vuốt chậm dần cực mượt
-                    className="flex flex-col h-[400%] will-change-transform"
-                    style={{ transform: "translateZ(0)" }} // Kích hoạt bộ tăng tốc phần cứng của trình duyệt
-                  >
-                    <span className="h-24 md:h-40 flex items-center">23</span>
-                    <span className="h-24 md:h-40 flex items-center">24</span>
-                    <span className="h-24 md:h-40 flex items-center">25</span>
-                    <span className="h-24 md:h-40 flex items-center">26</span>
-                  </motion.div>
-                </div>
+              {/* TRỤC QUÉT SỐ NGẪU NHIÊN DECODER */}
+              <div className="flex items-center justify-center font-black tracking-tighter text-[#FAF8F5] select-none font-sans uppercase text-7xl md:text-[10rem] leading-none absolute top-12">
+                <span>20</span>
+                <span className="text-[#FAF8F5]">{lastTwoDigits}</span>
               </div>
 
-              {/* HAI NÚT BẤM KÍNH MỜ KHUẾCH TÁN NHẠC NỀN HOÀNG GIA */}
-              <AnimatePresence>
-                {showGateway && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    className="flex flex-col md:flex-row gap-4 justify-center items-center"
-                  >
-                    <button 
-                      onClick={() => enterPortfolio(true)}
-                      className="px-8 py-3.5 border border-[#C5A880] rounded-full text-xs font-mono tracking-widest uppercase hover:bg-[#C5A880] hover:text-[#1C2333] transition-all duration-300 bg-transparent text-[#C5A880]"
+              {/* HAI NÚT BẤM KÍNH MỜ XUẤT HIỆN TUYỆT ĐỐI KHÔNG LỆCH GRID */}
+              <div className="absolute bottom-4 w-full flex justify-center">
+                <AnimatePresence>
+                  {showGateway && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="flex flex-col md:flex-row gap-4 justify-center items-center"
                     >
-                      ENTER WITH MUSIC
-                    </button>
-                    <button 
-                      onClick={() => enterPortfolio(false)}
-                      className="px-8 py-3.5 border border-white/20 rounded-full text-xs font-mono tracking-widest uppercase hover:bg-white hover:text-[#1C2333] transition-all duration-300 bg-transparent text-white/70"
-                    >
-                      ENTER WITHOUT MUSIC
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                      <button 
+                        onClick={() => enterPortfolio(true)}
+                        className="px-8 py-3.5 border border-[#C5A880] rounded-full text-xs font-mono tracking-widest uppercase hover:bg-[#C5A880] hover:text-[#1C2333] transition-all duration-300 bg-transparent text-[#C5A880]"
+                      >
+                        ENTER WITH MUSIC
+                      </button>
+                      <button 
+                        onClick={() => enterPortfolio(false)}
+                        className="px-8 py-3.5 border border-white/20 rounded-full text-xs font-mono tracking-widest uppercase hover:bg-white hover:text-[#1C2333] transition-all duration-300 bg-transparent text-white/70"
+                      >
+                        ENTER WITHOUT MUSIC
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
             </div>
           </motion.div>
         )}
