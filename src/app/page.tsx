@@ -112,26 +112,26 @@ const careerImpacts = [
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
-  const [currentYear, setCurrentYear] = useState(2023);
+  const [activeYearIndex, setActiveYearIndex] = useState(0); // 0: 23, 1: 24, 2: 25, 3: 26
   const [showGateway, setShowGateway] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // 1. CONSOLE LOADING: ĐẾM NĂM 2023 -> 2026 CHUẨN 375 STUDIO
+  // 1. TRỤC XOAY SỐ ODOMETER ENGINE (23 ➔ 24 ➔ 25 ➔ 26)
   useEffect(() => {
-    let year = 2023;
+    let index = 0;
     const interval = setInterval(() => {
-      if (year < 2026) {
-        year += 1;
-        setCurrentYear(year);
+      if (index < 3) {
+        index += 1;
+        setActiveYearIndex(index);
         synth.enableSound(true);
         synth.playTick();
       } else {
         clearInterval(interval);
         setShowGateway(true);
       }
-    }, 600); // Mỗi năm chạy 0.6 giây
+    }, 700); // 0.7 giây lăn một khấc số cực kỳ đầm và sang
     return () => clearInterval(interval);
   }, []);
 
@@ -276,15 +276,26 @@ export default function Home() {
             <div className="absolute w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,rgba(197,168,128,0.12)_0%,transparent_60%)] pointer-events-none" />
 
             <div className="text-center space-y-12 z-10">
-              {/* ĐẾM NĂM KHỔNG LỒ CHUẨN 375 */}
-              <motion.h2 
-                key={currentYear}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                className="text-[18vw] md:text-[12vw] font-black tracking-tighter text-[#FAF8F5] select-none uppercase font-sans leading-none"
-              >
-                {currentYear}
-              </motion.h2>
+              
+              {/* TRỤC XOAY SỐ VẬT LÝ ODOMETER (STATIC 20 + ROLLING STRIP) */}
+              <div className="flex items-center justify-center font-black tracking-tighter text-[#FAF8F5] select-none font-sans uppercase text-[18vw] md:text-[12vw] leading-none h-[18vw] md:h-[12vw]">
+                {/* 20 được giữ nguyên */}
+                <span>20</span>
+                
+                {/* Trục trượt dọc cho hai chữ số cuối */}
+                <div className="relative overflow-hidden h-[18vw] md:h-[12vw] flex items-center">
+                  <motion.div
+                    animate={{ y: `-${activeYearIndex * 25}%` }} // Di chuyển tịnh tiến 25% mỗi khấc số (vì có 4 số)
+                    transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
+                    className="flex flex-col h-[400%]" // Tổng chiều cao gấp 4 lần h-[18vw]/[12vw]
+                  >
+                    <span className="h-[18vw] md:h-[12vw] flex items-center">23</span>
+                    <span className="h-[18vw] md:h-[12vw] flex items-center">24</span>
+                    <span className="h-[18vw] md:h-[12vw] flex items-center">25</span>
+                    <span className="h-[18vw] md:h-[12vw] flex items-center">26</span>
+                  </motion.div>
+                </div>
+              </div>
 
               {/* HAI NÚT BẤM KÍNH MỜ KHUẾCH TÁN ÂM THANH */}
               <AnimatePresence>
@@ -477,7 +488,7 @@ export default function Home() {
                       onMouseMove={handle3DTilt}
                       onMouseLeave={reset3DTilt}
                       onMouseEnter={() => synth.playWhoosh()}
-                      className="bg-[#1C2333] border border-white/5 p-10 rounded-[36px] shadow-sm flex flex-col justify-between h-[440px] cursor-pointer group scan-glow transition-all duration-300"
+                      className="bg-[#111111] border border-white/5 p-8 rounded-[36px] shadow-sm flex flex-col justify-between h-[420px] cursor-pointer group scan-glow transition-all duration-300"
                     >
                        <div className="flex justify-between items-start">
                           <span className="font-serif-luxury text-5xl font-light text-stroke-gold group-hover:text-[#C5A880] transition-all italic">{item.num}</span>
@@ -510,7 +521,7 @@ export default function Home() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.05 }}
                 transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-                className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24 bg-[#141923]"
+                className="absolute inset-0 h-full w-full flex flex-col justify-between pt-40 p-8 md:p-24 bg-[#0a0a0a]"
               >
                 <div className="text-center my-auto relative z-10">
                   <span className="font-sans text-[8px] tracking-[0.4em] text-[#C5A880] uppercase block mb-12 animate-pulse">// THÔNG TIN LIÊN HỆ TRỰC TIẾP //</span>
