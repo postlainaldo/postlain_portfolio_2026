@@ -16,7 +16,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "POSTLAIN // Ngô Phúc — Điều Hành Vận Hành & Sáng Tạo",
+  title: "POSTLAIN // Ngô Phúc — Creative Operations",
   description: "Bản lĩnh quản trị đa lĩnh vực kết hợp tư duy tự động hóa công nghệ.",
 };
 
