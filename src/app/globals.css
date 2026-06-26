@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --bg-slate: #1C2333; /* Slate Midnight Blue chuẩn 375 Studio */
+  --bg-slate: #1D2436; /* Mã màu Slate Midnight gốc của ten.375.studio */
   --text-linen: #FAF8F5; /* Trắng ngà hoàng gia */
   --accent-gold: #C5A880; /* Vàng Champagne Đồng */
 }
