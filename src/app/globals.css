@@ -2,12 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background: #050505;
-  color: white;
+:root {
+  --bg: #050505;
+  --primary: #2563eb;
 }
 
-::selection {
-  background: #2563eb;
+body {
+  background-color: var(--bg);
   color: white;
+  overflow-x: hidden;
+  font-family: var(--font-inter), sans-serif;
+}
+
+/* Hiệu ứng chữ chạy ngầm dưới nền */
+.bg-text {
+  font-size: 20vw;
+  font-weight: 900;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.05);
+  color: transparent;
+  position: absolute;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Custom Cursor cho giống website xịn */
+.custom-cursor {
+  mix-blend-mode: difference;
+}
+
+/* Chỉnh typography xịn cho font Space Grotesk */
+.font-space {
+  font-family: var(--font-space), sans-serif;
+  letter-spacing: -0.05em;
+}
+
+::-webkit-scrollbar {
+  width: 0px; /* Ẩn scrollbar để tạo cảm giác cinematic */
 }
