@@ -3,15 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --bg-cream: #F5F2EB; /* Màu kem đặc trưng của 28k */
-  --text-charcoal: #141414; /* Màu chữ than sang trọng */
-  --accent-lilac: #A78BFA; /* Tím Lilac tạo điểm nhấn */
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  --bg-cream: #FAF8F5; /* Tông nền kem chuẩn 28K */
+  --text-charcoal: #141414; /* Chữ đen xám */
+  --accent-lilac: #8B5CF6; /* Tím nhạt */
 }
 
 body {
@@ -19,10 +13,10 @@ body {
   color: var(--text-charcoal);
   overflow-x: hidden;
   font-family: var(--font-inter), sans-serif;
-  cursor: default;
+  user-select: none;
 }
 
-/* Thêm lớp Grain điện ảnh nhưng dịu mắt hơn trên nền sáng */
+/* LỚP BỤI NHIỄU PHIM (GRAIN EFFECT) */
 body::after {
   content: "";
   position: fixed;
@@ -31,35 +25,28 @@ body::after {
   width: 100vw;
   height: 100vh;
   background-image: url('https://grainy-gradients.vercel.app/noise.svg');
-  opacity: 0.04;
+  opacity: 0.05;
   pointer-events: none;
   z-index: 9999;
 }
 
-/* Line kẻ kỹ thuật mỏng như sợi tóc */
-.hairline {
-  border-color: rgba(20, 20, 20, 0.08);
+/* HỆ LƯỚI NỀN KỸ THUẬT (DESIGN MATRIX GRID) */
+.design-grid-bg {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(20, 20, 20, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 20, 20, 0.02) 1px, transparent 1px);
 }
 
-/* Chuyển động cuộn lụa Lenis */
+/* HIỆU ỨNG SMOOTH CUỘN */
 html.lenis {
   height: auto;
 }
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
 
-/* CSS cho font Space Grotesk */
-.font-space {
-  font-family: var(--font-space), sans-serif;
-}
-
+/* KHÔNG HIỂN THỊ SCROLLBAR ĐỂ GIỮ THẨM MỸ */
 ::-webkit-scrollbar {
   width: 0px;
 }
