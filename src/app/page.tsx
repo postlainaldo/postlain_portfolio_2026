@@ -88,7 +88,7 @@ const careerImpacts = [
 export default function Page() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
-  const horizontalSectionRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // 1. CHẠY PRELOADER CONSOLE
   useEffect(() => {
